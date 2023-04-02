@@ -19,8 +19,8 @@
   width: 100px;
 }
 
-.wrapper,footer{
-  background-color: #Fcfcfcfc;
+.wrapper,footer ,.card{
+  background-color: #Fcfcfcfc !important;
   /* height: 100vh; */
 }
 

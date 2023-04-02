@@ -29,7 +29,7 @@
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">Sign In</a>
+              <a class="nav-link" href="/register">Sign Up</a>
             </li>
           </ul>
         </div>
@@ -37,61 +37,27 @@
     </div>
     <div class="wrapper ">
       <div class="container container-sm container-md pt-4">
-        <div class="card mx-auto mt-5 shadow p-3   rounded " style="max-width: 35rem;   background-color: #Fcfcfcfc;">
+        <div class="card mx-auto mt-5 shadow p-3 rounded " style="max-width: 25rem; background-color: #Fcfcfcfc;">
           <div class="card-body p-5">
-            <h3 class="text-center mb-4">Create an account</h3>
+            <h3 class="text-center mb-4">Login</h3>
             <form method="post" action="#" class="row g-3">
-              {%csrf_token%}
-              <div class="col-6 mb-3">
-                <!-- first_name -->
-                <label for="first_name" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" >
-              </div>
-              <div class="col-6 mb-3">
-                <!-- last_name -->
-                <label for="last_name" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" >
-              </div>
-              <div class="col-12 mb-3">
-                <!-- birthday -->
-                <label for="birthday" class="form-label">Birthday</label>
-                <input type="date" class="form-control" id="birthday" name="birthday" >
-              </div>
-              <!-- time zone -->
-              <div class="col-12 mb-3">
-                <label for="time_zone" class="form-label">Select your time zone:</label>
-                <select class=" form-select" id="time_zone " aria-label="Default select example" name="time_zone">
-                  {% for tz in time_zones %}
-                    <option value="{{ tz }}">{{ tz }}</option>
-                  {% endfor %}
-                </select>
+              {%csrf_token%} <div class="col-12 mb-3">
+                <!-- Email name = email -->
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" >
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
               </div>
               <div class="col-12 mb-3">
                 <!-- Password name is password  -->
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" >
               </div>
-              <div class="col-12 mb-3">
-                <!-- Password name is password  -->
-                <label for="confirm_password" class="form-label"> Confirm Password</label>
-                <input type="password" class="form-control" name="confirm_password" id="confirm_password" >
-              </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
               </div>
-              <div class="col-12 text-center mx-auto" hidden>
-                <div class="btn-group " role="group" aria-label="Basic example" >
-                  <button type="button" class="btn btn-primary">Back</button>
-                  <button type="button" class="btn btn-primary">Next</button>
-                </div>
-              </div>
-
             </form>
-            <div>
-
-            </div>
             <div class="text-center mt-4">
-              <a href="/" class="btn btn-link">Already a member? Sign In!</a>
+              <a href="/register" class="btn btn-link">Not a member? Sign Up!</a>
             </div>
           </div>
         </div>
