@@ -1,0 +1,25 @@
+/* Source Sans serif pro font for the main pages */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@200;400;700&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@900&display=swap');
+
+/* Background color : #Fcfcfcfc */
+
+
+*{
+  font-family: 'Source Serif Pro', serif;
+}
+/* .logo{
+  font-family: 'Noto Serif Malayalam', serif;
+  font-weight: 900;
+  display: flex;
+
+} */
+
+.logo {
+  width: 100px;
+}
+
+.wrapper{
+  background-color: #Fcfcfcfc;
+  height: 100vh;
+}

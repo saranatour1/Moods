@@ -4,4 +4,4 @@ from django.shortcuts import render,HttpResponse
 
 # referring to the main test method 
 def index(request):
-  return HttpResponse("you have successfully confugured your app!")
+  return render(request, "register.html")
