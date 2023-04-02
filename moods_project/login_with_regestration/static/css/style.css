@@ -19,7 +19,8 @@
   width: 100px;
 }
 
-.wrapper{
+.wrapper,footer{
   background-color: #Fcfcfcfc;
-  height: 100vh;
+  /* height: 100vh; */
 }
+
