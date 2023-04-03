@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
-
+from django.http import JsonResponse
 from pytz import all_timezones     #importing all time zones in the pyz library
 from .models import *
 # Create your views here.
@@ -24,9 +24,10 @@ def handle_regestration(request):
     if request.method=='POST':
         errors=User.objects.validate_login(request.POST)
         if len(errors) > 0:
-            for key , value in errors.items():
-                messages.error(request,value)
-            return redirect('/')
+            error_list = []
+            for key, value in errors.items():
+                error_list.append(value)
+            return JsonResponse({'success': False, 'errors': error_list}) #removed the redirection 
         else:
             password = request.POST['password']
             pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -39,7 +40,8 @@ def handle_regestration(request):
                                 password_hash=pw_hash)
             newUser=User.objects.last().id
             request.session['newUser'] = newUser
-            return redirect('/dashboard')
+            # return redirect('/dashboard')
+            return JsonResponse({'success': True}) #returned true instead of redirection 
     else:
         return redirect('/')
 
