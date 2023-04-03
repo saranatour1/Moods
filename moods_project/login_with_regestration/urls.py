@@ -10,5 +10,6 @@ urlpatterns = [
     path('redirect',views.successfull),
     path('logout',views.logout),
     path('user',views.logged_user_profile),    #path to show the logged user profile
-
+    path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles 
+    
 ]

@@ -48,18 +48,18 @@
               <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="text-start mb-3">
-                    <a href="/user">
-                      {{newUser.first_name}} {{newUser.last_name}}
+                    <a href="/user/{{user.id}}">
+                      {{user.first_name}} {{user.last_name}}
                     </a>
                   </h4>
-                  <span class="text-start mb-3 text-muted small"> joined on {{newUser.created_at.date}}
+                  <span class="text-start mb-3 text-muted small"> joined on {{user.created_at.date}}
                   </span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <p class="text-start mb-3"> Age: {{user_age}} years old </p>
                   <p class="text start mb-3">
                     <i class="bi bi-balloon ps-1"></i>
-                    {{newUser.birthday}}
+                    {{user.birthday}}
                   </p>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
@@ -73,52 +73,14 @@
                 </div>
                 </em>
                 <p class="text-center">
-                  <i class="bi bi-geo ps-1"></i> for the time zone <em>{{newUser.time_zone}}</em>
+                  <i class="bi bi-geo ps-1"></i> for the time zone <em>{{user.time_zone}}</em>
                   <br>
                 </p>
                 </p>
-                <a class="btn btn-link " href="/edit_profile">edit profile</a>
               </div>
             </div>
           </div>
-          <!-- Requests and list of friends  -->
-          <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto">
-            <div class="card border-light mb-3  mx-auto " style="max-width: 30rem;">
-              <div class="card-header"> Requests <span class="badge text-bg-secondary">5</span>
-              </div>
-              <div class="text-start">
-                <!-- Start -->
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="card-title">
-                      <a href="/user/{{user.id}}">Jane Smith</a>
-                    </h6>
-                    <p class="card-text">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                      <button class="btn btn-light me-md-2 rounded-5 " type="button">
-                        <i class="bi bi-person-add"></i>
-                      </button>
-                      <button class="btn btn-light rounded-5" type="button">
-                        <i class="bi bi-person-dash"></i>
-                      </button>
-                    </div>
-                    </p>
-                  </div>
-                </div>
-                <hr>
-                <!-- End -->
-              </div>
-            </div>
-            <div class="card border-light mb-4 mx-auto" style="max-width: 30rem;">
-              <div class="card-header"> Friendships <span class="badge text-bg-secondary">5</span>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">
-                  <a href="/user/{{user.id}}">Jack smith</a>
-                </h6>
-              </div>
-            </div>
-          </div>
+
         </div>
         <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
@@ -172,7 +134,7 @@
         // const now = new Date();
         // const timeNow = now.toLocaleTimeString();
         // document.querySelector('.time_now').textContent = timeNow;
-        var userTimezone = "{{ newUser.time_zone }}";
+        var userTimezone = "{{ user.time_zone }}";
         // getting the user time despite him/her being logged in or not
         var currentDate = new Date();
         var userDateTime = currentDate.toLocaleString("en-US", {

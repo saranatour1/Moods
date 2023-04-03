@@ -114,3 +114,23 @@ def logged_user_profile(request):
     'current_date':current_date_str, 
     }
     return render(request, "userprofile.html", context)
+
+# other users profile 
+def other_user_profile(request,user_id):
+  logged_user_id=request.session['newUser']
+  newUser=User.objects.get(id=logged_user_id)
+  user=User.objects.get(id=user_id)
+  user_age= datetime.date.today()- user.birthday 
+  age= (user_age.days//365)
+  time_zone=user.time_zone
+  current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+  current_time_str = current_time.strftime('%H:%M:%S')
+  current_date_str = current_time.strftime('%Y-%m-%d')
+  context={
+    
+    "user":user,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str, 
+  }
+  return render(request, "otheruserprofile.html",context)
