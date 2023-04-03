@@ -17,8 +17,6 @@ def show_registration_page(request):
   context = {'time_zones': time_zones}
   return render(request,"register.html",context)
 
-
-
 #create a new user object where the values are handles as form data
 def handle_regestration(request):
     if request.method=='POST':
@@ -68,8 +66,11 @@ def handle_login(request):
               return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
     return JsonResponse({'success': False, 'errors': ['please try again']})
 
+
+
+# The main dashboard page 
 def dashboard(request):
-  return HttpResponse("You have logged in successfully")
+  return render(request,"dashboard.html")
 
 
 def logout(request):
