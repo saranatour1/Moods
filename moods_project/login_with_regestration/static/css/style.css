@@ -24,7 +24,7 @@
   width: 100px;
 }
 
-.wrapper,footer ,.card{
+.wrapper,footer ,.card,ul{
   background-color: #Fcfcfcfc !important;
   /* height: 100vh; */
 }
