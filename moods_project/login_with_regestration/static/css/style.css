@@ -19,7 +19,9 @@
   display: flex;
 
 } */
-
+/* div.col-4 {
+ position: fixed;
+} */
 .logo {
   width: 100px;
 }

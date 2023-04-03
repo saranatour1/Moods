@@ -48,3 +48,5 @@ class User(models.Model):
     objects = UserManeger()
     
     
+    
+    

@@ -69,8 +69,9 @@ def handle_login(request):
 
 
 
-# The main dashboard page 
+# The main dashboard page at route  /dashboard 
 def dashboard(request):
+  # user profile front view done
   user_id=request.session['newUser']
   newUser=User.objects.get(id=user_id)
   user_age= datetime.date.today()- newUser.birthday 
@@ -79,20 +80,37 @@ def dashboard(request):
   current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
   current_time_str = current_time.strftime('%H:%M:%S')
   current_date_str = current_time.strftime('%Y-%m-%d')
-  print(current_time)
-  print(age)
   
   context= {
     'newUser':newUser,
     'user_age':age,
     'current_time':current_time_str,
-    'current_date':current_date_str,
-    
+    'current_date':current_date_str, 
   }
-  
   return render(request,"dashboard.html",context)
 
 
 def logout(request):
   request.session.flush()
   return redirect('/')
+
+# the profile pag of the loged user
+
+def logged_user_profile(request):
+  if 'newUser' in request.session:
+    user_id=request.session['newUser']
+    newUser=User.objects.get(id=user_id)
+    user_age= datetime.date.today()- newUser.birthday 
+    age= (user_age.days//365)
+    time_zone=newUser.time_zone
+    current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+    current_time_str = current_time.strftime('%H:%M:%S')
+    current_date_str = current_time.strftime('%Y-%m-%d')
+    
+    context={
+    'newUser':newUser,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str, 
+    }
+    return render(request, "userprofile.html", context)

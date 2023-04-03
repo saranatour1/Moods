@@ -9,5 +9,6 @@ urlpatterns = [
     path('handle_login/',views.handle_login),
     path('redirect',views.successfull),
     path('logout',views.logout),
+    path('user',views.logged_user_profile),    #path to show the logged user profile
 
 ]
