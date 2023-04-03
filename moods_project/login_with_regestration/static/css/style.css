@@ -36,8 +36,8 @@ a {
   color: black;
 }
 
-@media screen and (max-width: 1024px) {
-  div.col-3 {
+@media screen and (max-width: 1024px){
+  div.col-4 {
     display: none;
   }
 }
