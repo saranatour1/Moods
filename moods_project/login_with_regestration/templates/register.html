@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regestration Page </title>
+    <!-- Bootstrap and Jquery files go here -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="{% static 'css/frame1.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{%  static 'assets/favicon.png' %} " type="image/x-icon">
+
+
+
+  
+  
+  </head>
+  <body>
+    <!-- The main bav bar containing the Moods Logo -->
+    <!-- Logo Design -->
+    <div class=" w-100  ">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary h-100 ps-5 pe-5 ">
+        <a class="navbar-brand logo " href="/">
+          <img src="{% static 'assets/logo.svg' %}" alt="Moods Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Sign In</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="wrapper ">
+      <div class="container container-sm container-md pt-4">
+        <div class="card mx-auto mt-5 shadow p-3   rounded " style="max-width: 35rem;   background-color: #Fcfcfcfc;">
+          <div class="card-body p-5">
+            <h3 class="text-center mb-4">Create an account</h3>
+            <form method="post" action="/handle_regestration" class="row g-3">
+              {%csrf_token%}
+              <div class="col-6 mb-3">
+                <!-- first_name -->
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" >
+              </div>
+              <div class="col-6 mb-3">
+                <!-- last_name -->
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" >
+              </div>
+              <div class="col-12 mb-3">
+                <!-- birthday -->
+                <label for="birthday" class="form-label">Birthday</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" >
+              </div>
+              <!-- Gender select -->
+              <div class="col-12 mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class=" form-select" id="gender" aria-label="Default select example" name="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="none">Prefer not to say</option>
+                </select>
+              </div>
+              <!-- time zone -->
+              <div class="col-12 mb-3">
+                <label for="time_zone" class="form-label">Select your time zone:</label>
+                <select class=" form-select" id="time_zone " aria-label="Default select example" name="time_zone">
+                  {% for tz in time_zones %}
+                    <option value="{{ tz }}">{{ tz }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <!-- Email address -->
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" >
+              </div>
+              <div class="col-12 mb-3">
+                <!-- Password name is password  -->
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" >
+              </div>
+              <div class="col-12 mb-3">
+                <!-- Password name is password  -->
+                <label for="confirm_password" class="form-label"> Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" >
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+              </div>
+              <div class="col-12 text-center mx-auto" hidden>
+                <div class="btn-group " role="group" aria-label="Basic example" >
+                  <button type="button" class="btn btn-primary">Back</button>
+                  <button type="button" class="btn btn-primary">Next</button>
+                </div>
+              </div>
+
+            </form>
+            <div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="/login" class="btn btn-link">Already a member? Sign In!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if messages %}
+    <ul class="messages list-unstyled text-center py-5 ">    
+      {% for message in messages %}    
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <div id="error-message">
+
+  </div>
+          <!-- Footer -->
+      <footer class="page-footer font-small ">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2023 Copyright:
+          <a href="/"> Moods</a>
+        </div>
+        <!-- Copyright -->
+      </footer>
+      <!-- Footer -->
+    
+    <!-- We need to add ajax asap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+      <!-- Jqueryy script -->
+        <script>
+          $('form').submit(function(e){
+              e.preventDefault();
+              $.ajax({
+                  url: '/handle_regestration/',
+                  method: 'post',
+                  data: $(this).serialize(),
+                  success: function(response){
+                      if (response.success) {
+                          window.location.href = '/dashboard';
+                      } else {
+                          document.
+                          console.log('Registration failed:', response.errors);
+                      }
+                  }
+              });
+          });
+
+
+    
+        </script>
+    
+  </body>
+</html>
