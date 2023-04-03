@@ -61,12 +61,12 @@ def handle_login(request):
         if user:
             if bcrypt.checkpw(request.POST['password'].encode(), user.password_hash.encode()):
                 request.session['newUser'] = user.id
-                return redirect('/dashboard')
+                return JsonResponse({'success': True})
             else:
-                messages.error(request, 'Invalid password')
+                  return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
         else:
-            messages.error(request, 'Invalid email')
-    return redirect('/')
+              return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
+    return JsonResponse({'success': False, 'errors': ['please try again']})
 
 def dashboard(request):
   return HttpResponse("You have logged in successfully")
