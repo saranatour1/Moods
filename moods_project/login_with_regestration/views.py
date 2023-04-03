@@ -1,23 +1,78 @@
-from django.shortcuts import render,HttpResponse
-
-from pytz import all_timezones #importing all time zones in the pyz library
-
+from django.shortcuts import render,redirect,HttpResponse
+from django.contrib import messages
+from django.http import JsonResponse
+from pytz import all_timezones     #importing all time zones in the pyz library
+from .models import *
 # Create your views here.
+import bcrypt
 
 # referring to the main login method
-def index(request):
-  return render(request, "login.html")
+def show_login_page(request):
+  return render(request, "login.html ")
 
 
 # referring to the main regestration page 
 def show_registration_page(request):
   time_zones = all_timezones
-  
   context = {'time_zones': time_zones}
   return render(request,"register.html",context)
 
+#create a new user object where the values are handles as form data
+def handle_regestration(request):
+    if request.method=='POST':
+        errors=User.objects.validate_login(request.POST)
+        if len(errors) > 0:
+            error_list = []
+            for key, value in errors.items():
+                error_list.append(value)
+            return JsonResponse({'success': False, 'errors': error_list}) #removed the redirection 
+        else:
+            password = request.POST['password']
+            pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+            User.objects.create(first_name=request.POST['first_name'],
+                                last_name=request.POST['last_name'],
+                                email=request.POST['email'],
+                                birthday=request.POST['birthday'],
+                                gender=request.POST['gender'],
+                                time_zone=request.POST['time_zone'],
+                                password_hash=pw_hash)
+            newUser=User.objects.last().id
+            request.session['newUser'] = newUser
+            # return redirect('/dashboard')
+            return JsonResponse({'success': True}) #returned true instead of redirection 
+    else:
+        return redirect('/')
 
-# def my_view(request):
-#     time_zones = all_timezones
-#     context = {'time_zones': time_zones}
-#     return render(request, 'my_template.html', context)
+
+# Making the logged user log in to the wall app not to the success page
+def successfull(request):
+    if 'newUser' in request.session:
+        return redirect('/dashboard')
+    else:
+        return redirect('/')
+
+# route to handle login 
+
+def handle_login(request):
+    if request.method == 'POST':
+        user = User.objects.filter(email=request.POST['email']).first()
+        if user:
+            if bcrypt.checkpw(request.POST['password'].encode(), user.password_hash.encode()):
+                request.session['newUser'] = user.id
+                return JsonResponse({'success': True})
+            else:
+                  return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
+        else:
+              return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
+    return JsonResponse({'success': False, 'errors': ['please try again']})
+
+
+
+# The main dashboard page 
+def dashboard(request):
+  return render(request,"dashboard.html")
+
+
+def logout(request):
+  request.session.flush()
+  return redirect('/')
