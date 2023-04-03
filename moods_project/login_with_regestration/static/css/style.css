@@ -4,9 +4,14 @@
 
 /* Background color : #Fcfcfcfc */
 
+/* if we wanted to implemnt dark mode */
+/* body{
+  filter: invert(1) hue-rotate(180deg) !important;
+} */
 
 *{
   font-family: 'Source Serif Pro', serif;
+ 
 }
 /* .logo{
   font-family: 'Noto Serif Malayalam', serif;
