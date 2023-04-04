@@ -80,6 +80,11 @@
                   <small class="text-body-secondary my-2"> last updated {{post.updated_at.time}}</small>
                   <p class="card-title my-2"  > <a href="/user/{{post.user_who_post.id}}" > {{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a> </p>
                   <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
+                  {%if newUser == post.user_who_post%}
+                  <p>
+                    <a href="/delete/{{post.id}}"> delete Post</a>
+                  </p>
+                  {% endif %}
                   <div class="text-end my-3">
                     <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>  <a href="/add_likes_to_posts">312 Like(s)</a> </button>
                   </div>
@@ -105,6 +110,11 @@
                             <small class="text-body-secondary my-2">last updated: {{comment.updated_at.time}}</small>
                             <p class="card-title my-2"> {{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</p> 
                             <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
+                            {%if newUser == comment.user_who_comment%}
+                            <p>
+                              <a href="/delete/comment/{{comment.id}}"> delete Comment</a>
+                            </p>
+                            {% endif %}
                             <div class="text-end my-3">
                               <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
                             </div>

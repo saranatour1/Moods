@@ -109,6 +109,15 @@ def add_post(request):
     Post.objects.create(post_content=request.POST['post'], user_who_post=logged_user)
   return redirect('/dashboard') 
 
+# deleting a post 
+def delete_post(request,post_id):
+  user_id=request.session['newUser']
+  logged_user = User.objects.get(id=user_id)
+  post_object = Post.objects.get(id=post_id)
+  if logged_user == post_object.user_who_post:
+      post_object.delete()
+  return redirect('/dashboard')
+
 # adding a comment to that post
 def add_comment(request):
     if request.method == 'POST':
@@ -118,6 +127,15 @@ def add_comment(request):
         Comment.objects.create(comment_content=request.POST['comment'], user_who_comment=logged_user,post=post_object)
     return redirect('/dashboard')
 
+# delete comment
+
+def delete_comment(request,comment_id):
+  user_id=request.session['newUser']
+  logged_user = User.objects.get(id=user_id)
+  comment_object = Comment.objects.get(id=comment_id)
+  if logged_user == comment_object.user_who_comment:
+      comment_object.delete()
+  return redirect('/dashboard')
 
 
 
