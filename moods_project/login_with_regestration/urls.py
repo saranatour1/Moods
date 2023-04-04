@@ -10,6 +10,13 @@ urlpatterns = [
     path('redirect',views.successfull),
     path('logout',views.logout),
     path('user',views.logged_user_profile),    #path to show the logged user profile
-    path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles 
+    path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles
+    path('requestAdd/<int:frindId>', views.requestAdd),
+    path('requestDelete/<int:frindId>', views.requestDelete),
+    path('frindAdd/<int:frindId>', views.frindAdd),
+    path('frindRemove/<int:frindId>', views.frindRemove),
+    path('likeOnPost/<int:postId>', views.likeOnPost),
+    path('changOtherId/<int:otherId>', views.changOtherId),
+    path('creatMessages/<int:otherId>', views.creatMessages),
     
 ]

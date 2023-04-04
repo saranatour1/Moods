@@ -134,3 +134,43 @@ def other_user_profile(request,user_id):
     'current_date':current_date_str, 
   }
   return render(request, "otheruserprofile.html",context)
+
+
+# -----------------------hamza start
+
+
+def requestAdd(request,frindId):
+    sender = User.objects.get(id = request.session['id'])
+    reciever = User.objects.get(id = int(frindId))
+    Request.objects.create(request_sender = sender,request_reciever = reciever )
+    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+
+
+def requestDelete(request,frindId):
+    user = User.objects.get(id = request.session['id'])
+    other = User.objects.get(id = int(frindId))
+    user.sent_requests.delete(other)
+    user.received_requests.delete(other)
+    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+
+def frindAdd(request,frindId):
+    user = User.objects.get(id = request.session['id'])
+    friend = User.objects.get(id = int(frindId))
+    user.friends.add(friend)
+    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+
+def frindRemove(request,frindId):
+    user = User.objects.get(id = request.session['id'])
+    friend = User.objects.get(id = int(frindId))
+    user.friends.remove(friend)
+    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+
+
+def likeOnPost(request,postId):
+    user = User.objects.get(id = request.session['id'])
+    post = Post.objects.get(id = postId)
+    LikePost.objects.create(user_who_like = user,post = post)
+    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+
+
+# --------------------------hamza end
