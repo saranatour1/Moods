@@ -58,7 +58,8 @@ class User(models.Model):
     
 
 class OurMessage(models.Model):
-    user_group = models.ForeignKey(User,related_name='chat_groups', on_delete=models.CASCADE)
+    user_group1 = models.ForeignKey(User,related_name='chat_groups1', on_delete=models.CASCADE,default=None)
+    user_group2 = models.ForeignKey(User,related_name='chat_groups2', on_delete=models.CASCADE,default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

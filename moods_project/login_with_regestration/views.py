@@ -62,6 +62,8 @@ def handle_login(request):
         if user:
             if bcrypt.checkpw(request.POST['password'].encode(), user.password_hash.encode()):
                 request.session['newUser'] = user.id
+                request.session['id'] = user.id 
+                # هاي انا ضفتها ببببببببببببببببببببببببببب
                 return JsonResponse({'success': True})
             else:
                   return JsonResponse({'success': False, 'errors': ['Invalid email or password']})
@@ -192,35 +194,65 @@ def messages(request):
         }
         return render(request,'messages1.html',context)
     else:
-        # request.session['id']=request.session['newUser']
-        all_users_for_last_messages = User.objects.get(id = request.session['id']).chat_groups.all()
+        # ---------------------------saratimestart
+        user_id=request.session['otherId']
+        newUser=User.objects.get(id=user_id)
+        user_age= datetime.date.today()- newUser.birthday 
+        age= (user_age.days//365)
+        time_zone=newUser.time_zone
+        current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+        current_time_str = current_time.strftime('%H:%M:%S')
+        current_date_str = current_time.strftime('%Y-%m-%d')
+        
+        # ------------------------------saratimeend
+
+        request.session['id']=request.session['newUser']
+        # all_users_for_last_messages = User.objects.get(id = request.session['id']).chat_groups2.all()
         all_users = User.objects.all() 
-        # print(all_users_for_last_messages)
-        # print('5*'*70)
         # --------------------------
         user = User.objects.get(id = request.session['id'])
         other = User.objects.get(id=request.session['otherId'])
 
+        # all_users_for_last_messages = OurMessage.objects.filter(user_group1 = user)
 
         sent = Message.objects.filter(message_receiver = other,message_sender = user)
         
         received = Message.objects.filter(message_sender = other,message_receiver = user)
         
-        allSR = received.union(sent)  # this not good
-        # allSR = received.order_by('-created_at')
-        # print(two)
-        print('*'*70)
+        allSR = received.union(sent)  # messagess
 
-        # print(all_users)
-        # print('3*'*70)
+        # ---------------------------------
+        userId = request.session['id']
+        messages = Message.objects.all().order_by('-created_at')
+        arrI = []
+        arrP = []
+        all_users_for_last_messages = []
+        for message in messages:
+            if message.message_sender_id == userId and userId not in arrI:
+                arrI.append(message.message_receiver_id)
+                arrP.append(1)
+            elif message.message_receiver_id == userId and userId not in arrI:
+                arrI.append(message.message_sender_id)
+                arrP.append(0)
+        for i in range(len(arrI)):
+            if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
+                all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
+        # ---------------------------------S
         context = {
                 'allSR': allSR,
                 'all_users_for_last_messages': all_users_for_last_messages,
                 'all_users' : all_users,
                 'sent': sent,
-                'other':other,
                 'received' : received,
+                'other':other,
+                'theUser' : User.objects.get(id = request.session['id']),
                 # هذه الطويلة لعرض قائمة المستخدمين عل يسار
+
+
+                'newUser':newUser,
+                'user_age':age,
+                'current_time':current_time_str,
+                'current_date':current_date_str, 
                 }
         return render(request,'messages.html',context)
 
@@ -235,7 +267,7 @@ def creatMessages(request,otherId):
     message_receiver = User.objects.get(id = int(otherId))
     Message.objects.create(message_content = message_content,message_sender = message_sender,message_receiver = message_receiver)
     # message_sender.chat_groups.add(message_receiver)
-    # OurMessage.objects.create()
+    OurMessage.objects.create(user_group1 = message_sender, user_group2 = message_receiver)
     
     return redirect('/messages')
 # ----------------------------------endmessage
