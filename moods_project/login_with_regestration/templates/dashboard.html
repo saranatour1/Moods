@@ -95,7 +95,7 @@
                     {%csrf_token%}
                     <input type="hidden" name="post_id" value="{{ post.id }}">
                     <div class="card-body">
-                      <div class="form-floating ">
+                      <div class="form-floating">
                         <textarea class="form-control" placeholder="Comment on this post!" id="comment" name="comment" style="height: 100px"></textarea>
                         <label for="post">Comment</label>
                         <div class="d-flex justify-content-end">
@@ -119,7 +119,7 @@
                             </p>
                             {% endif %}
                             <div class="text-end my-3">
-                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
+                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}"> {{comment.likes_count}} Like(s)</a> </button>
                             </div>
                           </div>
                         {% endif %}

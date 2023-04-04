@@ -140,7 +140,6 @@ def delete_comment(request,comment_id):
   return redirect('/dashboard')
 
 # adding likes to posts
-
 def likeOnPost(request, post_id):
     user = User.objects.get(id=request.session['newUser'])
     post = Post.objects.get(id=post_id)
@@ -154,6 +153,22 @@ def likeOnPost(request, post_id):
         LikePost.objects.create(user_who_like=user, post=post)
         post.likes_count += 1
         post.save()
+    return redirect('/dashboard')
+  
+# adding likes to comments 
+def likeOnComemnt(request,comment_id):
+    user = User.objects.get(id=request.session['newUser'])
+    comment = Comment.objects.get(id=comment_id)
+    like_exists = LikeComment.objects.filter(user_who_like=user, comment=comment).exists()
+    if like_exists:
+        like = LikeComment.objects.get(user_who_like=user, comment=comment)
+        like.delete()
+        comment.likes_count -= 1
+        comment.save()
+    else:
+        LikeComment.objects.create(user_who_like=user, comment=comment)
+        comment.likes_count += 1
+        comment.save()
     return redirect('/dashboard')
 
 

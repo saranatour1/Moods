@@ -91,6 +91,7 @@ class Comment(models.Model):
     comment_content = models.TextField()
     user_who_comment = models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE)
     post = models.ForeignKey(Post,related_name='comments_on_post' ,on_delete=models.CASCADE)
+    likes_count=models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=CommentManager()    
@@ -102,6 +103,18 @@ class LikePost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
       unique_together = ('user_who_like', 'post') # to ensure that the user likes the post only once
+
+# Likes on comments table 
+class LikeComment(models.Model):
+    user_who_like = models.ForeignKey(User,related_name='liked_comments', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment,related_name='likes_on_comment', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+      unique_together = ('user_who_like', 'comment') # to ensure that the user likes the post only once
+
+
+
 
 # class OurMessage(models.Model):
 #     user_group = models.ForeignKey(User,related_name='chat_groups', on_delete=models.CASCADE)
