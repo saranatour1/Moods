@@ -61,7 +61,7 @@
           </div>
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded" id="postForm">
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded postForm" >
               {%csrf_token%}
               <div class="card-body">
                 <div class="form-floating ">
@@ -94,7 +94,7 @@
                           <i class="bi bi-hand-thumbs-up"></i>
                       <a href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
-                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 " id="commentForm">
+                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 commentForm ">
                     {%csrf_token%}
                     <input type="hidden" name="post_id" value="{{ post.id }}">
                     <div class="card-body">
@@ -172,7 +172,7 @@
 
       // Ajax functionality
       // adding posts 
-      $('#postForm').submit(function(e){
+      $('.postForm').submit(function(e){
         e.preventDefault();
         $.ajax({
             url: '/new_post',
@@ -180,7 +180,7 @@
             data: $(this).serialize(),
             success: function(response){
                 if (response.success) {
-                  window.location.href = '/dashboard';
+                  location.reload();
                   console.log(response)
                 } else {
                     var errors = response.errors;
@@ -197,7 +197,7 @@
       return false;
     });
             // adding comments 
-          $('#commentForm').submit(function(e){
+          $('.commentForm').submit(function(e){
             e.preventDefault();
             $.ajax({
                 url: '/add-new-comment',
@@ -205,8 +205,9 @@
                 data: $(this).serialize(),
                 success: function(response){
                     if (response.success) {
-                      window.location.href = '/dashboard';
+                      location.reload();
                       console.log(response.success)
+                      alert(data)
                     } else {
                         var errors = response.errors;
                         var errorList = '<ul class="list-unstyled">';

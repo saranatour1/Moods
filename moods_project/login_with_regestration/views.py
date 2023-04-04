@@ -131,20 +131,24 @@ def delete_post(request,post_id):
 
 # adding a comment to that post
 def add_comment(request):
-  if request.method=='POST':
-      errors=Comment.objects.validate_comment(request.POST)
-      if len(errors) > 0:
-          error_list = []
-          for key, value in errors.items():
-              error_list.append(value)
-          return JsonResponse({'success': False, 'errors': error_list}) #removed the redirection 
-      else:
-        user_id=request.session['newUser']
-        logged_user = User.objects.get(id=user_id)
-        post_object = Post.objects.get(id=request.POST['post_id'])
-        Comment.objects.create(comment_content=request.POST['comment'], user_who_comment=logged_user,post=post_object)
-        return JsonResponse({'success': True})
-  return redirect('/dashboard')
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        if post_id is None:
+            return JsonResponse({'success': False, 'errors': ['Post ID is missing']})
+        errors = Comment.objects.validate_comment(request.POST)
+        if len(errors) > 0:
+            error_list = []
+            for key, value in errors.items():
+                error_list.append(value)
+            return JsonResponse({'success': False, 'errors': error_list})
+        else:
+            user_id = request.session['newUser']
+            logged_user = User.objects.get(id=user_id)
+            post_object = Post.objects.get(id=post_id)
+            Comment.objects.create(comment_content=request.POST['comment'], user_who_comment=logged_user, post=post_object)
+            return JsonResponse({'success': True})
+    return redirect('/dashboard')
+
   
 # delete comment
 def delete_comment(request,comment_id):
