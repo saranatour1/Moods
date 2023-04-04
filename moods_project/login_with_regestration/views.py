@@ -39,6 +39,8 @@ def handle_regestration(request):
                                 password_hash=pw_hash)
             newUser=User.objects.last().id
             request.session['newUser'] = newUser
+            request.session['id'] = newUser 
+            # هاي انا ضفتها ببببببببببببببببببببببببببب
             # return redirect('/dashboard')
             return JsonResponse({'success': True}) #returned true instead of redirection 
     else:
@@ -139,11 +141,12 @@ def other_user_profile(request,user_id):
 # -----------------------hamza start
 
 
+# -------------------------friendshipStart
 def requestAdd(request,frindId):
     sender = User.objects.get(id = request.session['id'])
     reciever = User.objects.get(id = int(frindId))
     Request.objects.create(request_sender = sender,request_reciever = reciever )
-    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+    return redirect('/otherProf/' + str(frindId))
 
 
 def requestDelete(request,frindId):
@@ -151,26 +154,107 @@ def requestDelete(request,frindId):
     other = User.objects.get(id = int(frindId))
     user.sent_requests.delete(other)
     user.received_requests.delete(other)
-    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+    return redirect('/userProf') 
 
 def frindAdd(request,frindId):
     user = User.objects.get(id = request.session['id'])
     friend = User.objects.get(id = int(frindId))
     user.friends.add(friend)
-    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+    user.received_requests.delete(friend)
+    return redirect('/userProf')
 
 def frindRemove(request,frindId):
     user = User.objects.get(id = request.session['id'])
     friend = User.objects.get(id = int(frindId))
     user.friends.remove(friend)
-    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+    return redirect('/otherProf/' + str(frindId)) 
+
+# -------------------------friendshipEnd
+
 
 
 def likeOnPost(request,postId):
     user = User.objects.get(id = request.session['id'])
     post = Post.objects.get(id = postId)
     LikePost.objects.create(user_who_like = user,post = post)
-    return redirect('/dashboard') # هون عدلها مشان يرجعك لنفس الصفحة  الي انت فيها
+    post.likeCount += 1
+    post.save()
+    return redirect('/dashboard')
 
+
+# -------------------------startmessage
+def messages(request):
+    
+    if 'otherId' not in request.session :
+        all_users = User.objects.all()
+        context ={
+            'all_users' : all_users,
+        }
+        return render(request,'messages1.html',context)
+    else:
+        # request.session['id']=request.session['newUser']
+        all_users_for_last_messages = User.objects.get(id = request.session['id']).chat_groups.all()
+        all_users = User.objects.all() 
+        # print(all_users_for_last_messages)
+        # print('5*'*70)
+        # --------------------------
+        user = User.objects.get(id = request.session['id'])
+        other = User.objects.get(id=request.session['otherId'])
+
+
+        sent = Message.objects.filter(message_receiver = other,message_sender = user)
+        
+        received = Message.objects.filter(message_sender = other,message_receiver = user)
+        
+        allSR = received.union(sent)  # this not good
+        # allSR = received.order_by('-created_at')
+        # print(two)
+        print('*'*70)
+
+        # print(all_users)
+        # print('3*'*70)
+        context = {
+                'allSR': allSR,
+                'all_users_for_last_messages': all_users_for_last_messages,
+                'all_users' : all_users,
+                'sent': sent,
+                'other':other,
+                'received' : received,
+                # هذه الطويلة لعرض قائمة المستخدمين عل يسار
+                }
+        return render(request,'messages.html',context)
+
+def changOtherId(request,otherId):# this func put it in link on the left list in 'messages page'
+                                # we use this link to chang the 'other' id
+    request.session['otherId'] = otherId
+    return redirect('/messages')
+
+def creatMessages(request,otherId):
+    message_content = request.POST['message_content']
+    message_sender = User.objects.get(id = request.session['id'])
+    message_receiver = User.objects.get(id = int(otherId))
+    Message.objects.create(message_content = message_content,message_sender = message_sender,message_receiver = message_receiver)
+    # message_sender.chat_groups.add(message_receiver)
+    # OurMessage.objects.create()
+    
+    return redirect('/messages')
+# ----------------------------------endmessage
+
+
+
+def userProf(request):
+    context = {
+        'user' : User.objects.get(id = request.session['id'])
+    }
+    return render(request,'userProf.html',context)
+
+
+def otherProf(request,otherId):
+    request.session['otherId'] = otherId
+    context = {
+        'other' : User.objects.get(id = request.session['otherId']),
+        'user' : User.objects.get(id = request.session['id']),
+    }
+    return render(request,'otherProf.html',context)
 
 # --------------------------hamza end

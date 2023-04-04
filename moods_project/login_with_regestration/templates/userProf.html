@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        nav{
+            height: 80px;
+        }
+        main{
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+        .right{
+            width: 400px;
+        }
+        .left{
+            width: 800px;
+        }
+        .mydata{
+            width: 80%;
+            height: 100px;
+            border: 2px solid black;
+            border-radius: 5px;
+        }.form{
+            width: 80%;
+            height: 100px;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .form p{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form p input{
+            background-color: whitesmoke;
+            width: 70px;
+            height: 23px;
+            border: 2px solid black;
+            box-shadow: 2px 2px 1px black;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+        .request{
+            width: 80%;
+            border: 2px solid black;
+            border-radius: 4px;
+            overflow: scroll;
+            height: 300px;
+        }
+        .friends{
+            width: 80%;
+            border: 2px solid black;
+            border-radius: 4px;
+            overflow: scroll;
+            margin: 20px 0;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav></nav>
+    <main>
+        <div class="left">
+            <div class="mydata"><h1>My data</h1></div>
+            <div class="form">
+                <form action="/addPost" method="post">
+                    {%csrf_token%}
+                    <textarea name="textarea" cols="60" rows="3"></textarea>
+                    <p><input type="submit" value="Post"></p>
+                </form>
+            </div>
+            <div class="mypost">
+                {%for post in user.posts%}
+                    <p>{{post.post_content}}</p>
+                {%endfor%}
+            </div>
+        </div>
+
+        <div class="right">
+            <h3>Requests</h3>
+            <div class="request">
+                {%for request in user.received_requests%}
+                    <p>{{request.request_sender.first_name}}  {{request.request_sender.last_name}} <a href="/requestAdd/{{request.request_sender.id}}">+</a><a href="/requestDelete/{{request.request_sender.id}}">-</a></p>
+                {%endfor%}
+            </div>
+            <h3>My friends</h3>
+            <div class="friends">
+                {%for friend in user.friends%}
+                    <p>{{friens.first_name}}  {{friend.last_name}} <a href="/requestAdd/{{friend.id}}">+</a><a href="/requestDelete/{{friend.id}}">-</a></p>
+                {%endfor%}
+                
+            </div>
+        </div>
+    </main>
+</body>
+</html>

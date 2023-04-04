@@ -41,11 +41,11 @@ class User(models.Model):
     email = models.CharField(max_length=255, unique=True)
     password_hash = models.CharField(max_length=255) # the bcrypt password hash only.
     birthday=models.DateField()
-    gender = models.BooleanField()
+    gender = models.CharField(max_length=50)
     time_zone = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    objects = UserManeger()
     # friends : list of users
 
     # sent_requests : list of users

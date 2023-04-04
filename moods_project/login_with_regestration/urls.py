@@ -11,12 +11,16 @@ urlpatterns = [
     path('logout',views.logout),
     path('user',views.logged_user_profile),    #path to show the logged user profile
     path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles
+    
     path('requestAdd/<int:frindId>', views.requestAdd),
     path('requestDelete/<int:frindId>', views.requestDelete),
     path('frindAdd/<int:frindId>', views.frindAdd),
     path('frindRemove/<int:frindId>', views.frindRemove),
     path('likeOnPost/<int:postId>', views.likeOnPost),
+    path('messages', views.messages),
     path('changOtherId/<int:otherId>', views.changOtherId),
     path('creatMessages/<int:otherId>', views.creatMessages),
-    
+    path('userProf', views.userProf),
+    path('otherProf/<int:otherId>', views.otherProf),
+
 ]

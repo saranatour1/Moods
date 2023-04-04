@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        nav{
+            height: 80px;
+        }
+        main{
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+        .right{
+            width: 400px;
+        }
+        .left{
+            width: 800px;
+        }
+        .mydata{
+            width: 80%;
+            height: 100px;
+            border: 2px solid black;
+            border-radius: 5px;
+        }.form{
+            width: 80%;
+            height: 100px;
+            border: 2px solid black;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .form p{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form p input{
+            background-color: whitesmoke;
+            width: 70px;
+            height: 23px;
+            border: 2px solid black;
+            box-shadow: 2px 2px 1px black;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+        .request{
+            width: 80%;
+            border: 2px solid black;
+            border-radius: 4px;
+            overflow: scroll;
+            height: 300px;
+        }
+        .friends{
+            width: 80%;
+            border: 2px solid black;
+            border-radius: 4px;
+            overflow: scroll;
+            margin: 20px 0;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav></nav>
+    <main>
+        <div class="left">
+            <div class="mydata">
+                <!-- add the other name and data -->
+                <h1>My data</h1>  
+                {%if other in user.request_reciever%}
+                    <a href="/frindAdd/{{other.id}}">Accept request</a> <a href="/frindRemove/{{other.id}}">Ignore request</a>
+                {%elif other in user.request_sender%}
+                    <a href="/requestDelete/{{other.id}}">Delete request</a>
+                {%elif other in user.friends %}
+                    <a href="/frindRemove/{{other.id}}">Unfriend</a>
+                {%else%}
+                    <a href="/requestAdd/{{other.id}}">Send request</a>
+                {%endif%}
+            </div>
+            <div class="form">
+                
+            </div>
+            <div class="mypost">
+                {% for post in other.posts %}
+                    <p>{{post.post_content}}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="right">
+            
+        </div>
+    </main>
+</body>
+</html>
