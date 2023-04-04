@@ -1,0 +1,33 @@
+/* Source Sans serif pro font for the main pages */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@200;400;700&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@900&display=swap');
+
+/* Background color : #Fcfcfcfc */
+
+/* if we wanted to implemnt dark mode */
+/* body{
+  filter: invert(1) hue-rotate(180deg) !important;
+} */
+
+*{
+  font-family: 'Source Serif Pro', serif;
+ 
+}
+/* .logo{
+  font-family: 'Noto Serif Malayalam', serif;
+  font-weight: 900;
+  display: flex;
+
+} */
+
+.logo {
+  width: 100px;
+}
+
+.wrapper,footer ,.card,ul{
+  background-color: #Fcfcfcfc !important;
+  /* height: 100vh; */
+}
+
+
+
