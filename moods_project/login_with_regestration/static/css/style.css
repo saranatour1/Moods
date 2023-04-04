@@ -4,6 +4,7 @@
 
 /* Background color : #Fcfcfcfc */
 /* Logo color #f8d054 */
+/* For dark mode  #f0f0f0 */
 
 /* if we wanted to implemnt dark mode */
 /* body{
@@ -29,7 +30,7 @@
 .wrapper,
 footer,
 .card,
-ul {
+ul,body {
   background-color: #fcfcfcfc !important;
   /* height: 100vh; */
 }
