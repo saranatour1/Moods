@@ -11,10 +11,6 @@ urlpatterns = [
     path('logout',views.logout),
     path('user',views.logged_user_profile),    #path to show the logged user profile
     path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles 
-    # path('requestAdd/<int:frindId>', views.requestAdd),
-    # path('requestDelete/<int:frindId>', views.requestDelete),
-    # path('frindAdd/<int:frindId>', views.frindAdd),
-    # path('frindRemove/<int:frindId>', views.frindRemove),
     path('likeOnPost/<int:post_id>', views.likeOnPost),
     path('add_likes_comment/<int:comment_id>',views.likeOnComemnt), 
     path('new_post',views.add_post),
@@ -23,7 +19,7 @@ urlpatterns = [
     path('delete/comment/<int:comment_id>',views.delete_comment),
     path('add-friend/<int:friend_id>',views.add_friend),
     path('remove-friend/<int:friend_id>',views.remove_friend),
-    # path('send-request/<int:friend_id>',views.send_request),
-    # path('delete-request/<int:friend_id>',views.delete_request),
+    path('send-request/<int:friend_id>',views.send_request),
+    path('delete-request/<int:request_id>',views.delete_request),
     
 ]

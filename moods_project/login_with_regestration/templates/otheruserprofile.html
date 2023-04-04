@@ -30,6 +30,9 @@
               <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/user">Profile</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/messages">Messages</a>
             </li>
             <li class="nav-item">
@@ -77,19 +80,32 @@
                   <br>
                 </p>
                 </p>
+                {% if has_a_request %}
+                {% if incoming_request.request_reciever == newUser %}
+                  <div class="text-end">
+                    <a href="/delete-request/{{incoming_request.id}}" class="btn btn-outline-danger">ignore</a>
+                    <a href="/add-friend/{{user.id}}" class="btn btn-outline-success">accept</a>
+                  </div>
+                {% else %}
+                  <button class="btn btn-outline-success" disabled data-bs-toggle="button">pending</button>
+                {% endif %}
+              {% else %}
                 {% if is_a_friend %}
                   <div class="text-end">
-                    <button type="button" class="btn btn-outline-success"><a href="/remove-friend/{{user.id}}">Friends</a></button>
+                    <a href="/remove-friend/{{user.id}}" class="btn btn-outline-success">Friends</a>
                   </div>
-                {%elif not is_a_friend%}
-                <div class="text-end">
-                  <button type="button" class="btn btn-outline-success"><a href="/add-friend/{{user.id}}">Add friend</a></button>
-                </div>
+                {%else%}
+                  <div class="text-end">
+                    <a href="/send-request/{{user.id}}" class="btn btn-outline-success" id="addfriend">Add friend</a>
+                    <!-- <button type="button" class="btn btn-outline-success" disabled id="pending">pending request</button> -->
+                  </div>
                 {% endif%}
-                <div class="text-end">
-                  <button type="button" class="btn btn-outline-danger"><a href="">ignore</a></button>
-                  <button type="button" class="btn btn-outline-success"><a href="">accept</a></button>
-                </div>
+              {% endif %}
+              
+              
+
+
+
                 
               </div>
             </div>
@@ -143,6 +159,8 @@
     <!-- Footer -->
     <!-- We need to add ajax asap -->
     <script>
+    const pendingBtn=document.getElementById('pending');
+    const addFriendBtn=document.getElementById('addfriend');
       function updateTime() {
         // function to get the logged user time
         // const now = new Date();
@@ -159,7 +177,13 @@
         // console.log(timeString); 
       }
       setInterval(updateTime, 1000);
-      
+      // function pending_request(){
+      //   addFriendBtn.style.display="none"; 
+      //   pendingBtn.style.display="block";
+      // }      
+
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
   </body>

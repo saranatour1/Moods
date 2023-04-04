@@ -122,11 +122,11 @@ class FriendShip(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
 # requests table 
-# class Request(models.Model):
-#     request_sender = models.ForeignKey(User,related_name='sent_requests', on_delete=models.CASCADE)
-#     request_reciever = models.ForeignKey(User,related_name='received_requests', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class Request(models.Model):
+    request_sender = models.ForeignKey(User,related_name='sent_requests', on_delete=models.CASCADE)
+    request_reciever = models.ForeignKey(User,related_name='received_requests', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # class OurMessage(models.Model):
