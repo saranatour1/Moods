@@ -6,8 +6,10 @@ urlpatterns = [
     path('',views.show_registration_page), # where the main route here is refering to the main page shown on load
     path('dashboard',views.dashboard),   # redirecting to the main dashboard after successful login
     path('handle_regestration/',views.handle_regestration),
-    path('handle_login',views.handle_login),
+    path('handle_login/',views.handle_login),
     path('redirect',views.successfull),
     path('logout',views.logout),
-
+    path('user',views.logged_user_profile),    #path to show the logged user profile
+    path('user/<int:user_id>', views.other_user_profile), #path to show other users profiles 
+    
 ]

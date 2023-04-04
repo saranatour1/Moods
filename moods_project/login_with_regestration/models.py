@@ -13,6 +13,7 @@ class User(models.Model):
     time_zone = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+<<<<<<< HEAD
 
     # friends : list of users
 
@@ -79,3 +80,10 @@ class LikePost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+=======
+    objects = UserManeger()
+    
+    
+    
+    
+>>>>>>> 11f5fb6df40e7e6830fb15e0fd139bd2e27af31f
