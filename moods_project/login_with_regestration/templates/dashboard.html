@@ -92,7 +92,7 @@
                   <div class="text-end my-3">
                     <button class="btn btn-light">
                           <i class="bi bi-hand-thumbs-up"></i>
-                      <a href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
+                      <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
                   <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 commentForm ">
                     {%csrf_token%}
@@ -180,7 +180,7 @@
             data: $(this).serialize(),
             success: function(response){
                 if (response.success) {
-                  location.reload();
+                  location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
                   console.log(response)
                 } else {
                     var errors = response.errors;
@@ -222,7 +222,25 @@
             });
           return false;
         });
-            // adding likes on posts and comment 
+            // adding likes on posts and comment  likes_on_post, what i need to do is update the likes on the post id 
+            $(document).ready(function() {
+                $('.likes_on_post').click(function(e) {
+                  e.preventDefault();
+                  var post_id = $(this).attr('href').split('/').pop();
+                  var like_btn = $(this);
+                  $.ajax({
+                    url: '/likeOnPost/' + post_id,
+                    method: 'GET', //get method 
+                    success: function(data) { //update the number of likes in real time 
+                      like_btn.text(data.likes_count + ' Like(s)');
+                    },
+                    error: function(xhr, status, error) {
+                      console.error(xhr.responseText);
+                    }
+                  });
+                });
+              });
+        
 
 
     </script>
