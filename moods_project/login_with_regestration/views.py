@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse ,HttpRequest
 from pytz import all_timezones   #importing all time zones in the pyz library
 from .models import *
 # Create your views here.
@@ -189,6 +189,12 @@ def likeOnComemnt(request,comment_id):
     return JsonResponse({'likes_count': comment.likes_count}) 
 
 # the logged in user profile, showing the friendships, and all the neccessary functionalities 
+
+# the functionality here is really simple, accept or delete requests for only the logged user, 
+# have the friends of this user be displayed
+# display the user posts 
+
+
 def logged_user_profile(request):
   if 'newUser' in request.session:
     user_id=request.session['newUser']
@@ -200,15 +206,30 @@ def logged_user_profile(request):
     current_time_str = current_time.strftime('%H:%M:%S')
     current_date_str = current_time.strftime('%Y-%m-%d')
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
-    
+  
+    # All the user friends 
+    friends = newUser.friends.all()
+    friend_count = newUser.friends.count()
+
+    # Get all the requests where  the logged user is the reciever
+    requests = Request.objects.filter(request_reciever=newUser).all()
+    requests_count = newUser.received_requests.count()
+    print(requests_count)
+    for friend_request in requests:
+        sender = friend_request.request_sender
+        print(sender)
     context={
     'newUser':newUser,
     'user_age':age,
     'current_time':current_time_str,
     'current_date':current_date_str,
-    'all_posts':posts, 
+    'all_posts':posts,
+    'all_friends':friends,
+    'friends_count':friend_count,
+    'all_requests':requests,
+    'friend_request_count':requests_count, 
     }
-    return render(request, "userprofile.html", context)
+  return render(request, "userprofile.html", context)
 
 # friend requests
 # How to think: 
@@ -239,10 +260,10 @@ def other_user_profile(request, user_id):
     if user_id == logged_user_id:
         return redirect('/user')
 
-    try:
-        logged_user = User.objects.get(id=logged_user_id)
-    except User.DoesNotExist:
+    logged_user = User.objects.filter(id=logged_user_id).first()
+    if not logged_user:
         return redirect('/login')
+
 
     is_friend = FriendShip.objects.filter(users=logged_user).filter(users__id=user_id).exists()
 
@@ -252,10 +273,10 @@ def other_user_profile(request, user_id):
 
     has_a_request = Request.objects.filter(request_sender__id=user_id, request_reciever=logged_user).exists()
 
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
+    user = User.objects.filter(id=user_id).first()
+    if not user:
         return redirect('/user')
+
 
     user_age = datetime.date.today() - user.birthday
     age = user_age.days // 365
