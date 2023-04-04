@@ -231,66 +231,83 @@ def logged_user_profile(request):
 # the friendships are done 
 # onto the requests
 
-def other_user_profile(request,user_id):
-  logged_user_id = request.session['newUser']
-  if user_id == logged_user_id:
-    return redirect('/user')
-  else:
-    user = User.objects.get(id=user_id)
-    user_age = datetime.date.today() - user.birthday 
+def other_user_profile(request, user_id):
+    logged_user_id = request.session.get('newUser')
+    if not logged_user_id:
+        return redirect('/login')
+  
+    if user_id == logged_user_id:
+        return redirect('/user')
+
+    try:
+        logged_user = User.objects.get(id=logged_user_id)
+    except User.DoesNotExist:
+        return redirect('/login')
+
+    is_friend = FriendShip.objects.filter(users=logged_user).filter(users__id=user_id).exists()
+
+    outgoing_request = Request.objects.filter(request_sender=logged_user, request_reciever__id=user_id).first()
+
+    incoming_request = Request.objects.filter(request_sender__id=user_id, request_reciever=logged_user).first()
+
+    has_a_request = Request.objects.filter(request_sender__id=user_id, request_reciever=logged_user).exists()
+
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return redirect('/user')
+
+    user_age = datetime.date.today() - user.birthday
     age = user_age.days // 365
     time_zone = user.time_zone
     current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
     current_time_str = current_time.strftime('%H:%M:%S')
     current_date_str = current_time.strftime('%Y-%m-%d')
-    
-    # check if the logged-in user is friends with the user whose profile is being viewed
-    is_a_friend = True if FriendShip.objects.filter(users=logged_user_id).filter(users=user_id).exists() else False
-    
-    # Check if he is not a friend, and there are no incoming requests
-    incoming_request = Request.objects.filter(request_reciever=user).filter(request_sender=logged_user_id).first()
-    has_a_request= True if Request.objects.filter(request_reciever=user).filter(request_sender=logged_user_id).exists() else False 
-    
-    context={
-      "user": user,
-      'user_age': age,
-      'current_time': current_time_str,
-      'current_date': current_date_str,
-      'is_a_friend': is_a_friend, # pass the is_a_friend variable to the template
-      'incoming_request': incoming_request,
-      'has_a_request':has_a_request,
+
+    context = {
+        'newUser': logged_user,
+        'user': user,
+        'user_age': age,
+        'current_time': current_time_str,
+        'current_date': current_date_str,
+        'outgoing_request': outgoing_request,
+        'incoming_request': incoming_request,
+        'is_friend': is_friend,
+        'has_a_request': has_a_request
     }
+
     return render(request, "otheruserprofile.html", context)
+
+
+
 
 # Create a friendships instance 
 def add_friend(request, friend_id):
-    request_sender = User.objects.get(id=request.session['newUser'])  # I am the person who is accepting
+    request_sender = User.objects.get(id=request.session['newUser'])
     friend_to_be_added = User.objects.get(id=int(friend_id))
 
     # Check if the friendship already exists
     if FriendShip.objects.filter(users=request_sender).filter(users=friend_to_be_added).exists():
         return redirect(f"/user/{friend_id}")
 
-    # Create a Friendship instance
-    friendship = FriendShip.objects.create()
-    friendship.users.add(request_sender)
-    friendship.users.add(friend_to_be_added)
-
-    # Add the Friendship instance to your friend list
-    request_sender.friends.add(friendship)
-
-    # After adding the friend, remove the request
-    friend_to_be_added.received_requests.filter(request_sender=request_sender).delete()
+    # Check if there is a pending request
+    pending_request = Request.objects.filter(request_sender=request_sender, request_reciever=friend_to_be_added).first()
+    if pending_request:
+        friendship = FriendShip.objects.create()
+        friendship.users.add(request_sender)
+        friendship.users.add(friend_to_be_added)
+        request_sender.friends.add(friendship)
+        pending_request.delete()
+    else:
+        Request.objects.create(request_sender=request_sender, request_reciever=friend_to_be_added)
 
     return redirect(f"/user/{friend_id}")
-
 
 
 def remove_friend(request, friend_id):
     request_sender = User.objects.get(id=request.session['newUser'])
     friend_to_be_removed = User.objects.get(id=int(friend_id))
 
-    # Get the Friendship instance between the two users
     friendship = FriendShip.objects.filter(users=request_sender).filter(users=friend_to_be_removed).first()
 
     # Remove the Friendship instance if it exists
@@ -300,21 +317,46 @@ def remove_friend(request, friend_id):
 
 # jumping to requests
 # Sending  a request
-# Sending a request
-# Sending a request
 def send_request(request, friend_id):
-    sender = User.objects.get(id=request.session['newUser']) # I am the user who is sending 
+    sender = User.objects.get(id=request.session['newUser']) #I am the one who sent the request
     receiver = User.objects.get(id=int(friend_id))
-    # checking if the person is already a friend
-    friendship = FriendShip.objects.filter(users=sender).filter(users=receiver).first()
-    if friendship:
+  
+    # check if the sender and receiver are already friends
+    if FriendShip.objects.filter(users=sender).filter(users=receiver).exists():
         return redirect(f"/user/{friend_id}")
-    # checking if a request already exists
-    if Request.objects.filter(request_sender=sender).filter(request_reciever=receiver).exists():
+
+    # check if a request already exists
+    if Request.objects.filter(request_sender=sender, request_reciever =receiver).exists():
         return redirect(f"/user/{friend_id}")
-    Request.objects.create(request_sender=sender, request_reciever=receiver) # create a request
+
+    # check if there is an incoming request from the receiver to the sender
+    incoming_request = Request.objects.filter(request_sender=receiver, request_reciever =sender).first()
+    if incoming_request:
+        friendship = FriendShip.objects.create()
+        friendship.users.add(sender)
+        friendship.users.add(receiver)
+        sender.friends.add(friendship)
+        incoming_request.delete()
+        return redirect(f"/user/{friend_id}")
+
+    # create a new request
+    Request.objects.create(request_sender=sender, request_reciever=receiver)
     return redirect(f"/user/{friend_id}")
 
+
+# accept request 
+def accept_request(request, request_id):
+    # Get the request object
+    friend_request = Request.objects.get(id=request_id)
+    user = User.objects.get(id=request.session['newUser']) #I am the one who accepts the request
+    
+    friend_ship = FriendShip.objects.create()
+    friend_ship.users.add(friend_request.request_sender)
+    friend_ship.users.add(int(user.id))
+    friend_ship.save()
+    old_friend_id=friend_request.request_sender.id
+    friend_request.delete()
+    return redirect(f'/user/{old_friend_id}')
 
 
 
@@ -323,6 +365,10 @@ def delete_request(request,request_id):
     # if the person is allready a friend, do nothing, if not and ignore is pressed just remove the request 
     request_to_ignore = Request.objects.get(id=request_id)
     request_to_ignore.delete()
-    return redirect(f"/user")
+    return redirect("/user")
 
 
+def delete_all_requests(request):
+    Request.objects.all().delete()
+    FriendShip.objects.all().delete()
+    return redirect("/user")

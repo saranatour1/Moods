@@ -127,6 +127,8 @@ class Request(models.Model):
     request_reciever = models.ForeignKey(User,related_name='received_requests', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+      unique_together = ('request_sender', 'request_reciever')
 
 
 # class OurMessage(models.Model):

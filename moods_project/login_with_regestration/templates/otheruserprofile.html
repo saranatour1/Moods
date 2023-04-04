@@ -80,31 +80,45 @@
                   <br>
                 </p>
                 </p>
+
+
+
+
                 {% if has_a_request %}
-                {% if incoming_request.request_reciever == newUser %}
+                {% if incoming_request.request_sender_id == user.id %}
                   <div class="text-end">
-                    <a href="/delete-request/{{incoming_request.id}}" class="btn btn-outline-danger">ignore</a>
-                    <a href="/add-friend/{{user.id}}" class="btn btn-outline-success">accept</a>
+                    <a href="/delete-request/{{incoming_request.id}}" class="btn btn-outline-danger">Ignore</a>
+                    <a href="/accept-request/{{incoming_request.id}}" class="btn btn-outline-success">Accept</a>
                   </div>
                 {% else %}
-                  <button class="btn btn-outline-success" disabled data-bs-toggle="button">pending</button>
+                  <div class="text-end">
+                    <button class="btn btn-outline-success" disabled data-bs-toggle="button">Pending</button>
+                  </div>
                 {% endif %}
+              {% elif is_friend %}
+                <div class="text-end">
+                  <a href="/remove-friend/{{user.id}}" class="btn btn-outline-success">Friends</a>
+                </div>
               {% else %}
-                {% if is_a_friend %}
-                  <div class="text-end">
-                    <a href="/remove-friend/{{user.id}}" class="btn btn-outline-success">Friends</a>
-                  </div>
-                {%else%}
-                  <div class="text-end">
-                    <a href="/send-request/{{user.id}}" class="btn btn-outline-success" id="addfriend">Add friend</a>
-                    <!-- <button type="button" class="btn btn-outline-success" disabled id="pending">pending request</button> -->
-                  </div>
-                {% endif%}
+                <div class="text-end">
+                  {% if outgoing_request %}
+                    <button class="btn btn-outline-success" disabled data-bs-toggle="button">Request Sent</button>
+                  {% else %}
+                    <a href="/send-request/{{user.id}}" class="btn btn-outline-success" id="addfriend">Add Friend</a>
+                  {% endif %}
+                </div>
               {% endif %}
               
               
-
-
+              
+              
+              
+              
+              
+              
+            
+              
+              
 
                 
               </div>

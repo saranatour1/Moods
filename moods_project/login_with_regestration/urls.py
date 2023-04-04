@@ -21,5 +21,7 @@ urlpatterns = [
     path('remove-friend/<int:friend_id>',views.remove_friend),
     path('send-request/<int:friend_id>',views.send_request),
     path('delete-request/<int:request_id>',views.delete_request),
+    path('delete-all-requests', views.delete_all_requests),
+    path('accept-request/<int:request_id>/', views.accept_request),
     
 ]
