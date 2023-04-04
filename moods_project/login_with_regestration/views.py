@@ -85,11 +85,14 @@ def dashboard(request):
     current_time_str = current_time.strftime('%H:%M:%S')
     current_date_str = current_time.strftime('%Y-%m-%d')
     posts = Post.objects.all().order_by("-created_at")
-
     for post in posts:
         comments = post.comments_on_post.all().order_by("-created_at")
         post.all_comments = comments
+        post.likes_count = post.likes_on_post.count() 
 
+    # checking if the user has like the post 
+    
+    
     context= {
         'newUser':newUser,
         'user_age':age,
@@ -126,9 +129,8 @@ def add_comment(request):
         post_object = Post.objects.get(id=request.POST['post_id'])
         Comment.objects.create(comment_content=request.POST['comment'], user_who_comment=logged_user,post=post_object)
     return redirect('/dashboard')
-
+  
 # delete comment
-
 def delete_comment(request,comment_id):
   user_id=request.session['newUser']
   logged_user = User.objects.get(id=user_id)
@@ -136,6 +138,24 @@ def delete_comment(request,comment_id):
   if logged_user == comment_object.user_who_comment:
       comment_object.delete()
   return redirect('/dashboard')
+
+# adding likes to posts
+
+def likeOnPost(request, post_id):
+    user = User.objects.get(id=request.session['newUser'])
+    post = Post.objects.get(id=post_id)
+    like_exists = LikePost.objects.filter(user_who_like=user, post=post).exists()
+    if like_exists:
+        like = LikePost.objects.get(user_who_like=user, post=post)
+        like.delete()
+        post.likes_count -= 1
+        post.save()
+    else:
+        LikePost.objects.create(user_who_like=user, post=post)
+        post.likes_count += 1
+        post.save()
+    return redirect('/dashboard')
+
 
 
 
@@ -168,11 +188,7 @@ def delete_comment(request,comment_id):
 #     user.friends.remove(friend)
 #     return redirect('/dashboard') 
 
-# def likeOnPost(request,postId):
-#     user = User.objects.get(id = request.session['id'])
-#     post = Post.objects.get(id = postId)
-#     LikePost.objects.create(user_who_like = user,post = post)
-#     return redirect('/dashboard') 
+
 
 
 

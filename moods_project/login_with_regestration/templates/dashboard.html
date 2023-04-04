@@ -86,7 +86,10 @@
                   </p>
                   {% endif %}
                   <div class="text-end my-3">
-                    <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>  <a href="/add_likes_to_posts">312 Like(s)</a> </button>
+                    
+                    <button class="btn btn-light">
+                          <i class="bi bi-hand-thumbs-up"></i>
+                      <a href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
                   <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 ">
                     {%csrf_token%}

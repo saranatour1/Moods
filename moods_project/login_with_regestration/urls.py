@@ -15,7 +15,7 @@ urlpatterns = [
     # path('requestDelete/<int:frindId>', views.requestDelete),
     # path('frindAdd/<int:frindId>', views.frindAdd),
     # path('frindRemove/<int:frindId>', views.frindRemove),
-    # path('likeOnPost/<int:postId>', views.likeOnPost),
+    path('likeOnPost/<int:post_id>', views.likeOnPost),
     path('new_post',views.add_post),
     path('add-new-comment',views.add_comment),
     path('delete/<int:post_id>',views.delete_post),

@@ -70,6 +70,7 @@ class PostManager(models.Manager):
 class Post(models.Model):
     post_content = models.TextField() #referring to the text conent of the post
     user_who_post = models.ForeignKey(User,related_name='posts', on_delete=models.CASCADE)
+    likes_count=models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=PostManager()
@@ -99,6 +100,8 @@ class LikePost(models.Model):
     post = models.ForeignKey(Post,related_name='likes_on_post', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+      unique_together = ('user_who_like', 'post') # to ensure that the user likes the post only once
 
 # class OurMessage(models.Model):
 #     user_group = models.ForeignKey(User,related_name='chat_groups', on_delete=models.CASCADE)
