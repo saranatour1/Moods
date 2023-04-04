@@ -197,29 +197,30 @@
       return false;
     });
             // adding comments 
-            // $('#commentForm').submit(function(e){
-            //     e.preventDefault();
-            //     $.ajax({
-            //         url: '/add-new-comment',
-            //         method: 'post',
-            //         data: $(this).serialize(),
-            //         success: function(response){
-            //             if (response.success) {
-            //                 // //return to the dashborad after adding a new post
-            //             } else {
-            //                 var errors = response.errors;
-            //                 var errorList = '<ul class="list-unstyled">';
-            //                 for (var i=0; i<errors.length; i++) {
-            //                     errorList += '<li class="text-danger">' + errors[i] + '</li>';
-            //                 }
-            //                 errorList += '</ul>';
-            //                 $('#error-message-post').html(errorList);
-            //                 console.log('adding post failed:', errors);
-            //             }
-            //         }
-            //     });
-            //     return false;
-            // });
+          $('#commentForm').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: '/add-new-comment',
+                method: 'post',
+                data: $(this).serialize(),
+                success: function(response){
+                    if (response.success) {
+                      window.location.href = '/dashboard';
+                      console.log(response.success)
+                    } else {
+                        var errors = response.errors;
+                        var errorList = '<ul class="list-unstyled">';
+                        for (var i=0; i<errors.length; i++) {
+                            errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                        }
+                        errorList += '</ul>';
+                        $('#error-message-comment').html(errorList);
+                        console.log('adding post failed:', errors);
+                    }
+                }
+            });
+          return false;
+        });
             // adding likes on posts and comment 
 
 

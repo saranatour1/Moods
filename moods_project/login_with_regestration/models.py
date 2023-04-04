@@ -84,8 +84,8 @@ class CommentManager(models.Manager):
     def validate_comment(self, postData):
         errors = {}
         # Validate post data
-        if len(postData['comment_content']) < 1:
-            errors["post_content"] = "The comment content cannot be empty."
+        if len(postData['comment']) < 1:
+            errors["comment"] = "The comment content cannot be empty."
         return errors
 
 
