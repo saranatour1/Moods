@@ -77,13 +77,61 @@
                   <br>
                 </p>
                 </p>
-                <a class="btn btn-link " href="/edit_profile">edit profile</a>
+                <a class="btn btn-link " href="/edit_profile">Edit profile</a>
+              </div>
+              <!--Off canvas -->
+              <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"> Toggle static offcanvas </button>
+              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="staticBackdropLabel">Friendships & Requests </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <div>
+                    <div class="card border-light mb-3  mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
+                      <div class="card-header"> Requests <span class="badge text-bg-secondary">5</span>
+                      </div>
+                      <div class="text-start">
+                        <!-- Start -->
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-title">
+                              <a href="/user/{{user.id}}">Jane Smith</a>
+                            </h6>
+                            <p class="card-text">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                              <button class="btn btn-light me-md-2 rounded-5 " type="button">
+                                <i class="bi bi-person-add"></i>
+                              </button>
+                              <button class="btn btn-light rounded-5" type="button">
+                                <i class="bi bi-person-dash"></i>
+                              </button>
+                            </div>
+                            </p>
+                          </div>
+                        </div>
+                        <hr>
+                        <!-- End -->
+                      </div>
+                    </div>
+                    <div class="card border-light mb-4 mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
+                      <div class="card-header"> Friendships <span class="badge text-bg-secondary">5</span>
+                      </div>
+                      <div class="card-body">
+                        <h6 class="card-title">
+                          <a href="/user/{{user.id}}">Jack smith</a>
+                        </h6>
+                      </div>
+                      <hr>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <!-- Requests and list of friends  -->
-          <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto">
-            <div class="card border-light mb-3  mx-auto " style="max-width: 30rem;">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto" id="hide-this">
+            <div class="card border-light mb-3  mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
               <div class="card-header"> Requests <span class="badge text-bg-secondary">5</span>
               </div>
               <div class="text-start">
@@ -109,7 +157,7 @@
                 <!-- End -->
               </div>
             </div>
-            <div class="card border-light mb-4 mx-auto" style="max-width: 30rem;">
+            <div class="card border-light mb-4 mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
               <div class="card-header"> Friendships <span class="badge text-bg-secondary">5</span>
               </div>
               <div class="card-body">
@@ -117,13 +165,14 @@
                   <a href="/user/{{user.id}}">Jack smith</a>
                 </h6>
               </div>
+              <hr>
             </div>
           </div>
         </div>
         <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded">
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded"> 
               {%csrf_token%} 
               <div class="card-body">
                 <div class="form-floating ">
@@ -149,7 +198,6 @@
                       <a href="/add_likes_to_posts">312 Like(s)</a>
                     </button>
                   </div>
-                  <div></div>
                 </div>
               </div>
             </div>

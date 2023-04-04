@@ -37,9 +37,18 @@ a {
   text-decoration: none !important;
   color: black;
 }
+.btn.btn-primary{
+  display: none !important;
+}
 
 @media screen and (max-width: 1024px){
   div.col-4 {
+    display: none;
+  }
+  .btn.btn-primary{
+    display: block !important;
+  }
+  #hide-this{
     display: none;
   }
 }
