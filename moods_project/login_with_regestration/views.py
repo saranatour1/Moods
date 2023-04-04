@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from django.http import JsonResponse
-from pytz import all_timezones     #importing all time zones in the pyz library
+from pytz import all_timezones   #importing all time zones in the pyz library
 from .models import *
 # Create your views here.
+import pytz
 import bcrypt
 
 # referring to the main login method
@@ -68,11 +69,68 @@ def handle_login(request):
 
 
 
-# The main dashboard page 
+# The main dashboard page at route  /dashboard 
 def dashboard(request):
-  return render(request,"dashboard.html")
+  # user profile front view done
+  user_id=request.session['newUser']
+  newUser=User.objects.get(id=user_id)
+  user_age= datetime.date.today()- newUser.birthday 
+  age= (user_age.days//365)
+  time_zone=newUser.time_zone
+  current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+  current_time_str = current_time.strftime('%H:%M:%S')
+  current_date_str = current_time.strftime('%Y-%m-%d')
+  
+  context= {
+    'newUser':newUser,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str, 
+  }
+  return render(request,"dashboard.html",context)
 
 
 def logout(request):
   request.session.flush()
   return redirect('/')
+
+# the profile pag of the loged user
+
+def logged_user_profile(request):
+  if 'newUser' in request.session:
+    user_id=request.session['newUser']
+    newUser=User.objects.get(id=user_id)
+    user_age= datetime.date.today()- newUser.birthday 
+    age= (user_age.days//365)
+    time_zone=newUser.time_zone
+    current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+    current_time_str = current_time.strftime('%H:%M:%S')
+    current_date_str = current_time.strftime('%Y-%m-%d')
+    
+    context={
+    'newUser':newUser,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str, 
+    }
+    return render(request, "userprofile.html", context)
+
+# other users profile 
+def other_user_profile(request,user_id):
+  logged_user_id=request.session['newUser']
+  newUser=User.objects.get(id=logged_user_id)
+  user=User.objects.get(id=user_id)
+  user_age= datetime.date.today()- user.birthday 
+  age= (user_age.days//365)
+  time_zone=user.time_zone
+  current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+  current_time_str = current_time.strftime('%H:%M:%S')
+  current_date_str = current_time.strftime('%Y-%m-%d')
+  context={
+    
+    "user":user,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str, 
+  }
+  return render(request, "otheruserprofile.html",context)

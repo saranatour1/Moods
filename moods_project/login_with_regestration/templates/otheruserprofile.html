@@ -8,8 +8,7 @@
     <!-- Bootstrap and Jquery files go here -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link href="{% static 'css/frame1.css' %}" rel="stylesheet" />
     <link rel="shortcut icon" href="{%  static 'assets/favicon.png' %} " type="image/x-icon">
@@ -28,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/user">Profile</a>
+              <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/messages">Messages</a>
@@ -42,26 +41,59 @@
     </div>
     <div class="wrapper ">
       <div class="container container-sm container-md container-lg  pt-4">
-        <div class="row d-flex justify-content-between ">
-          <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+        <div class="row d-flex justify-content-center  mx-auto">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 mx-auto">
             <!-- logged user profile functionality -->
             <div class="card shadow p-3 mb-5  rounded">
               <div class="card-body p-4">
-                <h4 class="text-start mb-3"> Welcome <a href="/user">{{newUser.first_name}} {{newUser.last_name}}</a> ! </h4>
-                <p class="text-start mb-3"> Age: {{user_age}} years old </p>
-                <p class="text-start mb-3"> time now: <em class="time_now"></em> <br>
-                <span>Date Now: {{current_date}}</span> <br>
-                </em> for the time zone <em>{{newUser.time_zone}}</em>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="text-start mb-3">
+                    <a href="/user/{{user.id}}">
+                      {{user.first_name}} {{user.last_name}}
+                    </a>
+                  </h4>
+                  <span class="text-start mb-3 text-muted small"> joined on {{user.created_at.date}}
+                  </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="text-start mb-3"> Age: {{user_age}} years old </p>
+                  <p class="text start mb-3">
+                    <i class="bi bi-balloon ps-1"></i>
+                    {{user.birthday}}
+                  </p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-calendar4-event ps-1"></i> Date Now: {{current_date}}
+                  </span>
+                  <br>
+                  <p class="text-start mb-3">
+                    <i class="bi bi-hourglass-split ps-1"></i> time now: <em class="time_now"></em>
+                    <br>
+                </div>
+                </em>
+                <p class="text-center">
+                  <i class="bi bi-geo ps-1"></i> for the time zone <em>{{user.time_zone}}</em>
+                  <br>
                 </p>
-                <p class="text-start mb-3 text-muted"> joined on {{newUser.created_at.date}} </p>
-                <a class="btn btn-link " href="/edit_profile">edit profile</a>
+                </p>
+                <div class="text-end">
+                  <button type="button" class="btn btn-outline-danger">ignore</button>
+                  <button type="button" class="btn btn-outline-success">Accept</button>
+                  
+
+                </div>
+                
               </div>
             </div>
           </div>
+
+        </div>
+        <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
-          <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 ">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
             <form action="/new_post" method="post" class="card shadow  mb-5 rounded">
-              {%csrf_token%}
+              {%csrf_token%} 
               <div class="card-body">
                 <div class="form-floating ">
                   <textarea class="form-control" placeholder="What's on your mind today?" id="post" name="post" style="height: 100px"></textarea>
@@ -76,36 +108,17 @@
               <div class="card shadow mb-5 rounded">
                 <div class="card-body p-5">
                   <small class="text-body-secondary my-2"> last updated 20 min ago</small>
-                  <p class="card-title my-2"  > <a href="/user/1" > Jane Doe </a> </p>
+                  <p class="card-title my-2">
+                    <a href="/user">{{newUser.first_name}} {{newUser.last_name}} </a>
+                  </p>
                   <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
                   <div class="text-end my-3">
-                    <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>  <a href="/add_likes_to_posts">312 Like(s)</a> </button>
+                    <button class="btn btn-light">
+                      <i class="bi bi-hand-thumbs-up"></i>
+                      <a href="/add_likes_to_posts">312 Like(s)</a>
+                    </button>
                   </div>
-                  <form action="/new_comment" method="post" class="card shadow-sm   rounded w-90 ">
-                    {%csrf_token%}
-                    <div class="card-body">
-                      <div class="form-floating ">
-                        <textarea class="form-control" placeholder="Comment on this post!" id="comment" name="comment" style="height: 100px"></textarea>
-                        <label for="post">Comment</label>
-                        <div class="d-flex justify-content-end">
-                          <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <div>
-                    <!-- Start of comments -->
-                    <div class="text-start ps-3">
-                    <div class="card-body border-bottom">
-                      <small class="text-body-secondary my-2"> last updated 10 min ago</small>
-                      <p class="card-title my-2"> Jane Doe </p>  <small class=" text-muted "> from :Tulkarem</small>
-                      <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
-                      <div class="text-end my-3">
-                        <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
+                  <div></div>
                 </div>
               </div>
             </div>
@@ -113,7 +126,6 @@
         </div>
       </div>
     </div>
-
     <!-- Footer -->
     <footer class="page-footer font-small ">
       <!-- Copyright -->
@@ -129,21 +141,19 @@
         // const now = new Date();
         // const timeNow = now.toLocaleTimeString();
         // document.querySelector('.time_now').textContent = timeNow;
-        var userTimezone = "{{ newUser.time_zone }}";
-
+        var userTimezone = "{{ user.time_zone }}";
         // getting the user time despite him/her being logged in or not
         var currentDate = new Date();
-        var userDateTime = currentDate.toLocaleString("en-US", { timeZone: userTimezone });
+        var userDateTime = currentDate.toLocaleString("en-US", {
+          timeZone: userTimezone
+        });
         const timeString = userDateTime.split(", ")[1];
-        document.querySelector('.time_now').textContent=timeString
+        document.querySelector('.time_now').textContent = timeString
         // console.log(timeString); 
-     
       }
-
       setInterval(updateTime, 1000);
+      
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-
-  
   </body>
 </html>

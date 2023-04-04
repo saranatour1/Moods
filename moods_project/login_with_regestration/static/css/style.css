@@ -1,17 +1,17 @@
 /* Source Sans serif pro font for the main pages */
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@200;400;700&display=swap'); 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@200;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@900&display=swap");
 
 /* Background color : #Fcfcfcfc */
+/* Logo color #f8d054 */
 
 /* if we wanted to implemnt dark mode */
 /* body{
   filter: invert(1) hue-rotate(180deg) !important;
 } */
 
-*{
-  font-family: 'Source Serif Pro', serif;
- 
+* {
+  font-family: "Source Serif Pro", serif;
 }
 /* .logo{
   font-family: 'Noto Serif Malayalam', serif;
@@ -19,15 +19,36 @@
   display: flex;
 
 } */
-
+/* div.col-4 {
+ position: fixed;
+} */
 .logo {
   width: 100px;
 }
 
-.wrapper,footer ,.card,ul{
-  background-color: #Fcfcfcfc !important;
+.wrapper,
+footer,
+.card,
+ul {
+  background-color: #fcfcfcfc !important;
   /* height: 100vh; */
 }
+a {
+  text-decoration: none !important;
+  color: black;
+}
+#keep-this{
+  display: none !important;
+}
 
-
-
+@media screen and (max-width: 1024px){
+  div.col-4 {
+    display: none;
+  }
+#keep-this{
+    display: block !important;
+  }
+  #hide-this{
+    display: none;
+  }
+}
