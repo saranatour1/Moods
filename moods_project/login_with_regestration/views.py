@@ -218,82 +218,92 @@ def logged_user_profile(request):
 # if they accept we become friends else the request is removed and the friendship is not added
 # where to start? friendships
 
+#Sending  a request
 
+# def send_request(request,friend_id):
+#     sender = User.objects.get(id = request.session['newUser']) #I am the user who is sending 
+#     reciever = User.objects.get(id = int(friend_id))
+#     Request.objects.create(request_sender = sender,request_reciever = reciever) #create a request
+#     return redirect(f"user/{friend_id}") #redirect to the friend profile ,, needs more thinking    
+
+
+# def delete_request(request,friend_id):
+#     user = User.objects.get(id = request.session['newUser'])
+#     request_sender_to_be_removed = User.objects.get(id = int(friend_id))
+#     #why?
+#     user.sent_requests.delete(request_sender_to_be_removed)
+#     # user.received_requests.delete(request_sender_to_be_removed)
+#     return redirect(f"user/{friend_id}")
+
+# for demonstration purposes, I addded friendships in the shell :) 
+# friend 1 added to 2 
+# friend 1 added to 3 
+# friend 1 added to 4 
 
 # Note: this is in the other user profiles
-# handling adding or sending friend requests: 
-def add_friend(request,friend_id):
-    request_sender = User.objects.get(id = request.session['newUser'])
-    friend_to_be_added = User.objects.get(id = int(friend_id))
-    request_sender.friends.add(friend_to_be_added)              #add the friend to your friend lists
-    request_sender.received_requests.delete(friend_to_be_added) #after adding the friend, remove the request
-    return redirect('/user')                                    #you are expected to stay in the 'logged in' user profile
+# handling adding or sending friend requests:
+# I am the other user who's accepting the request 
 
-def remove_friend(request,friend_id):
-    request_sender = User.objects.get(id = request.session['newUser'])
-    friend_to_be_removed = User.objects.get(id = int(friend_id))
-    request_sender.friends.remove(friend_to_be_removed) #remove the friend if they are friends
-    return redirect(f"user/{friend_id}") 
-
-
-
-
-# def requestAdd(request,frindId):
-#     sender = User.objects.get(id = request.session['id'])
-#     reciever = User.objects.get(id = int(frindId))
-#     Request.objects.create(request_sender = sender,request_reciever = reciever )
-#     return redirect('/dashboard') 
-
-
-# def requestDelete(request,frindId):
-#     user = User.objects.get(id = request.session['id'])
-#     other = User.objects.get(id = int(frindId))
-#     user.sent_requests.delete(other)
-#     user.received_requests.delete(other)
-#     return redirect('/dashboard') 
-
-# def frindAdd(request,frindId):
-#     user = User.objects.get(id = request.session['id'])
-#     friend = User.objects.get(id = int(frindId))
-#     user.friends.add(friend)
-#     return redirect('/dashboard') 
-
-# def frindRemove(request,frindId):
-#     user = User.objects.get(id = request.session['id'])
-#     friend = User.objects.get(id = int(frindId))
-#     user.friends.remove(friend)
-#     return redirect('/dashboard') 
-
-
-
-
-
-
-
-
-
-
-
-# the profile pag of the loged user
-
-
-
+# the rendered user profile page 
 # other users profile 
+# the friendships are done 
+# onto the requests
+
 def other_user_profile(request,user_id):
-  logged_user_id=request.session['newUser']
-  newUser=User.objects.get(id=logged_user_id)
-  user=User.objects.get(id=user_id)
-  user_age= datetime.date.today()- user.birthday 
-  age= (user_age.days//365)
-  time_zone=user.time_zone
-  current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
-  current_time_str = current_time.strftime('%H:%M:%S')
-  current_date_str = current_time.strftime('%Y-%m-%d')
-  context={
+  logged_user_id = request.session['newUser']
+  if user_id == logged_user_id:
+    return redirect('/user')
+  else:
+    user = User.objects.get(id=user_id)
+    user_age = datetime.date.today() - user.birthday 
+    age = user_age.days // 365
+    time_zone = user.time_zone
+    current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+    current_time_str = current_time.strftime('%H:%M:%S')
+    current_date_str = current_time.strftime('%Y-%m-%d')
     
-    "user":user,
-    'user_age':age,
-    'current_time':current_time_str,
-    'current_date':current_date_str, 
-  }
-  return render(request, "otheruserprofile.html",context)
+    # check if the logged-in user is friends with the user whose profile is being viewed
+    is_a_friend = True if FriendShip.objects.filter(users=logged_user_id).filter(users=user_id).exists() else False
+    context={
+      "user": user,
+      'user_age': age,
+      'current_time': current_time_str,
+      'current_date': current_date_str,
+      'is_a_friend': is_a_friend, # pass the is_a_friend variable to the template
+    }
+    return render(request, "otheruserprofile.html", context)
+
+# Create a friendships instance 
+def add_friend(request, friend_id):
+    request_sender = User.objects.get(id=request.session['newUser'])  # I am the person who is accepting
+    friend_to_be_added = User.objects.get(id=int(friend_id))
+
+    # Create a Friendship instance
+    friendship = FriendShip.objects.create()
+    friendship.users.add(request_sender)
+    friendship.users.add(friend_to_be_added)
+
+    # Add the Friendship instance to your friend list
+    request_sender.friends.add(friendship)
+
+    # After adding the friend, remove the request
+    # request_sender.received_requests.remove(friendship)
+
+    return redirect(f"/user/{friend_id}")
+
+
+def remove_friend(request, friend_id):
+    request_sender = User.objects.get(id=request.session['newUser'])
+    friend_to_be_removed = User.objects.get(id=int(friend_id))
+
+    # Get the Friendship instance between the two users
+    friendship = FriendShip.objects.filter(users=request_sender).filter(users=friend_to_be_removed).first()
+
+    # Remove the Friendship instance if it exists
+    if friendship:
+        request_sender.friends.remove(friendship)
+    return redirect(f"/user/{friend_id}")
+
+
+
+

@@ -23,5 +23,7 @@ urlpatterns = [
     path('delete/comment/<int:comment_id>',views.delete_comment),
     path('add-friend/<int:friend_id>',views.add_friend),
     path('remove-friend/<int:friend_id>',views.remove_friend),
+    # path('send-request/<int:friend_id>',views.send_request),
+    # path('delete-request/<int:friend_id>',views.delete_request),
     
 ]

@@ -77,11 +77,18 @@
                   <br>
                 </p>
                 </p>
+                {% if is_a_friend %}
+                  <div class="text-end">
+                    <button type="button" class="btn btn-outline-success"><a href="/remove-friend/{{user.id}}">Friends</a></button>
+                  </div>
+                {%elif not is_a_friend%}
                 <div class="text-end">
-                  <button type="button" class="btn btn-outline-danger">ignore</button>
-                  <button type="button" class="btn btn-outline-success">Accept</button>
-                  
-
+                  <button type="button" class="btn btn-outline-success"><a href="/add-friend/{{user.id}}">Add friend</a></button>
+                </div>
+                {% endif%}
+                <div class="text-end">
+                  <button type="button" class="btn btn-outline-danger"><a href="">ignore</a></button>
+                  <button type="button" class="btn btn-outline-success"><a href="">accept</a></button>
                 </div>
                 
               </div>
