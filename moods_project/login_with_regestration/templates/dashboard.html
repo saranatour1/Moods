@@ -173,28 +173,29 @@
       // Ajax functionality
       // adding posts 
       $('#postForm').submit(function(e){
-                e.preventDefault();
-                $.ajax({
-                    url: '/new_post',
-                    method: 'post',
-                    data: $(this).serialize(),
-                    success: function(response){
-                        if (response.success) {
-                          $('#postForm')[0].reset(); //return to the dashborad after adding a new post
-                        } else {
-                            var errors = response.errors;
-                            var errorList = '<ul class="list-unstyled">';
-                            for (var i=0; i<errors.length; i++) {
-                                errorList += '<li class="text-danger">' + errors[i] + '</li>';
-                            }
-                            errorList += '</ul>';
-                            $('#error-message-post').html(errorList);
-                            console.log('adding post failed:', errors);
-                        }
+        e.preventDefault();
+        $.ajax({
+            url: '/new_post',
+            method: 'post',
+            data: $(this).serialize(),
+            success: function(response){
+                if (response.success) {
+                  window.location.href = '/dashboard';
+                  console.log(response)
+                } else {
+                    var errors = response.errors;
+                    var errorList = '<ul class="list-unstyled">';
+                    for (var i=0; i<errors.length; i++) {
+                        errorList += '<li class="text-danger">' + errors[i] + '</li>';
                     }
-                });
-                return false;
-            });
+                    errorList += '</ul>';
+                    $('#error-message-post').html(errorList);
+                    console.log('adding post failed:', errors);
+                }
+            }
+        });
+      return false;
+    });
             // adding comments 
             // $('#commentForm').submit(function(e){
             //     e.preventDefault();

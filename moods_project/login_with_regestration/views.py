@@ -117,7 +117,8 @@ def add_post(request):
         user_id=request.session['newUser']
         logged_user = User.objects.get(id=user_id)
         Post.objects.create(post_content=request.POST['post'], user_who_post=logged_user)
-        return JsonResponse({'success': True, 'errors': "no errors"})
+       
+        return JsonResponse({'success': True})
   return redirect('/dashboard')
 
 # deleting a post 
