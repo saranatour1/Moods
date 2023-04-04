@@ -72,17 +72,20 @@
                 </div>
               </div>
             </form>
+
             <div class="w-100">
+              {% for post in all_posts %}
               <div class="card shadow mb-5 rounded">
                 <div class="card-body p-5">
-                  <small class="text-body-secondary my-2"> last updated 20 min ago</small>
-                  <p class="card-title my-2"  > <a href="/user/1" > Jane Doe </a> </p>
-                  <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
+                  <small class="text-body-secondary my-2"> last updated {{post.updated_at.time}}</small>
+                  <p class="card-title my-2"  > <a href="/user/{{post.user_who_post.id}}" > {{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a> </p>
+                  <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
                   <div class="text-end my-3">
                     <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>  <a href="/add_likes_to_posts">312 Like(s)</a> </button>
                   </div>
-                  <form action="/new_comment" method="post" class="card shadow-sm   rounded w-90 ">
+                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 ">
                     {%csrf_token%}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
                     <div class="card-body">
                       <div class="form-floating ">
                         <textarea class="form-control" placeholder="Comment on this post!" id="comment" name="comment" style="height: 100px"></textarea>
@@ -96,18 +99,25 @@
                   <div>
                     <!-- Start of comments -->
                     <div class="text-start ps-3">
-                    <div class="card-body border-bottom">
-                      <small class="text-body-secondary my-2"> last updated 10 min ago</small>
-                      <p class="card-title my-2"> Jane Doe </p>  <small class=" text-muted "> from :Tulkarem</small>
-                      <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
-                      <div class="text-end my-3">
-                        <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
-                      </div>
-                    </div>
+                      {% for comment in post.all_comments %}
+                        {% if comment.post == post %}
+                          <div class="card-body border-bottom">
+                            <small class="text-body-secondary my-2">last updated: {{comment.updated_at.time}}</small>
+                            <p class="card-title my-2"> {{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</p> 
+                            <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
+                            <div class="text-end my-3">
+                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
+                            </div>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- end of posts here -->
+              {% endfor %}  
             </div>
           </div>
         </div>
