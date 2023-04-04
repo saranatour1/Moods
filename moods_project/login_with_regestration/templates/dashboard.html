@@ -125,7 +125,7 @@
                             </p>
                             {% endif %}
                             <div class="text-end my-3">
-                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}"> {{comment.likes_count}} Like(s)</a> </button>
+                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}" class="likes_on_comment" id="like_btn_{{comment.id}}">  {{comment.likes_count}} Like(s)</a> </button>
                             </div>
                           </div>
                         {% endif %}
@@ -222,24 +222,46 @@
             });
           return false;
         });
+        // keep it like this for now , repetitive wise 
             // adding likes on posts and comment  likes_on_post, what i need to do is update the likes on the post id 
-            $(document).ready(function() {
-                $('.likes_on_post').click(function(e) {
-                  e.preventDefault();
-                  var post_id = $(this).attr('href').split('/').pop();
-                  var like_btn = $(this);
-                  $.ajax({
-                    url: '/likeOnPost/' + post_id,
-                    method: 'GET', //get method 
-                    success: function(data) { //update the number of likes in real time 
-                      like_btn.text(data.likes_count + ' Like(s)');
-                    },
-                    error: function(xhr, status, error) {
-                      console.error(xhr.responseText);
-                    }
-                  });
-                });
+        $(document).ready(function() {
+            $('.likes_on_post').click(function(e) {
+              e.preventDefault();
+              var post_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var like_btn = $(this); //the id itself 
+              $.ajax({
+                url: '/likeOnPost/' + post_id,
+                method: 'GET', //get method ,not post 
+                success: function(data) { //update the number of likes in real time 
+                  like_btn.text(data.likes_count + ' Like(s)');
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
               });
+            });
+          });
+          //adding likes to comments
+          $(document).ready(function() {
+            $('.likes_on_comment').click(function(e) {
+              e.preventDefault();
+              var post_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var like_btn = $(this); //the id itself 
+              $.ajax({
+                url: '/likeOnPost/' + post_id,
+                method: 'GET', //get method ,not post 
+                success: function(data) { //update the number of likes in real time 
+                  like_btn.text(data.likes_count + ' Like(s)');
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
+              });
+            });
+          });
+          
+        
+
         
 
 

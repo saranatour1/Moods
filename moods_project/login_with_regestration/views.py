@@ -204,7 +204,7 @@ def likeOnComemnt(request,comment_id):
         LikeComment.objects.create(user_who_like=user, comment=comment)
         comment.likes_count += 1
         comment.save()
-    return redirect('/dashboard')
+    return JsonResponse({'likes_count': comment.likes_count}) 
 
 
 
