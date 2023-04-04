@@ -62,8 +62,10 @@ class PostManager(models.Manager):
     def validate_post(self, postData):
         errors = {}
         # Validate post data
-        if len(postData['post_content']) < 1:
-            errors["post_content"] = "The post content cannot be empty."
+        if len(postData['post']) < 1:
+            errors["post"] = "The post content cannot be empty."
+        if postData['post'] =='':
+            errors["post"] = "The post content cannot be empty."
         return errors
     
 

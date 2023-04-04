@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <!-- Bootstrap and Jquery files go here -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -60,7 +61,7 @@
           </div>
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded">
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded" id="postForm">
               {%csrf_token%}
               <div class="card-body">
                 <div class="form-floating ">
@@ -69,6 +70,9 @@
                   <div class="d-flex justify-content-end">
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
+                </div>
+                <div id="error-message-post">
+                    
                 </div>
               </div>
             </form>
@@ -86,7 +90,6 @@
                   </p>
                   {% endif %}
                   <div class="text-end my-3">
-                    
                     <button class="btn btn-light">
                           <i class="bi bi-hand-thumbs-up"></i>
                       <a href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
@@ -102,8 +105,10 @@
                           <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
                         </div>
                       </div>
+ 
                     </div>
                   </form>
+
                   <div>
                     <!-- Start of comments -->
                     <div class="text-start ps-3">
@@ -160,10 +165,39 @@
         const timeString = userDateTime.split(", ")[1];
         document.querySelector('.time_now').textContent=timeString
         // console.log(timeString); 
-     
       }
 
       setInterval(updateTime, 1000);
+
+      // Ajax functionality
+      // adding posts 
+      $('#postForm').submit(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: '/new_post',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(response){
+                        if (response.success) {
+                            // //return to the dashborad after adding a new post
+                        } else {
+                            var errors = response.errors;
+                            var errorList = '<ul class="list-unstyled">';
+                            for (var i=0; i<errors.length; i++) {
+                                errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                            }
+                            errorList += '</ul>';
+                            $('#error-message-post').html(errorList);
+                            console.log('adding post failed:', errors);
+                        }
+                    }
+                });
+                return false;
+            });
+            // adding comments 
+            // adding likes on posts and comment 
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 

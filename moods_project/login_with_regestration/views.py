@@ -106,11 +106,19 @@ def dashboard(request):
 # adding a post functionality 
 
 def add_post(request):
-  if request.method == 'POST':
-    user_id=request.session['newUser']
-    logged_user = User.objects.get(id=user_id)
-    Post.objects.create(post_content=request.POST['post'], user_who_post=logged_user)
-  return redirect('/dashboard') 
+  if request.method=='POST':
+      errors=Post.objects.validate_post(request.POST)
+      if len(errors) > 0:
+          error_list = []
+          for key, value in errors.items():
+              error_list.append(value)
+          return JsonResponse({'success': False, 'errors': error_list}) #removed the redirection 
+      else:
+        user_id=request.session['newUser']
+        logged_user = User.objects.get(id=user_id)
+        Post.objects.create(post_content=request.POST['post'], user_who_post=logged_user)
+        # return JsonResponse({'success': True})
+  return redirect('/dashboard')
 
 # deleting a post 
 def delete_post(request,post_id):
