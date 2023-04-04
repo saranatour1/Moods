@@ -115,6 +115,11 @@ class LikeComment(models.Model):
     class Meta:
       unique_together = ('user_who_like', 'comment') # to ensure that the user likes the post only once
 
+# friendshps table 
+class FriendShip(models.Model):
+  users = models.ManyToManyField(User,related_name='friends')
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
 
 

@@ -21,4 +21,7 @@ urlpatterns = [
     path('add-new-comment',views.add_comment),
     path('delete/<int:post_id>',views.delete_post),
     path('delete/comment/<int:comment_id>',views.delete_comment),
+    path('add-friend/<int:friend_id>',views.add_friend),
+    path('remove-friend/<int:friend_id>',views.remove_friend),
+    
 ]

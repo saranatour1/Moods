@@ -212,7 +212,28 @@ def logged_user_profile(request):
 
 # friend requests
 # How to think: 
+# as a person who is looking at other peoples profiles, I send them friend requests
+# they recieve the friend request, after that , they become the logged in user 
+# they are met with the fact that they now hove a request in their main profile
+# if they accept we become friends else the request is removed and the friendship is not added
+# where to start? friendships
 
+
+
+# Note: this is in the other user profiles
+# handling adding or sending friend requests: 
+def add_friend(request,friend_id):
+    request_sender = User.objects.get(id = request.session['newUser'])
+    friend_to_be_added = User.objects.get(id = int(friend_id))
+    request_sender.friends.add(friend_to_be_added)              #add the friend to your friend lists
+    request_sender.received_requests.delete(friend_to_be_added) #after adding the friend, remove the request
+    return redirect('/user')                                    #you are expected to stay in the 'logged in' user profile
+
+def remove_friend(request,friend_id):
+    request_sender = User.objects.get(id = request.session['newUser'])
+    friend_to_be_removed = User.objects.get(id = int(friend_id))
+    request_sender.friends.remove(friend_to_be_removed) #remove the friend if they are friends
+    return redirect(f"user/{friend_id}") 
 
 
 
