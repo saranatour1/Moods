@@ -37,7 +37,7 @@ a {
   text-decoration: none !important;
   color: black;
 }
-.btn.btn-primary{
+#keep-this{
   display: none !important;
 }
 
@@ -45,7 +45,7 @@ a {
   div.col-4 {
     display: none;
   }
-  .btn.btn-primary{
+#keep-this{
     display: block !important;
   }
   #hide-this{
