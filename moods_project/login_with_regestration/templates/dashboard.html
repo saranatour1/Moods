@@ -94,7 +94,7 @@
                           <i class="bi bi-hand-thumbs-up"></i>
                       <a href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
-                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 ">
+                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 " id="commentForm">
                     {%csrf_token%}
                     <input type="hidden" name="post_id" value="{{ post.id }}">
                     <div class="card-body">
@@ -105,10 +105,11 @@
                           <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
                         </div>
                       </div>
- 
+                      <div id="error-message-comment">
+                    
+                      </div>
                     </div>
                   </form>
-
                   <div>
                     <!-- Start of comments -->
                     <div class="text-start ps-3">
@@ -179,7 +180,7 @@
                     data: $(this).serialize(),
                     success: function(response){
                         if (response.success) {
-                            // //return to the dashborad after adding a new post
+                          $('#postForm')[0].reset(); //return to the dashborad after adding a new post
                         } else {
                             var errors = response.errors;
                             var errorList = '<ul class="list-unstyled">';
@@ -195,6 +196,29 @@
                 return false;
             });
             // adding comments 
+            // $('#commentForm').submit(function(e){
+            //     e.preventDefault();
+            //     $.ajax({
+            //         url: '/add-new-comment',
+            //         method: 'post',
+            //         data: $(this).serialize(),
+            //         success: function(response){
+            //             if (response.success) {
+            //                 // //return to the dashborad after adding a new post
+            //             } else {
+            //                 var errors = response.errors;
+            //                 var errorList = '<ul class="list-unstyled">';
+            //                 for (var i=0; i<errors.length; i++) {
+            //                     errorList += '<li class="text-danger">' + errors[i] + '</li>';
+            //                 }
+            //                 errorList += '</ul>';
+            //                 $('#error-message-post').html(errorList);
+            //                 console.log('adding post failed:', errors);
+            //             }
+            //         }
+            //     });
+            //     return false;
+            // });
             // adding likes on posts and comment 
 
 
