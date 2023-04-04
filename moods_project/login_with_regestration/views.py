@@ -91,8 +91,6 @@ def dashboard(request):
         post.likes_count = post.likes_on_post.count() 
 
     # checking if the user has like the post 
-    
-    
     context= {
         'newUser':newUser,
         'user_age':age,
@@ -149,7 +147,6 @@ def add_comment(request):
     return JsonResponse({'success': True})
     # return redirect('/dashboard')
 
-  
 # delete comment
 def delete_comment(request,comment_id):
   user_id=request.session['newUser']
@@ -159,21 +156,6 @@ def delete_comment(request,comment_id):
       comment_object.delete()
   return redirect('/dashboard')
 
-# adding likes to posts
-# def likeOnPost(request, post_id):
-#     user = User.objects.get(id=request.session['newUser'])
-#     post = Post.objects.get(id=post_id)
-#     like_exists = LikePost.objects.filter(user_who_like=user, post=post).exists()
-#     if like_exists:
-#         like = LikePost.objects.get(user_who_like=user, post=post)
-#         like.delete()
-#         post.likes_count -= 1
-#         post.save()
-#     else:
-#         LikePost.objects.create(user_who_like=user, post=post)
-#         post.likes_count += 1
-#         post.save()
-#     return redirect('/dashboard')
 def likeOnPost(request, post_id):
     user = User.objects.get(id=request.session['newUser'])
     post = Post.objects.get(id=post_id)
@@ -206,7 +188,30 @@ def likeOnComemnt(request,comment_id):
         comment.save()
     return JsonResponse({'likes_count': comment.likes_count}) 
 
+# the logged in user profile, showing the friendships, and all the neccessary functionalities 
+def logged_user_profile(request):
+  if 'newUser' in request.session:
+    user_id=request.session['newUser']
+    newUser=User.objects.get(id=user_id)
+    user_age= datetime.date.today()- newUser.birthday 
+    age= (user_age.days//365)
+    time_zone=newUser.time_zone
+    current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+    current_time_str = current_time.strftime('%H:%M:%S')
+    current_date_str = current_time.strftime('%Y-%m-%d')
+    posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
+    
+    context={
+    'newUser':newUser,
+    'user_age':age,
+    'current_time':current_time_str,
+    'current_date':current_date_str,
+    'all_posts':posts, 
+    }
+    return render(request, "userprofile.html", context)
 
+# friend requests
+# How to think: 
 
 
 
@@ -250,24 +255,7 @@ def likeOnComemnt(request,comment_id):
 
 # the profile pag of the loged user
 
-def logged_user_profile(request):
-  if 'newUser' in request.session:
-    user_id=request.session['newUser']
-    newUser=User.objects.get(id=user_id)
-    user_age= datetime.date.today()- newUser.birthday 
-    age= (user_age.days//365)
-    time_zone=newUser.time_zone
-    current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
-    current_time_str = current_time.strftime('%H:%M:%S')
-    current_date_str = current_time.strftime('%Y-%m-%d')
-    
-    context={
-    'newUser':newUser,
-    'user_age':age,
-    'current_time':current_time_str,
-    'current_date':current_date_str, 
-    }
-    return render(request, "userprofile.html", context)
+
 
 # other users profile 
 def other_user_profile(request,user_id):
