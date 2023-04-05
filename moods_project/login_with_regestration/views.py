@@ -472,104 +472,6 @@ def delete_request(request, request_id):
     return redirect("/user")
 
 
-# def delete_all_requests(request):
-#     Request.objects.all().delete()
-#     FriendShip.objects.all().delete()
-#     return redirect("/user")
-
-# adding the messages page:
-
-
-# # def messages(request):
-#   if 'otherId' not in request.session :
-#     if User.objects.last().id:
-#         otherId = User.objects.last().id
-#         request.session['otherId'] = otherId
-#         return redirect('/messages')
-#     else:
-#       user_id = request.session["newUser"]
-#       newUser = User.objects.get(id=user_id)
-#       user_age = datetime.date.today() - newUser.birthday
-#       age = user_age.days // 365
-#       time_zone = newUser.time_zone
-#       current_time = datetime.datetime.now(pytz.utc).astimezone(
-#           pytz.timezone(time_zone)
-#       )
-#       current_time_str = current_time.strftime("%H:%M:%S")
-#       current_date_str = current_time.strftime("%Y-%m-%d")
-        
-#       all_users = User.objects.all()
-#       context = {
-#           "theUser": newUser,
-#           "user_age": age,
-#           "current_time": current_time_str,
-#           "current_date": current_date_str,
-#           "all_users":all_users,
-#       }
-#     return render(request,'messages1.html',context)
-#   else:
-#         user_id = request.session["newUser"]
-#         newUser = User.objects.get(id=user_id)
-#         all_users = User.objects.all()
-#         # --------------------------
-#         user = User.objects.get(id=user_id)  # the logged in user
-#         other = User.objects.get(
-#             id=request.session["otherId"]
-#         )  # the other user i am sending a mesaage to
-#         sent = Message.objects.filter(message_receiver=other, message_sender=user)
-#         received = Message.objects.filter(message_sender=other, message_receiver=user)
-#         allSR = received.union(sent)  # all the messages
-
-#         userId = request.session["newUser"]
-#         messages = Message.objects.all().order_by("-created_at")
-#         arrI = []
-#         arrP = []
-#         all_users_for_last_messages = []
-#         for message in messages:
-#             if message.message_sender_id == userId and userId not in arrI:
-#                 arrI.append(message.message_receiver_id)
-#                 arrP.append(1)
-#             elif message.message_receiver_id == userId and userId not in arrI:
-#                 arrI.append(message.message_sender_id)
-#                 arrP.append(0)
-#         for i in range(len(arrI)):
-#             if User.objects.get(id=arrI[i]) not in all_users_for_last_messages:
-#                 all_users_for_last_messages.append(User.objects.get(id=arrI[i]))
-
-#         # the other user details
-#         user_age = datetime.date.today() - other.birthday
-#         age = user_age.days // 365
-#         time_zone = other.time_zone
-#         current_time = datetime.datetime.now(pytz.utc).astimezone(
-#             pytz.timezone(time_zone)
-#         )
-#         current_time_str = current_time.strftime("%H:%M:%S")
-#         current_date_str = current_time.strftime("%Y-%m-%d")
-
-#         # for the logged in user
-#         # time_zone_logged = logged_user.time_zone
-#         # current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
-#         # # Hourly time difference
-#         # time_difference = current_time_logged - current_time
-#         # # time_difference_in_hours = int(abs(time_difference.total_hours() / 3600))
-#         # print(time_difference)
-#         context = {
-#             "allSR": allSR,
-#             "all_users_for_last_messages": all_users_for_last_messages,
-#             "all_users": all_users,
-#             "sent": sent,
-#             "received": received,
-#             "other": other,
-#             "theUser": User.objects.get(
-#                 id=request.session["newUser"]
-#             ),  # need to remove this, repititive
-#             "newUser": newUser,
-#             "user_age": age,
-#             "current_time": current_time_str,
-#             "current_date": current_date_str,
-#         }
-#         return render(request, "messages.html", context)
-
 def messages(request):
     
     if 'otherId' not in request.session :
@@ -666,5 +568,27 @@ def creatMessages(request, otherId):
     # message_sender.chat_groups.add(message_receiver)
     OurMessage.objects.create(user_group1=message_sender, user_group2=message_receiver)
     return redirect("/messages")
+
+
+
+# adding the seacrh bar
+def search(request, q):
+    re1 = User.objects.filter(first_name__icontains=q)
+    re2 = User.objects.filter(last_name__icontains=q)
+    re3 = User.objects.filter(email__icontains=q)
+    
+    if re1 or re2 or re3:
+        te = 1
+    else:
+        te = 0
+    
+    context = {
+        're1': re1,
+        're2': re2,
+        're3': re3,
+        'te': te,
+    }
+    return render(request, 'result.html', context)
+
 
 

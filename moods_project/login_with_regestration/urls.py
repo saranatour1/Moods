@@ -26,6 +26,8 @@ urlpatterns = [
     path('messages', views.messages),  # get all the messages 
     path('changOtherId/<int:otherId>', views.changOtherId),
     path('creatMessages/<int:otherId>', views.creatMessages),
+    path('search/<se>', views.search), #search bar
+    
     
     
 ]
