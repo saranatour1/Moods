@@ -19,7 +19,7 @@
     <!-- The main bav bar containing the Moods Logo -->
     <!-- Logo Design -->
     <div class=" w-100  ">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary h-100 ps-5 pe-5 ">
+      <nav class="navbar navbar-expand-lg  h-100 ps-5 pe-5 " >
         <a class="navbar-brand logo " href="/dashboard">
           <img src="{% static 'assets/logo.svg' %}" alt="Moods Logo">
         </a>
@@ -27,7 +27,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto"   >
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/user">Profile</a>
             </li>
@@ -52,7 +52,7 @@
         <div class="row d-flex justify-content-between ">
           <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3">
             <!-- logged user profile functionality -->
-            <div class="card shadow p-3 mb-5  rounded">
+            <div class="card  p-3 mb-5  rounded " >
               <div class="card-body p-4">
                 <h4 class="text-start mb-3"> Welcome <a href="/user">{{newUser.first_name}} {{newUser.last_name}}</a> ! </h4>
                 <p class="text-start mb-3"> Age: {{user_age}} years old </p>
