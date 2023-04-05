@@ -20,6 +20,7 @@ def show_login_page(request):
 def show_registration_page(request):
     time_zones = all_timezones
     context = {"time_zones": time_zones}
+    
     return render(request, "register.html", context)
 
 
@@ -590,4 +591,35 @@ def search(request,se):
     }
     return render(request,'result.html',context)
 
+
+def editProfile(request):
+    context = {
+        'user':User.objects.get(id = request.session['newUser'])
+    }
+    return render(request,'editProfile.html',context)
+
+
+def updateProfile(request):
+
+    if request.method=='POST':
+        errors=User.objects.validate_login(request.POST)
+        if len(errors) > 0:
+            error_list = []
+            for key, value in errors.items():
+                error_list.append(value)
+            return JsonResponse({'success': False, 'errors': error_list}) #removed the redirection 
+        else:
+            first_name =request.POST['first_name']
+            last_name =request.POST['last_name']
+            birthday =request.POST['birthday']
+            gender =request.POST['gender']
+            password =request.POST['password']
+            user = User.objects.get(id = request.session['newUser'])
+            user.first_name = first_name
+            user.last_name = last_name
+            user.birthday = birthday
+            user.gender = gender
+            user.password = password
+            user.save()
+        return JsonResponse({'success': True})
 

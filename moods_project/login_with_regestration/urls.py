@@ -4,9 +4,9 @@ from . import views                    # import views from current file
 urlpatterns = [
     path('login',views.show_login_page),              # here i am refering to the method
     path('',views.show_registration_page), # where the main route here is refering to the main page shown on load
-    path('dashboard',views.dashboard),   # redirecting to the main dashboard after successful login
     path('handle_regestration/',views.handle_regestration),
     path('handle_login/',views.handle_login),
+    path('dashboard',views.dashboard),   # redirecting to the main dashboard after successful login
     path('redirect',views.successfull),
     path('logout',views.logout),
     path('user',views.logged_user_profile),    #path to show the logged user profile
@@ -27,6 +27,8 @@ urlpatterns = [
     path('changOtherId/<int:otherId>', views.changOtherId),
     path('creatMessages/<int:otherId>', views.creatMessages),
     path('search/<se>', views.search), #search bar
+    path('edit_profile', views.editProfile),
+    path('updateProfile/', views.updateProfile),
     
     
     
