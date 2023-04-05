@@ -306,21 +306,12 @@ def other_user_profile(request, user_id):
     if not logged_user:
         return redirect("/login")
 
-    is_friend = (
-        FriendShip.objects.filter(users=logged_user).filter(users__id=user_id).exists()
-    )
+    is_friend = (FriendShip.objects.filter(users=logged_user).filter(users__id=user_id).exists())
 
-    outgoing_request = Request.objects.filter(
-        request_sender=logged_user, request_reciever__id=user_id
-    ).first()
+    outgoing_request = Request.objects.filter(request_sender=logged_user, request_reciever__id=user_id).first()
+    incoming_request = Request.objects.filter(request_sender__id=user_id, request_reciever=logged_user).first()
 
-    incoming_request = Request.objects.filter(
-        request_sender__id=user_id, request_reciever=logged_user
-    ).first()
-
-    has_a_request = Request.objects.filter(
-        request_sender__id=user_id, request_reciever=logged_user
-    ).exists()
+    has_a_request = Request.objects.filter(request_sender__id=user_id, request_reciever=logged_user).exists()
 
     user = User.objects.filter(id=user_id).first()
     if not user:
@@ -335,13 +326,31 @@ def other_user_profile(request, user_id):
 
     # for the logged in user
     time_zone_logged = logged_user.time_zone
-    current_time_logged = datetime.datetime.now(pytz.utc).astimezone(
-        pytz.timezone(time_zone_logged)
-    )
+    current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+    current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
     # Hourly time difference
-    time_difference = current_time_logged - current_time
+    hour_logged_user=int(current_time_logged.strftime("%H"))
+    hour_viewed_user=int(current_time.strftime("%H"))
+    
+    hourly_dif=hour_logged_user - hour_viewed_user
+    if hourly_dif> 0:
+        msg=f"<p> You are { hourly_dif} hour ahead</p>"
+        # print(hourly_dif> 0)
+    elif hourly_dif < 0:
+        msg=f"<p> You are {hourly_dif} hour behind</p>"
+        # print(hourly_dif< 0)
+    else:
+        msg="<p> You have the same time  </p>"
+        print(hourly_dif< 0)
+    
+    # print(type(hour_logged_user))
+ 
+    
+    
+    
+    # print(current_time_logged.strftime("%H"))
     # time_difference_in_hours = int(abs(time_difference.total_hours() / 3600))
-    print(time_difference)
+    # print(current_time.strftime("%H"))
     # if time_difference.total_seconds() > 0:
     #   msg=f"<p> You are {time_difference_in_hours} ahead</p>"
     # elif time_difference.total_seconds() == 0:
@@ -362,7 +371,7 @@ def other_user_profile(request, user_id):
         "is_friend": is_friend,
         "has_a_request": has_a_request,
         "all_posts":posts,
-        # 'msg':msg,
+        'msg':msg,
     }
 
     return render(request, "otheruserprofile.html", context)
@@ -593,14 +602,16 @@ def search(request,se):
 
 
 def editProfile(request):
+    time_zones = all_timezones
     context = {
-        'user':User.objects.get(id = request.session['newUser'])
+        'user':User.objects.get(id = request.session['newUser']),
+        "time_zones": time_zones,
     }
     return render(request,'editProfile.html',context)
 
 
+# needs more thinking 
 def updateProfile(request):
-
     if request.method=='POST':
         errors=User.objects.validate_login(request.POST)
         if len(errors) > 0:
