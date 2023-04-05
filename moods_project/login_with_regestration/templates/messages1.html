@@ -1,0 +1,104 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        
+nav{
+    height: 200px;
+}
+main{
+    width: 100%;
+    display: flex;
+   justify-content: space-around;
+}
+.left{
+    width:300px;
+    border: 3px solid black;
+    height: 500px;
+    visibility: hidden
+    
+
+}
+.center{
+    width:800px;
+    border: 3px solid black;
+    height: 500px;
+    
+    
+}
+.disply_messages{
+    
+    width: 600px;
+    height: 300px;
+    border: 1px solid;
+    margin-top: 40px;
+    margin-left: 80px;
+    overflow: scroll;
+    visibility: hidden
+}
+.type-message{
+    width: 600px;
+    height: 100px;
+   
+    margin-top: 40px;
+    margin-left: 80px;
+    visibility: hidden
+}
+
+.right{
+    margin-top: 100px;
+    width:250px;
+    border: 3px solid black;
+    height: 400px;
+    overflow: scroll;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <nav></nav>
+    <main>
+        <div class="left">
+            {{other.first_name}}  {{other.last_name}}  
+            {{other.birthday}}
+
+            
+        </div>
+        <div class="center" >
+            <h1>please choose user </h1>
+            <div class="disply_messages">
+         
+            </div>
+            <div class="type-message">
+                <form action="/creatMessages/{{other.id}}" method="post">
+                    {% csrf_token %}
+                    
+                    <textarea name="message_content"  cols="70" rows="5"></textarea>
+                    <input type="submit" value="send">
+                </form>
+                
+            </div>
+
+        </div>
+        <div class="right">
+
+            {%for user in all_users%}
+            {% if user.id != request.session.id %}
+                <div><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
+            {%endif%}
+            {%endfor%}
+        </div>
+    </main>
+</body>
+
+</html>

@@ -6,7 +6,8 @@ from .models import *
 # Create your views here.
 import pytz
 import bcrypt
-
+# from datetime import datetime
+import datetime
 # referring to the main login method
 def show_login_page(request):
   return render(request, "login.html ")
@@ -278,12 +279,28 @@ def other_user_profile(request, user_id):
         return redirect('/user')
 
 
-    user_age = datetime.date.today() - user.birthday
+    user_age= datetime.date.today()- user.birthday 
     age = user_age.days // 365
     time_zone = user.time_zone
     current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
     current_time_str = current_time.strftime('%H:%M:%S')
     current_date_str = current_time.strftime('%Y-%m-%d')
+    
+    # for the logged in user
+    time_zone_logged = logged_user.time_zone
+    current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+    # Hourly time difference 
+    time_difference = current_time_logged - current_time
+    # time_difference_in_hours = int(abs(time_difference.total_hours() / 3600))
+    print(time_difference)
+    # if time_difference.total_seconds() > 0:
+    #   msg=f"<p> You are {time_difference_in_hours} ahead</p>"
+    # elif time_difference.total_seconds() == 0:
+    #   msg="<p> You have the same time  </p>"
+    #   # time_difference_in_hours=abs(time_difference_in_hours)
+    # else:
+    #   msg=f"<p> You are {time_difference_in_hours} behind </p>"
+
 
     context = {
         'newUser': logged_user,
@@ -294,10 +311,12 @@ def other_user_profile(request, user_id):
         'outgoing_request': outgoing_request,
         'incoming_request': incoming_request,
         'is_friend': is_friend,
-        'has_a_request': has_a_request
+        'has_a_request': has_a_request,
+        # 'msg':msg,
     }
 
     return render(request, "otheruserprofile.html", context)
+
 
 
 
@@ -389,7 +408,97 @@ def delete_request(request,request_id):
     return redirect("/user")
 
 
-def delete_all_requests(request):
-    Request.objects.all().delete()
-    FriendShip.objects.all().delete()
-    return redirect("/user")
+# def delete_all_requests(request):
+#     Request.objects.all().delete()
+#     FriendShip.objects.all().delete()
+#     return redirect("/user")
+
+# adding the messages page:
+
+
+def messages(request):
+    
+    if 'otherId' not in request.session :
+        all_users = User.objects.all()
+        context ={
+            'all_users' : all_users,
+        }
+        return render(request,'messages1.html',context)
+    else:
+        # ---------------------------saratimestart
+        user_id=request.session['otherId']
+        newUser=User.objects.get(id=user_id)
+        user_age= datetime.date.today()- newUser.birthday 
+        age= (user_age.days//365)
+        time_zone=newUser.time_zone
+        current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+        current_time_str = current_time.strftime('%H:%M:%S')
+        current_date_str = current_time.strftime('%Y-%m-%d')
+        
+        # ------------------------------saratimeend
+
+        request.session['id']=request.session['newUser']
+        # all_users_for_last_messages = User.objects.get(id = request.session['id']).chat_groups2.all()
+        all_users = User.objects.all() 
+        # --------------------------
+        user = User.objects.get(id = request.session['id'])
+        other = User.objects.get(id=request.session['otherId'])
+
+        # all_users_for_last_messages = OurMessage.objects.filter(user_group1 = user)
+
+        sent = Message.objects.filter(message_receiver = other,message_sender = user)
+        
+        received = Message.objects.filter(message_sender = other,message_receiver = user)
+        
+        allSR = received.union(sent)  # messagess
+
+        # ---------------------------------
+        userId = request.session['id']
+        messages = Message.objects.all().order_by('-created_at')
+        arrI = []
+        arrP = []
+        all_users_for_last_messages = []
+        for message in messages:
+            if message.message_sender_id == userId and userId not in arrI:
+                arrI.append(message.message_receiver_id)
+                arrP.append(1)
+            elif message.message_receiver_id == userId and userId not in arrI:
+                arrI.append(message.message_sender_id)
+                arrP.append(0)
+        for i in range(len(arrI)):
+            if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
+                all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
+        # ---------------------------------S
+        context = {
+                'allSR': allSR,
+                'all_users_for_last_messages': all_users_for_last_messages,
+                'all_users' : all_users,
+                'sent': sent,
+                'received' : received,
+                'other':other,
+                'theUser' : User.objects.get(id = request.session['id']),
+                # هذه الطويلة لعرض قائمة المستخدمين عل يسار
+
+
+                'newUser':newUser,
+                'user_age':age,
+                'current_time':current_time_str,
+                'current_date':current_date_str, 
+                }
+        return render(request,'messages.html',context)
+
+def changOtherId(request,otherId):# this func put it in link on the left list in 'messages page'
+                                # we use this link to chang the 'other' id
+    request.session['otherId'] = otherId
+    return redirect('/messages')
+
+def creatMessages(request,otherId):
+    message_content = request.POST['message_content']
+    message_sender = User.objects.get(id = request.session['id'])
+    message_receiver = User.objects.get(id = int(otherId))
+    Message.objects.create(message_content = message_content,message_sender = message_sender,message_receiver = message_receiver)
+    # message_sender.chat_groups.add(message_receiver)
+    OurMessage.objects.create(user_group1 = message_sender, user_group2 = message_receiver)
+    
+    return redirect('/messages')
+  

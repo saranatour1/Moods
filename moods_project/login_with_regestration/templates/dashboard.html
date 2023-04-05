@@ -117,7 +117,7 @@
                         {% if comment.post == post %}
                           <div class="card-body border-bottom">
                             <small class="text-body-secondary my-2">last updated: {{comment.updated_at.time}}</small>
-                            <p class="card-title my-2"> {{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</p> 
+                            <p class="card-title my-2" ><a href="/user/{{comment.user_who_comment.id}}">{{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</a></p> 
                             <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
                             {%if newUser == comment.user_who_comment%}
                             <p>
@@ -245,10 +245,10 @@
           $(document).ready(function() {
             $('.likes_on_comment').click(function(e) {
               e.preventDefault();
-              var post_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var comment_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
               var like_btn = $(this); //the id itself 
               $.ajax({
-                url: '/likeOnPost/' + post_id,
+                url: '/add_likes_comment/' + comment_id,
                 method: 'GET', //get method ,not post 
                 success: function(data) { //update the number of likes in real time 
                   like_btn.text(data.likes_count + ' Like(s)');

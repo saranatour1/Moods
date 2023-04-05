@@ -130,36 +130,20 @@ class Request(models.Model):
     class Meta:
       unique_together = ('request_sender', 'request_reciever')
 
+# Messages table 
 
-# class OurMessage(models.Model):
-#     user_group = models.ForeignKey(User,related_name='chat_groups', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class OurMessage(models.Model): # i'm way to lazy to change the names :")
+    user_group1 = models.ForeignKey(User,related_name='chat_groups1', on_delete=models.CASCADE,default=None)
+    user_group2 = models.ForeignKey(User,related_name='chat_groups2', on_delete=models.CASCADE,default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-# class Message(models.Model):
-#     message_content = models.TextField()
-#     message_sender = models.ForeignKey(User,related_name='sent_messages', on_delete=models.CASCADE)
-#     message_receiver = models.ForeignKey(User,related_name='received_messages', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-
-# class FriendShip(models.Model):
-#     users = models.ManyToManyField(User,related_name='friends')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-
-# class Request(models.Model):
-#     request_sender = models.ForeignKey(User,related_name='sent_requests', on_delete=models.CASCADE)
-#     request_reciever = models.ForeignKey(User,related_name='received_requests', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-
-
-
-    # likes_on_comment : list of likes on comment
+class Message(models.Model):
+    message_content = models.TextField()
+    message_sender = models.ForeignKey(User,related_name='sent_messages', on_delete=models.CASCADE)
+    message_receiver = models.ForeignKey(User,related_name='received_messages', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 
