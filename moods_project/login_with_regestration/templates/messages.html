@@ -74,7 +74,7 @@
                     <ul class="list-unstyled">
                       <h5>Latest messages</h5>
                   {%for user in all_users_for_last_messages%}
-                      <li class="">
+                      <li >
                         <a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
                       <p>{{user.message_receiver.message_content}}</p>
                         <p class="text-muted"> sent on {{message.created_at}} </p>
@@ -92,7 +92,7 @@
                 {%for user in all_users%}
                     {% if user not in all_users_for_last_messages%}
                         {% if user.id != theUser.id %}
-                            <li><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
+                            <li ><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
                             </li>
                         {% endif %}
                     {% endif %}
@@ -110,7 +110,8 @@
           <div class="card shadow mb-1 rounded p-5" style=" overflow-y: scroll;   max-height: 25rem; " id="myDiv">
             <div class="card-body border"> 
               {%for message in allSR%} 
-              {%if message.message_sender.id == request.session.id %} <div class="d-flex justify-content-end ">
+              {%if message.message_sender.id == request.session.id %} 
+              <div class="d-flex justify-content-end mt-2">
                 <div class="card p-1 h-25">
                   <div class="card-body">
                     <p> You <span class="text-muted"> at {{message.created_at.time}}</span>
@@ -120,9 +121,9 @@
                 </div>
               </div> 
               {%else%} 
-              <div class="d-flex justify-content-start ">
-                <div class="card p-1 h-25">
-                  <div class="card-body">
+              <div class="d-flex justify-content-start mt-2">
+                <div class="card p-1 h-25  " >
+                  <div class="card-body  ">
                     <p> {{message.message_sender.first_name}} {{message.message_sender.last_name}}
                       <span class="text-muted"> at {{message.created_at.time}}</span>
                     </p>
@@ -140,7 +141,7 @@
               <div class="form-floating ">
                 <textarea class="form-control" placeholder="Send a maessage " id="message_content" name="message_content" style="height: 100px"></textarea>
                 <label for="message_content">Message</label>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end mt-1">
                   <button class="btn btn-primary my-2 me-2" type="submit">Send</button>
                 </div>
               </div>

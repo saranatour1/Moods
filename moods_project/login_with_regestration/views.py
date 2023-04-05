@@ -50,6 +50,7 @@ def handle_regestration(request):
             )
             newUser = User.objects.last().id
             request.session["newUser"] = newUser
+            request.session['id']=newUser
             # return redirect('/dashboard')
             return JsonResponse(
                 {"success": True}
@@ -77,6 +78,7 @@ def handle_login(request):
                 request.POST["password"].encode(), user.password_hash.encode()
             ):
                 request.session["newUser"] = user.id
+                request.session['id']=user.id
                 return JsonResponse({"success": True})
             else:
                 return JsonResponse(

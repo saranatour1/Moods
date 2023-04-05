@@ -31,6 +31,4 @@ urlpatterns = [
     path('edit_profile', views.editProfile),
     path('updateProfile/', views.updateProfile),
     
-    
-    
 ]
