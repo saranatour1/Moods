@@ -188,11 +188,16 @@ def likeOnPost(request,postId):
 def messages(request):
     
     if 'otherId' not in request.session :
-        all_users = User.objects.all()
-        context ={
-            'all_users' : all_users,
-        }
-        return render(request,'messages1.html',context)
+        if User.objects.last().id:
+            otherId = User.objects.last().id
+            request.session['otherId'] = otherId
+            return redirect('/messages')
+        else:
+            all_users = User.objects.all()
+            context ={
+                'all_users' : all_users,
+            }
+            return render(request,'messages1.html',context)
     else:
         # ---------------------------saratimestart
         user_id=request.session['otherId']
