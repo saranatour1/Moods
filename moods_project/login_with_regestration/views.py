@@ -341,7 +341,7 @@ def other_user_profile(request, user_id):
         # print(hourly_dif< 0)
     else:
         msg="<p> You have the same time  </p>"
-        print(hourly_dif< 0)
+        # print(hourly_dif< 0)
     
     # print(type(hour_logged_user))
  
