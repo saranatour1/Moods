@@ -289,4 +289,21 @@ def otherProf(request,otherId):
     }
     return render(request,'otherProf.html',context)
 
+
+def search(request,se):
+    re1 = User.objects.filter(first_name = se)
+    re2 = User.objects.filter(last_name = se)
+    re3 = User.objects.filter(email = se)
+    if re1 or re2 or re3:
+        te = 1
+    else:
+        te = 0
+    context = {
+        're1':re1,
+        're2':re2,
+        're3':re3,
+        'te':te,
+    }
+    return render(request,'result.html',context)
+
 # --------------------------hamza end

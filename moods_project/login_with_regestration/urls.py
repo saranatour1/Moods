@@ -22,5 +22,6 @@ urlpatterns = [
     path('creatMessages/<int:otherId>', views.creatMessages),
     path('userProf', views.userProf),
     path('otherProf/<int:otherId>', views.otherProf),
+    path('search/<se>', views.search),
 
 ]

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {%if te == 1%}
+        {%for user in re1%}
+        <div><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
+        {%endfor%}
+        {%for user in re2%}
+        <div><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
+        {%endfor%}
+        {%for user in re3%}
+        <div><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
+        {%endfor%}
+    {%else%}
+        <h2>no result match</h2>
+    {%endif%}
+</body>
+</html>
