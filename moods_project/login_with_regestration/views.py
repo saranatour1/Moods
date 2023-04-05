@@ -613,7 +613,6 @@ def messages(request):
         
         allSR = received.union(sent)  # messagess
 
-        # ---------------------------------
         userId = request.session['id']
         messages = Message.objects.all().order_by('-created_at')
         arrI = []
@@ -629,7 +628,9 @@ def messages(request):
         for i in range(len(arrI)):
             if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
                 all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
-        # ---------------------------------S
+                
+ 
+
         context = {
                 'allSR': allSR,
                 'all_users_for_last_messages': all_users_for_last_messages,
@@ -638,9 +639,6 @@ def messages(request):
                 'received' : received,
                 'other':other,
                 'theUser' : User.objects.get(id = request.session['id']),
-
-
-
                 'newUser':newUser,
                 'user_age':age,
                 'current_time':current_time_str,

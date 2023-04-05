@@ -40,7 +40,7 @@
     <!-- <div class="left"> -->
     <div class="container container-sm container-md container-lg  pt-4">
       <div class="row d-flex justify-content-center  mx-auto">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 mx-auto">
           <div class="card shadow p-3 mb-5  rounded">
             <div class="card-body p-4">
               <h4 class="text-start mb-3"> <a href="/user/{{other.id}}">{{other.first_name}} {{other.last_name}}</a> ! </h4>
@@ -51,12 +51,58 @@
                 <br> for the time zone <em>{{newUser.time_zone}}</em>
               </p>
               <p class="text-start mb-3 text-muted"> joined on {{newUser.created_at.date}} </p>
+              <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop" id="keepMe2">
+                Messages and other users
+              </button>
+              
+              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title mt-3" id="staticBackdropLabel">Messages and other users</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <div class="card p-3">
+                    <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
+                    <ul class="list-unstyled">
+                      <h5>Latest messages</h5>
+                  {%for user in all_users_for_last_messages%}
+                      <li class="">
+                        <a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
+                      <p>{{user.message_receiver.message_content}}</p>
+                        <p class="text-muted"> sent on {{message.created_at}} </p>
+                      </li>
+                  {%endfor%}
+                    </ul>
+                </div>
+                </div>
+        
+        
+                <div class="card p-3 mt-5">
+                  <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
+                  <ul class="list-unstyled mt-2">
+                    <h6>Message other Users</h6>
+                {%for user in all_users%}
+                    {% if user not in all_users_for_last_messages%}
+                        {% if user.id != theUser.id %}
+                            <li><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {%endfor%}
+                  </ul>
+              </div>
+              </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto">
-          <div class="card shadow mb-5 rounded p-5" style=" overflow-y: scroll;   max-height: 30rem; ">
-            <div class="card-body border"> {%for message in allSR%} {%if message.message_sender.id == request.session.id %} <div class="d-flex justify-content-end ">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7 mx-auto">
+          <div class="card shadow mb-1 rounded p-5" style=" overflow-y: scroll;   max-height: 25rem; ">
+            <div class="card-body border"> 
+              {%for message in allSR%} 
+              {%if message.message_sender.id == request.session.id %} <div class="d-flex justify-content-end ">
                 <div class="card p-1 h-25">
                   <div class="card-body">
                     <p> You <span class="text-muted"> at {{message.created_at.time}}</span>
@@ -64,7 +110,9 @@
                     <p class="text-primary">{{message.message_content}}</p>
                   </div>
                 </div>
-              </div> {%else%} <div class="d-flex justify-content-start ">
+              </div> 
+              {%else%} 
+              <div class="d-flex justify-content-start ">
                 <div class="card p-1 h-25">
                   <div class="card-body">
                     <p> {{message.message_sender.first_name}} {{message.message_sender.last_name}}
@@ -73,19 +121,63 @@
                     <p class="text-success-emphasis">{{message.message_content}}</p>
                   </div>
                 </div>
-              </div> {%endif%} {%endfor%} </div>
-            <form action="/creatMessages/{{other.id}}" method="post" class="card "> {%csrf_token%} <div class="card-body">
-                <div class="form-floating ">
-                  <textarea class="form-control" placeholder="Send a maessage " id="message_content" name="message_content" style="height: 100px"></textarea>
-                  <label for="message_content">Message</label>
-                  <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary my-2 me-2" type="submit">Send</button>
-                  </div>
+              </div>
+               {%endif%} 
+              {%endfor%}
+             </div>
+
+          </div>
+          <form action="/creatMessages/{{other.id}}" method="post" class="card"> 
+            {%csrf_token%} 
+            <div class="card-body">
+              <div class="form-floating ">
+                <textarea class="form-control" placeholder="Send a maessage " id="message_content" name="message_content" style="height: 100px"></textarea>
+                <label for="message_content">Message</label>
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-primary my-2 me-2" type="submit">Send</button>
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mx-auto" id="hideMe2">
+          <div class="card p-3">
+            <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
+            <ul class="list-unstyled">
+              <h5>Latest messages</h5>
+          {%for user in all_users_for_last_messages%}
+              <li class="">
+                <a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
+              <p>{{user.message_receiver.message_content}}</p>
+                <p class="text-muted"> sent on {{message.created_at}} </p>
+              </li>
+          {%endfor%}
+            </ul>
+        </div>
+        </div>
+
+
+        <div class="card p-3 mt-5">
+          <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
+          <ul class="list-unstyled mt-2">
+            <h6>Message other Users</h6>
+        {%for user in all_users%}
+            {% if user not in all_users_for_last_messages%}
+                {% if user.id != theUser.id %}
+                    <li><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {%endfor%}
+          </ul>
+      </div>
+      </div>
+
+
+
+
+          </div>
+
       </div>
     </div>
     <script>

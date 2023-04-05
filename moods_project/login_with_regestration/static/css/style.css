@@ -41,70 +41,9 @@ a {
 #keep-this{
   display: none !important;
 }
-
-/* Messages CSS, Can be removed */
-        
-nav{
-  height: 200px;
+#keepMe2{
+  display: none !important;
 }
-main{
-  width: 100%;
-  display: flex;
- justify-content: space-around;
- margin-top: 20px;
-}
-.left{
-  width:300px;
-  border: 3px solid black;
-  height: 500px;
-  
-  
-
-}
-.center{
-  width:800px;
-  border: 3px solid black;
-  height: 500px;
-  
-  
-  
-}
-.disply_messages{
-  
-  width: 600px;
-  height: 300px;
-  border: 1px solid;
-  margin-top: 40px;
-  margin-left: 80px;
-  overflow: scroll;
-}
-.type-message{
-  width: 600px;
-  height: 100px;
- 
-  margin-top: 40px;
-  margin-left: 80px;
-}
-
-.right{
-  margin-top: 100px;
-  width:250px;
-  border: 3px solid black;
-  height: 400px;
-  overflow: scroll;
-}
-/* .myText{
-  color: green;
-  text-align: right;
-  margin: 10px 5px;
-
-
-}
-.yourText{
-  color: red;
-  text-align: left;
-  margin: 10px 5px;
-} */
 
 
 
@@ -117,5 +56,12 @@ main{
   }
   #hide-this{
     display: none;
+  }
+  /* in the messages profile */
+  #hideMe2{
+    display: none;
+  }
+  #keepMe2{
+    display: block !important;
   }
 }
