@@ -120,8 +120,8 @@
         <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded">
-              {%csrf_token%} 
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded postForm" >
+              {%csrf_token%}
               <div class="card-body">
                 <div class="form-floating ">
                   <textarea class="form-control" placeholder="What's on your mind today?" id="post" name="post" style="height: 100px"></textarea>
@@ -129,6 +129,9 @@
                   <div class="d-flex justify-content-end">
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
+                </div>
+                <div id="error-message-post">
+                    
                 </div>
               </div>
             </form>
@@ -188,7 +191,33 @@
       // function pending_request(){
       //   addFriendBtn.style.display="none"; 
       //   pendingBtn.style.display="block";
-      // }      
+      // }   
+      
+      
+      $('.postForm').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '/new_post',
+            method: 'post',
+            data: $(this).serialize(),
+            success: function(response){
+                if (response.success) {
+                  location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
+                  console.log(response)
+                } else {
+                    var errors = response.errors;
+                    var errorList = '<ul class="list-unstyled">';
+                    for (var i=0; i<errors.length; i++) {
+                        errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                    }
+                    errorList += '</ul>';
+                    $('#error-message-post').html(errorList);
+                    console.log('adding post failed:', errors);
+                }
+            }
+        });
+      return false;
+    });
       $(document).ready(function() {
             $('.likes_on_post').click(function(e) {
               e.preventDefault();
