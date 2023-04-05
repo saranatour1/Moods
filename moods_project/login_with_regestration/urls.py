@@ -26,7 +26,8 @@ urlpatterns = [
     path('messages', views.messages),  # get all the messages 
     path('changOtherId/<int:otherId>', views.changOtherId),
     path('creatMessages/<int:otherId>', views.creatMessages),
-    path('search/<se>', views.search), #search bar
+    path('search', views.search), #handling search bar functionality 
+    path('result',views.result), # redirected to the results page 
     path('edit_profile', views.editProfile),
     path('updateProfile/', views.updateProfile),
     

@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpRequest
 from pytz import all_timezones  # importing all time zones in the pyz library
 from .models import *
 
+# from django.db.models import Q
 # Create your views here.
 import pytz
 import bcrypt
@@ -337,27 +338,13 @@ def other_user_profile(request, user_id):
         msg=f"<p> You are { hourly_dif} hour ahead</p>"
         # print(hourly_dif> 0)
     elif hourly_dif < 0:
-        msg=f"<p> You are {hourly_dif} hour behind</p>"
+        msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
         # print(hourly_dif< 0)
     else:
         msg="<p> You have the same time  </p>"
         # print(hourly_dif< 0)
     
     # print(type(hour_logged_user))
- 
-    
-    
-    
-    # print(current_time_logged.strftime("%H"))
-    # time_difference_in_hours = int(abs(time_difference.total_hours() / 3600))
-    # print(current_time.strftime("%H"))
-    # if time_difference.total_seconds() > 0:
-    #   msg=f"<p> You are {time_difference_in_hours} ahead</p>"
-    # elif time_difference.total_seconds() == 0:
-    #   msg="<p> You have the same time  </p>"
-    #   # time_difference_in_hours=abs(time_difference_in_hours)
-    # else:
-    #   msg=f"<p> You are {time_difference_in_hours} behind </p>"
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
     
     context = {
@@ -584,10 +571,16 @@ def creatMessages(request, otherId):
 
 
 # adding the seacrh bar
-def search(request,se):
-    re1 = User.objects.filter(first_name = se)
-    re2 = User.objects.filter(last_name = se)
-    re3 = User.objects.filter(email = se)
+# getting the query value, and redirecting to the result page 
+def search(request):
+    request.session['se'] = request.GET['q']
+    return redirect('/result')
+    
+def result(request):
+    se = request.session['se']
+    re1 = User.objects.filter(first_name =se)
+    re2 = User.objects.filter(last_name=se)
+    re3 = User.objects.filter(email=se)
     if re1 or re2 or re3:
         te = 1
     else:
@@ -599,6 +592,21 @@ def search(request,se):
         'te':te,
     }
     return render(request,'result.html',context)
+
+
+
+# def result(request):
+#     se = request.session['se']
+#     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
+#     if results:
+#         te = 1
+#     else:
+#         te = 0
+#     context = {
+#         'results': results,
+#         'te': te,
+#     }
+#     return render(request, 'result.html', context)
 
 
 def editProfile(request):
@@ -625,6 +633,7 @@ def updateProfile(request):
             birthday =request.POST['birthday']
             gender =request.POST['gender']
             password =request.POST['password']
+            time_zone=request.POST['time_zone']
             user = User.objects.get(id = request.session['newUser'])
             user.first_name = first_name
             user.last_name = last_name
