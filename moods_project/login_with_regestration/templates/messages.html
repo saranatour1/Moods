@@ -156,14 +156,12 @@
           {%for user in all_users_for_last_messages%}
               <li class="">
                 <a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a>
-              <p>{{user.message_receiver.message_content}}</p>
-                <p class="text-muted"> sent on {{message.created_at}} </p>
+
               </li>
           {%endfor%}
             </ul>
         </div>
         </div>
-
         <div class="card p-3 mt-5">
           <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
           <ul class="list-unstyled mt-2">
