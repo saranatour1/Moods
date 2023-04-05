@@ -22,7 +22,7 @@ main{
 }
 .left{
     width:300px;
-    border: 3px solid black;
+    /* border: 3px solid black; */
     height: 500px;
     
     
@@ -30,7 +30,7 @@ main{
 }
 .center{
     width:800px;
-    border: 3px solid black;
+    /* border: 3px solid black; */
     height: 500px;
     
     
@@ -54,9 +54,12 @@ main{
 }
 
 .right{
-    margin-top: 100px;
+    margin-top: 20px;
+    margin-left: 10px;
     width:250px;
-    border: 3px solid black;
+    height: 100%;
+    /* border: 3px solid black; */
+
     height: 400px;
     overflow: scroll;
 }
@@ -124,9 +127,23 @@ main{
                 </div>
               </div>
             </div>
-
-            
         </div>
+<!-- ----------------------------------------------- -->
+<!-- <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 ">
+    
+    <div class="w-100">
+      <div class="card shadow mb-5 rounded">
+        <div class="card-body p-5">
+          <div class="text-end my-3">
+              
+              
+        </div>
+        </div> -->
+
+
+<!-- ---------------------------------------------------- -->
+            
+<div class="card shadow mb-5 rounded">
         <div class="center">
             <div class="disply_messages">
                 {%for message in allSR%}
@@ -149,6 +166,8 @@ main{
             </div>
 
         </div>
+    </div>
+    <div class="card shadow mb-5 rounded">
         <div class="right">
             {%for user in all_users_for_last_messages%}
             <div><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
@@ -162,6 +181,8 @@ main{
                 {% endif %}
             {%endfor%}
         </div>
+    </div>
+
     </main>
 </body>
 
