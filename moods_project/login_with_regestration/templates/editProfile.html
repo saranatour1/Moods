@@ -19,7 +19,7 @@
     <!-- Logo Design -->
     <div class=" w-100  ">
       <nav class="navbar navbar-expand-lg bg-body-tertiary h-100 ps-5 pe-5 ">
-        <a class="navbar-brand logo " href="/">
+        <a class="navbar-brand logo " href="/dashboard">
           <img src="{% static 'assets/logo.svg' %}" alt="Moods Logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,10 +28,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="/user">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/login">Sign In</a>
+              <a class="nav-link active" aria-current="page" href="/messages">Messages</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
             </li>
           </ul>
         </div>
