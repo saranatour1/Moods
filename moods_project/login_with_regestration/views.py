@@ -348,7 +348,8 @@ def other_user_profile(request, user_id):
     #   # time_difference_in_hours=abs(time_difference_in_hours)
     # else:
     #   msg=f"<p> You are {time_difference_in_hours} behind </p>"
-
+    posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
+    
     context = {
         "newUser": logged_user,
         "user": user,
@@ -359,6 +360,7 @@ def other_user_profile(request, user_id):
         "incoming_request": incoming_request,
         "is_friend": is_friend,
         "has_a_request": has_a_request,
+        "all_posts":posts,
         # 'msg':msg,
     }
 
@@ -572,23 +574,20 @@ def creatMessages(request, otherId):
 
 
 # adding the seacrh bar
-def search(request, q):
-    re1 = User.objects.filter(first_name__icontains=q)
-    re2 = User.objects.filter(last_name__icontains=q)
-    re3 = User.objects.filter(email__icontains=q)
-    
+def search(request,se):
+    re1 = User.objects.filter(first_name = se)
+    re2 = User.objects.filter(last_name = se)
+    re3 = User.objects.filter(email = se)
     if re1 or re2 or re3:
         te = 1
     else:
         te = 0
-    
     context = {
-        're1': re1,
-        're2': re2,
-        're3': re3,
-        'te': te,
+        're1':re1,
+        're2':re2,
+        're3':re3,
+        'te':te,
     }
-    return render(request, 'result.html', context)
-
+    return render(request,'result.html',context)
 
 
