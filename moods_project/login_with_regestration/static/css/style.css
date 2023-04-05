@@ -4,6 +4,7 @@
 
 /* Background color : #Fcfcfcfc */
 /* Logo color #f8d054 */
+/* For dark mode  #f0f0f0 */
 
 /* if we wanted to implemnt dark mode */
 /* body{
@@ -29,7 +30,7 @@
 .wrapper,
 footer,
 .card,
-ul {
+ul,body {
   background-color: #fcfcfcfc !important;
   /* height: 100vh; */
 }
@@ -40,6 +41,11 @@ a {
 #keep-this{
   display: none !important;
 }
+#keepMe2{
+  display: none !important;
+}
+
+
 
 @media screen and (max-width: 1024px){
   div.col-4 {
@@ -50,5 +56,12 @@ a {
   }
   #hide-this{
     display: none;
+  }
+  /* in the messages profile */
+  #hideMe2{
+    display: none;
+  }
+  #keepMe2{
+    display: block !important;
   }
 }

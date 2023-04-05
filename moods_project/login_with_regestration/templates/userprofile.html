@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>User profile {{newUser.id}}</title>
     <!-- Bootstrap and Jquery files go here -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> {% load static %}
@@ -30,13 +31,19 @@
               <a class="nav-link active" aria-current="page" href="/user">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+              <a class="nav-link " aria-current="page" href="/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/messages">Messages</a>
+              <a class="nav-link " aria-current="page" href="/messages">Messages</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <form class="d-flex" role="search" action="/search" method="get" id="search-form">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
             </li>
           </ul>
         </div>
@@ -91,41 +98,50 @@
                 </div>
                 <div class="offcanvas-body">
                   <div>
-                    <div class="card border-light mb-3  mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
-                      <div class="card-header"> Requests <span class="badge text-bg-secondary">5</span>
+                    <div class="card border-light mb-3  mx-auto shadow  mb-5 rounded" style="max-width: 35rem;">
+                      <div class="card-header"> Requests <span class="badge text-bg-secondary">{{friend_request_count}}</span>
                       </div>
                       <div class="text-start">
                         <!-- Start -->
+                        {% for request in all_requests %}
                         <div class="card-body">
                           <div class="d-flex justify-content-between align-items-center">
                             <h6 class="card-title">
-                              <a href="/user/{{user.id}}">Jane Smith</a>
+                              <a href="/user/{{request.request_sender.id}}">{{request.request_sender.first_name}}  {{request.request_sender.last_name}} </a>
                             </h6>
                             <p class="card-text">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                              <button class="btn btn-light me-md-2 rounded-5 " type="button">
-                                <i class="bi bi-person-add"></i>
-                              </button>
-                              <button class="btn btn-light rounded-5" type="button">
-                                <i class="bi bi-person-dash"></i>
+                              <div class="text-end">
+                                <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
+                                <a href="/accept-request/{{request.id}}" class="btn btn-outline-success">Accept</a>
+                              </div>            
                               </button>
                             </div>
                             </p>
                           </div>
                         </div>
                         <hr>
+                        {% endfor %}
+        
                         <!-- End -->
                       </div>
                     </div>
-                    <div class="card border-light mb-4 mx-auto shadow  mb-5 rounded" style="max-width: 30rem;">
-                      <div class="card-header"> Friendships <span class="badge text-bg-secondary">5</span>
+                    <div class="card border-light mb-4 mx-auto shadow  mb-5 rounded" style="max-width: 35rem;">
+                      <div class="card-header"> Friendships <span class="badge text-bg-secondary">{{friends_count}}</span>
                       </div>
-                      <div class="card-body">
-                        <h6 class="card-title">
-                          <a href="/user/{{user.id}}">Jack smith</a>
-                        </h6>
-                      </div>
-                      <hr>
+                      {% for friendship in newUser.friends.all %}
+                        {% for friend in friendship.users.all %}
+                        {% if friend.id != newUser.id %}
+                          <div class="card-body">
+                            <h6 class="card-title">
+                              <a href="/user/{{friend.id}}">{{friend.first_name}} {{friend.last_name}}</a>
+                            </h6>
+                          </div>
+                          <hr>
+                          {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                    
                     </div>
                   </div>
                 </div>
@@ -135,48 +151,57 @@
           <!-- Requests and list of friends  -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto" id="hide-this">
             <div class="card border-light mb-3  mx-auto shadow  mb-5 rounded" style="max-width: 35rem;">
-              <div class="card-header"> Requests <span class="badge text-bg-secondary">5</span>
+              <div class="card-header"> Requests <span class="badge text-bg-secondary">{{friend_request_count}}</span>
               </div>
               <div class="text-start">
                 <!-- Start -->
+                {% for request in all_requests %}
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center">
                     <h6 class="card-title">
-                      <a href="/user/{{user.id}}">Jane Smith</a>
+                      <a href="/user/{{request.request_sender.id}}">{{request.request_sender.first_name}}  {{request.request_sender.last_name}} </a>
                     </h6>
                     <p class="card-text">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                      <button class="btn btn-light me-md-2 rounded-5 " type="button">
-                        <i class="bi bi-person-add"></i>
-                      </button>
-                      <button class="btn btn-light rounded-5" type="button">
-                        <i class="bi bi-person-dash"></i>
+                      <div class="text-end">
+                        <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
+                        <a href="/accept-request/{{request.id}}" class="btn btn-outline-success">Accept</a>
+                      </div>            
                       </button>
                     </div>
                     </p>
                   </div>
                 </div>
                 <hr>
+                {% endfor %}
+
                 <!-- End -->
               </div>
             </div>
             <div class="card border-light mb-4 mx-auto shadow  mb-5 rounded" style="max-width: 35rem;">
-              <div class="card-header"> Friendships <span class="badge text-bg-secondary">5</span>
+              <div class="card-header"> Friendships <span class="badge text-bg-secondary">{{friends_count}}</span>
               </div>
-              <div class="card-body">
-                <h6 class="card-title">
-                  <a href="/user/{{user.id}}">Jack smith</a>
-                </h6>
-              </div>
-              <hr>
+              {% for friendship in newUser.friends.all %}
+                {% for friend in friendship.users.all %}
+                {% if friend.id != newUser.id %}
+                  <div class="card-body">
+                    <h6 class="card-title">
+                      <a href="/user/{{friend.id}}">{{friend.first_name}} {{friend.last_name}}</a>
+                    </h6>
+                  </div>
+                  <hr>
+                  {% endif %}
+              {% endfor %}
+            {% endfor %}
+            
             </div>
           </div>
         </div>
         <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded"> 
-              {%csrf_token%} 
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded postForm" >
+              {%csrf_token%}
               <div class="card-body">
                 <div class="form-floating ">
                   <textarea class="form-control" placeholder="What's on your mind today?" id="post" name="post" style="height: 100px"></textarea>
@@ -185,24 +210,33 @@
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
                 </div>
+                <div id="error-message-post">
+                    
+                </div>
               </div>
             </form>
             <div class="w-100">
+              {% for post in all_posts %}
               <div class="card shadow mb-5 rounded">
                 <div class="card-body p-5">
-                  <small class="text-body-secondary my-2"> last updated 20 min ago</small>
-                  <p class="card-title my-2">
-                    <a href="/user">{{newUser.first_name}} {{newUser.last_name}} </a>
+                  <small class="text-body-secondary my-2"> last updated {{post.updated_at.time}}</small>
+                  <p class="card-title my-2"  > <a href="/user/{{post.user_who_post.id}}" > {{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a> </p>
+                  <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
+                  {%if newUser == post.user_who_post%}
+                  <p>
+                    <a href="/delete/{{post.id}}"> delete Post</a>
                   </p>
-                  <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
+                  {% endif %}
                   <div class="text-end my-3">
                     <button class="btn btn-light">
-                      <i class="bi bi-hand-thumbs-up"></i>
-                      <a href="/add_likes_to_posts">312 Like(s)</a>
-                    </button>
+                          <i class="bi bi-hand-thumbs-up"></i>
+                      <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
+
                 </div>
               </div>
+              <!-- end of posts here -->
+              {% endfor %}  
             </div>
           </div>
         </div>
@@ -234,6 +268,51 @@
         // console.log(timeString); 
       }
       setInterval(updateTime, 1000);
+      // form for post submission, likes 
+      $('.postForm').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '/new_post',
+            method: 'post',
+            data: $(this).serialize(),
+            success: function(response){
+                if (response.success) {
+                  location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
+                  console.log(response)
+                } else {
+                    var errors = response.errors;
+                    var errorList = '<ul class="list-unstyled">';
+                    for (var i=0; i<errors.length; i++) {
+                        errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                    }
+                    errorList += '</ul>';
+                    $('#error-message-post').html(errorList);
+                    console.log('adding post failed:', errors);
+                }
+            }
+        });
+      return false;
+    });
+
+    // Likes 
+    $(document).ready(function() {
+            $('.likes_on_post').click(function(e) {
+              e.preventDefault();
+              var post_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var like_btn = $(this); //the id itself 
+              $.ajax({
+                url: '/likeOnPost/' + post_id,
+                method: 'GET', //get method ,not post 
+                success: function(data) { //update the number of likes in real time 
+                  like_btn.text(data.likes_count + ' Like(s)');
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
+              });
+            });
+          });
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
   </body>

@@ -1,104 +1,166 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <style>
-        
-nav{
-    height: 200px;
-}
-main{
-    width: 100%;
-    display: flex;
-   justify-content: space-around;
-}
-.left{
-    width:300px;
-    border: 3px solid black;
-    height: 500px;
-    visibility: hidden
-    
-
-}
-.center{
-    width:800px;
-    border: 3px solid black;
-    height: 500px;
-    
-    
-}
-.disply_messages{
-    
-    width: 600px;
-    height: 300px;
-    border: 1px solid;
-    margin-top: 40px;
-    margin-left: 80px;
-    overflow: scroll;
-    visibility: hidden
-}
-.type-message{
-    width: 600px;
-    height: 100px;
-   
-    margin-top: 40px;
-    margin-left: 80px;
-    visibility: hidden
-}
-
-.right{
-    margin-top: 100px;
-    width:250px;
-    border: 3px solid black;
-    height: 400px;
-    overflow: scroll;
-}
-
-
-    </style>
-</head>
-
-<body>
-    <nav></nav>
-    <main>
-        <div class="left">
-            {{other.first_name}}  {{other.last_name}}  
-            {{other.birthday}}
-
-            
+    <title>List of all users to message</title>
+    <!-- Bootstrap and Jquery files go here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> 
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="{% static 'css/frame1.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{%  static 'assets/favicon.png' %} " type="image/x-icon">
+  </head>
+  <body>
+    <!-- The main bav bar containing the Moods Logo -->
+    <!-- Logo Design -->
+    <div class=" w-100  ">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary h-100 ps-5 pe-5 ">
+        <a class="navbar-brand logo " href="/dashboard">
+          <img src="{% static 'assets/logo.svg' %}" alt="Moods Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/user">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <form class="d-flex" role="search" action="/search" method="get" id="search-form">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </li>
+          </ul>
         </div>
-        <div class="center" >
-            <h1>please choose user </h1>
-            <div class="disply_messages">
-         
+      </nav>
+    </div>
+
+    <div class="wrapper ">
+      <div class="container container-sm container-md container-lg  pt-4">
+        <div class="row d-flex justify-content-center  mx-auto">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mx-auto">
+            <!-- logged user profile functionality -->
+            <div class="card shadow p-3 mb-5  rounded">
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="text-start mb-3">
+                      <a href="/user">
+                        {{theUser.first_name}} {{theUser.last_name}}
+                      </a>
+                    </h4>
+                    <span class="text-start mb-3 text-muted small"> joined on {{theUser.created_at.date}}
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-start mb-3"> Age: {{user_age}} years old </p>
+                    <p class="text start mb-3">
+                      <i class="bi bi-balloon ps-1"></i>
+                      {{theUser.birthday}}
+                    </p>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span>
+                      <i class="bi bi-calendar4-event ps-1"></i> Date Now: {{current_date}}
+                    </span>
+                    <br>
+                    <p class="text-start mb-3">
+                      <i class="bi bi-hourglass-split ps-1"></i> time now: <em class="time_now"></em>
+                      <br>
+                  </div>
+                  </em>
+                  <p class="text-center">
+                    <i class="bi bi-geo ps-1"></i> for the time zone <em>{{theUser.time_zone}}</em>
+                    <br>
+                  </p>
+                  </p>
+                  <a class="btn btn-link " href="/edit_profile">Edit profile</a>
+                </div>
+                <!--Off canvas -->
+              </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
+            <div class="card"> 
+                <div class="card-body p-5">
+                    <h3 class="text-start mb-3 ">please choose user </h3>
+                        <div class="card p-3">
+                            <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
+                            <ul class="list-unstyled">
+                            {%for user in all_users%}
+                                {% if user.id != request.session.id %}
+                                  <li class="h6"> <a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></li> 
+                                {%endif%}
+                            {%endfor%}
+                            </ul>
+                        </div>
+                        </div>
+                      <form action="/creatMessages/{{other.id}}" method="post" class="card ">
+                        {%csrf_token%} 
+                        <div class="card-body">
+                          <div class="form-floating ">
+                            <textarea class="form-control" placeholder="Send a maessage " id="message_content" name="message_content" style="height: 100px"></textarea>
+                            <label for="message_content">Message</label>
+                            <div class="d-flex justify-content-end">
+                              <button class="btn btn-primary my-2 me-2" type="submit">Send</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                </div>
             </div>
-            <div class="type-message">
-                <form action="/creatMessages/{{other.id}}" method="post">
-                    {% csrf_token %}
-                    
-                    <textarea name="message_content"  cols="70" rows="5"></textarea>
-                    <input type="submit" value="send">
-                </form>
-                
-            </div>
-
+          </div>
         </div>
-        <div class="right">
 
-            {%for user in all_users%}
-            {% if user.id != request.session.id %}
-                <div><a href="/changOtherId/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></div>
-            {%endif%}
-            {%endfor%}
-        </div>
-    </main>
-</body>
+          <!-- Posting , commenting, showing the comment and posts -->
 
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer class="page-footer font-small ">
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">© 2023 Copyright: <a href="/"> Moods</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+    <!-- We need to add ajax asap -->
+    <script>
+      const pendingBtn = document.getElementById('pending');
+      const addFriendBtn = document.getElementById('addfriend');
+
+      function updateTime() {
+        // function to get the logged user time
+        // const now = new Date();
+        // const timeNow = now.toLocaleTimeString();
+        // document.querySelector('.time_now').textContent = timeNow;
+        var userTimezone = "{{ theUser.time_zone }}";
+        // getting the user time despite him/her being logged in or not
+        var currentDate = new Date();
+        var userDateTime = currentDate.toLocaleString("en-US", {
+          timeZone: userTimezone
+        });
+        const timeString = userDateTime.split(", ")[1];
+        document.querySelector('.time_now').textContent = timeString
+        // console.log(timeString); 
+      }
+      setInterval(updateTime, 1000);
+      // function pending_request(){
+      //   addFriendBtn.style.display="none"; 
+      //   pendingBtn.style.display="block";
+      // }      
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+  </body>
 </html>
