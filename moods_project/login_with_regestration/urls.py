@@ -23,5 +23,7 @@ urlpatterns = [
     path('userProf', views.userProf),
     path('otherProf/<int:otherId>', views.otherProf),
     path('search/<se>', views.search),
+    path('edit_profile', views.editProfile),
+    path('updateProfile', views.updateProfile),
 
 ]

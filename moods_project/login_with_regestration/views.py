@@ -311,4 +311,26 @@ def search(request,se):
     }
     return render(request,'result.html',context)
 
+def editProfile(request):
+    context = {
+        'user':User.objects.get(id = request.session['newUser'])
+    }
+    return render(request,'editProfile.html',context)
+
+
+def updateProfile(request):
+    first_name =request.POST['first_name']
+    last_name =request.POST['last_name']
+    birthday =request.POST['birthday']
+    gender =request.POST['gender']
+    password =request.POST['password']
+    user = User.objects.get(id = request.session['newUser'])
+    user.first_name = first_name
+    user.last_name = last_name
+    user.birthday = birthday
+    user.gender = gender
+    user.password = password
+    user.save()
+    return redirect('/edit_profile')
+
 # --------------------------hamza end
