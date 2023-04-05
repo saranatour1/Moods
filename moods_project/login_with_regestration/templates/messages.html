@@ -105,7 +105,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-7 col-xl-7 mx-auto">
-          <div class="card shadow mb-1 rounded p-5" style=" overflow-y: scroll;   max-height: 25rem; ">
+          <div class="card shadow mb-1 rounded p-5" style=" overflow-y: scroll;   max-height: 25rem; " id="myDiv">
             <div class="card-body border"> 
               {%for message in allSR%} 
               {%if message.message_sender.id == request.session.id %} <div class="d-flex justify-content-end ">
@@ -186,6 +186,8 @@
       </div>
     </div>
     <script>
+      const myDiv = document.getElementById("myDiv");
+      myDiv.scrollTop = myDiv.scrollHeight;
       const pendingBtn=document.getElementById('pending');
       const addFriendBtn=document.getElementById('addfriend');
         function updateTime() {
