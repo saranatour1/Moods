@@ -52,10 +52,12 @@
               <h4 class="text-start mb-3"> <a href="/user/{{other.id}}">{{other.first_name}} {{other.last_name}}</a> ! </h4>
               <p class="text-start mb-3"> Age: {{user_age}} years old </p>
               <p class="text-start mb-3"> time now: <em class="time_now"></em>
+
                 <br>
                 <span>Date Now: {{current_date}}</span>
                 <br> for the time zone <em>{{newUser.time_zone}}</em>
               </p>
+              <p>{{msg |safe}}</p>
               <p class="text-start mb-3 text-muted"> joined on {{newUser.created_at.date}} </p>
               <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop" id="keepMe2">
                 Messages and other users
@@ -130,8 +132,7 @@
               </div>
                {%endif%} 
               {%endfor%}
-             </div>
-
+            </div>
           </div>
           <form action="/creatMessages/{{other.id}}" method="post" class="card"> 
             {%csrf_token%} 

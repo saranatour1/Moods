@@ -485,34 +485,50 @@ def messages(request):
             }
             return render(request,'messages1.html',context)
     else:
-        # ---------------------------saratimestart
         user_id=request.session['otherId']
         newUser=User.objects.get(id=user_id)
+        user_age= datetime.date.today() - newUser.birthday 
+        age= (user_age.days // 365)
         
         
-        user_age= datetime.date.today()- newUser.birthday 
-        age= (user_age.days//365)
-        time_zone=newUser.time_zone
-        current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
-        current_time_str = current_time.strftime('%H:%M:%S')
-        current_date_str = current_time.strftime('%Y-%m-%d')
         
-
-
-        request.session['id']=request.session['newUser']
-
-        all_users = User.objects.all() 
-        # --------------------------
+        
         user = User.objects.get(id = request.session['id'])
         other = User.objects.get(id=request.session['otherId'])
+        
+        time_zone = other.time_zone #the other user 
+        current_time = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone))
+        current_time_str = current_time.strftime("%H:%M:%S")
+        current_date_str = current_time.strftime("%Y-%m-%d")
 
+        # for the logged in user
+        time_zone_logged = user.time_zone #the logged in user
+        current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+        current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
+        # Hourly time difference
+        hour_logged_user=int(current_time_logged.strftime("%H"))
+        hour_viewed_user=int(current_time.strftime("%H"))
+        
+        hourly_dif = hour_logged_user - hour_viewed_user
+        if hourly_dif> 0:
+            msg=f"<p> You are { hourly_dif} hour ahead</p>"
+            # print(hourly_dif> 0)
+        elif hourly_dif < 0:
+            msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
+            # print(hourly_dif< 0)
+        else:
+            msg="<p> You have the same time  </p>"
+        
+        request.session['id']=request.session['newUser']
+        all_users = User.objects.all() 
+        
 
-
+        
         sent = Message.objects.filter(message_receiver = other,message_sender = user)
         
         received = Message.objects.filter(message_sender = other,message_receiver = user)
         
-        allSR = received.union(sent)  # messagess
+        allSR = received.union(sent)  # messagess 
 
         userId = request.session['id']
         messages = Message.objects.all().order_by('-created_at')
@@ -530,8 +546,6 @@ def messages(request):
             if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
                 all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
                 
- 
-
         context = {
                 'allSR': allSR,
                 'all_users_for_last_messages': all_users_for_last_messages,
@@ -544,6 +558,7 @@ def messages(request):
                 'user_age':age,
                 'current_time':current_time_str,
                 'current_date':current_date_str, 
+                'msg':msg,
                 }
         return render(request,'messages.html',context)
 
