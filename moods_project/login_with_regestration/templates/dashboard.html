@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <!-- Bootstrap and Jquery files go here -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -18,7 +19,7 @@
     <!-- The main bav bar containing the Moods Logo -->
     <!-- Logo Design -->
     <div class=" w-100  ">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary h-100 ps-5 pe-5 ">
+      <nav class="navbar navbar-expand-lg  h-100 ps-5 pe-5 " >
         <a class="navbar-brand logo " href="/dashboard">
           <img src="{% static 'assets/logo.svg' %}" alt="Moods Logo">
         </a>
@@ -26,7 +27,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto"   >
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/user">Profile</a>
             </li>
@@ -35,6 +36,12 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <form class="d-flex" role="search" action="/search" method="get" id="search-form">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
             </li>
           </ul>
         </div>
@@ -45,7 +52,7 @@
         <div class="row d-flex justify-content-between ">
           <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3">
             <!-- logged user profile functionality -->
-            <div class="card shadow p-3 mb-5  rounded">
+            <div class="card  p-3 mb-5  rounded " >
               <div class="card-body p-4">
                 <h4 class="text-start mb-3"> Welcome <a href="/user">{{newUser.first_name}} {{newUser.last_name}}</a> ! </h4>
                 <p class="text-start mb-3"> Age: {{user_age}} years old </p>
@@ -60,7 +67,7 @@
           </div>
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 ">
-            <form action="/new_post" method="post" class="card shadow  mb-5 rounded">
+            <form action="/new_post" method="post" class="card shadow  mb-5 rounded postForm" >
               {%csrf_token%}
               <div class="card-body">
                 <div class="form-floating ">
@@ -70,44 +77,72 @@
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
                 </div>
+                <div id="error-message-post">
+                    
+                </div>
               </div>
             </form>
+
             <div class="w-100">
+              {% for post in all_posts %}
               <div class="card shadow mb-5 rounded">
                 <div class="card-body p-5">
-                  <small class="text-body-secondary my-2"> last updated 20 min ago</small>
-                  <p class="card-title my-2"  > <a href="/user/1" > Jane Doe </a> </p>
-                  <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
+                  <small class="text-body-secondary my-2"> last updated {{post.updated_at.time}}</small>
+                  <p class="card-title my-2"  > <a href="/user/{{post.user_who_post.id}}" > {{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a> </p>
+                  <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
+                  {%if newUser == post.user_who_post%}
+                  <p>
+                    <a href="/delete/{{post.id}}"> delete Post</a>
+                  </p>
+                  {% endif %}
                   <div class="text-end my-3">
-                    <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>  <a href="/add_likes_to_posts">312 Like(s)</a> </button>
+                    <button class="btn btn-light">
+                          <i class="bi bi-hand-thumbs-up"></i>
+                      <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
-                  <form action="/new_comment" method="post" class="card shadow-sm   rounded w-90 ">
+                  <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 commentForm ">
                     {%csrf_token%}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
                     <div class="card-body">
-                      <div class="form-floating ">
+                      <div class="form-floating">
                         <textarea class="form-control" placeholder="Comment on this post!" id="comment" name="comment" style="height: 100px"></textarea>
                         <label for="post">Comment</label>
                         <div class="d-flex justify-content-end">
                           <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
                         </div>
                       </div>
+                      <div id="error-message-comment">
+                    
+                      </div>
                     </div>
                   </form>
                   <div>
                     <!-- Start of comments -->
                     <div class="text-start ps-3">
-                    <div class="card-body border-bottom">
-                      <small class="text-body-secondary my-2"> last updated 10 min ago</small>
-                      <p class="card-title my-2"> Jane Doe </p>  <small class=" text-muted "> from :Tulkarem</small>
-                      <p class="card-text text-wrap my-2"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos accusantium soluta quidem sed possimus ullam? Nemo dignissimos quam iure porro iste, cum facere dolor illo neque maxime officiis explicabo quod? </p>
-                      <div class="text-end my-3">
-                        <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_to_comments">5 Like(s)</a> </button>
-                      </div>
-                    </div>
+                      {% for comment in post.all_comments %}
+                        {% if comment.post == post %}
+                          <div class="card-body border-bottom">
+                            <small class="text-body-secondary my-2">last updated: {{comment.updated_at.time}}</small>
+                            <p class="card-title my-2" ><a href="/user/{{comment.user_who_comment.id}}">{{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</a></p> 
+                            <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
+                            {%if newUser == comment.user_who_comment%}
+                            <p>
+                              <a href="/delete/comment/{{comment.id}}"> delete Comment</a>
+                            </p>
+                            {% endif %}
+                            <div class="text-end my-3">
+                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}" class="likes_on_comment" id="like_btn_{{comment.id}}">  {{comment.likes_count}} Like(s)</a> </button>
+                            </div>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- end of posts here -->
+              {% endfor %}  
             </div>
           </div>
         </div>
@@ -137,10 +172,105 @@
         const timeString = userDateTime.split(", ")[1];
         document.querySelector('.time_now').textContent=timeString
         // console.log(timeString); 
-     
       }
 
       setInterval(updateTime, 1000);
+
+      // Ajax functionality
+      // adding posts 
+      $('.postForm').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '/new_post',
+            method: 'post',
+            data: $(this).serialize(),
+            success: function(response){
+                if (response.success) {
+                  location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
+                  console.log(response)
+                } else {
+                    var errors = response.errors;
+                    var errorList = '<ul class="list-unstyled">';
+                    for (var i=0; i<errors.length; i++) {
+                        errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                    }
+                    errorList += '</ul>';
+                    $('#error-message-post').html(errorList);
+                    console.log('adding post failed:', errors);
+                }
+            }
+        });
+      return false;
+    });
+            // adding comments 
+          $('.commentForm').submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: '/add-new-comment',
+                method: 'post',
+                data: $(this).serialize(),
+                success: function(response){
+                    if (response.success) {
+                      location.reload();
+                      console.log(response.success)
+                      alert(data)
+                    } else {
+                        var errors = response.errors;
+                        var errorList = '<ul class="list-unstyled">';
+                        for (var i=0; i<errors.length; i++) {
+                            errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                        }
+                        errorList += '</ul>';
+                        $('#error-message-comment').html(errorList);
+                        console.log('adding post failed:', errors);
+                    }
+                }
+            });
+          return false;
+        });
+        // keep it like this for now , repetitive wise 
+            // adding likes on posts and comment  likes_on_post, what i need to do is update the likes on the post id 
+        $(document).ready(function() {
+            $('.likes_on_post').click(function(e) {
+              e.preventDefault();
+              var post_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var like_btn = $(this); //the id itself 
+              $.ajax({
+                url: '/likeOnPost/' + post_id,
+                method: 'GET', //get method ,not post 
+                success: function(data) { //update the number of likes in real time 
+                  like_btn.text(data.likes_count + ' Like(s)');
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
+              });
+            });
+          });
+          //adding likes to comments
+          $(document).ready(function() {
+            $('.likes_on_comment').click(function(e) {
+              e.preventDefault();
+              var comment_id = $(this).attr('href').split('/').pop(); //get the post id from the href id 
+              var like_btn = $(this); //the id itself 
+              $.ajax({
+                url: '/add_likes_comment/' + comment_id,
+                method: 'GET', //get method ,not post 
+                success: function(data) { //update the number of likes in real time 
+                  like_btn.text(data.likes_count + ' Like(s)');
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
+              });
+            });
+          });
+          
+        
+
+        
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 
