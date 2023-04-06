@@ -3,4 +3,4 @@ env/
 venv/
 __pycache__/
 .vscode/
-db.sqlite3
+moods_project/db.sqlite3
