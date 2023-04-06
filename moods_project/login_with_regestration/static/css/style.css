@@ -2,98 +2,81 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@200;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@900&display=swap");
 
-/* Background color : #Fcfcfcfc */
-/* Logo color #f8d054 */
-/* For dark mode  #f0f0f0 */
-
-/* Nav bar colors */
-/* Sky blue: #87CEEB
-Baby blue: #89CFF0
-Turquoise: #40E0D0 */
-
-
-
-/* if we wanted to implemnt dark mode */
+/* incase if we wanted to implemnt dark mode */
 /* body{
-  filter: invert(1) hue-rotate(180deg) !important;
+  filter: invert(1) hue-rotate(190deg) !important;
 } */
+
+:root {
+  --bg-col: #e0e9f8;
+  --color: #30354b;
+  --label-color: #4b558c;
+  --hsl-lightness: 39%;
+  --hsl-bg-lightness: 95%;
+}
 
 * {
   font-family: "Source Serif Pro", serif;
 }
 
-:root {
-  --bg-col: #E0E9F8;
-  --color: #30354B;
-  --label-color: #4B558C;
-  --hsl-lightness: 39%;
-  --hsl-bg-lightness: 95%;
-}
-
-
-
-nav.navbar,navbar-nav{
-  background-color:#f0f2f5 !important;
+nav.navbar,
+navbar-nav {
+  background-color: #f0f2f5 !important;
   box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px !important;
 }
 
-input[type="Search"],input[type="text"],textarea[name="post"],form .form-control,.form-floating:not(.form-control:disabled)::before ,.form-floating>.form-control {
-  background-color:#FCF6F5 !important;
-  border-color:#a56e22 !important;
+input[type="Search"],
+input[type="text"],
+textarea[name="post"],
+form .form-control,
+.form-floating:not(.form-control:disabled)::before,
+.form-floating > .form-control {
+  background-color: #fcf6f5 !important;
+  border-color: #a56e22 !important;
   color: #a56e22 !important;
 }
 
-button{
-  color: #a56e22!important;
-  background-color:#fff4e5 !important;
-  border-color:#a56e22 !important;
+button {
+  color: #a56e22 !important;
+  background-color: #fff4e5 !important;
+  border-color: #a56e22 !important;
 }
 
-.card{
-  background-color: hsl(210, 60%, 98%)!important ;
-  /* background-color: var(--label-color) !important; */
+.card {
+  background-color: hsl(210, 60%, 98%) !important ;
 }
 
-button:hover{
+button:hover {
   filter: brightness(110%);
 }
 
-
-p,h6,h1,h2,h3,h4,h5,h6{
- color: #30354b !important;
+p,
+h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #30354b !important;
 }
-a{
-  color:#424d8c !important;
+a {
+  color: #424d8c !important;
 }
-a:hover{
+a:hover {
   filter: brightness(110%) !important;
 }
 
-.card{
+.card {
   box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px !important;
-  
 }
 
-/* .logo{
-  font-family: 'Noto Serif Malayalam', serif;
-  font-weight: 900;
-  display: flex;
-
-} */
-/* div.col-4 {
- position: fixed;
-} */
 .logo {
   width: 100px;
 }
 
-/* #2d9aed  */
-/* #969d3f */
-/* #f8cebe */
-/* #f8cebe */
-
 .wrapper,
-footer{
+footer {
   background-color: hsl(0, 0%, 100%) !important;
   /* height: 100vh; */
 }
@@ -101,30 +84,28 @@ a {
   text-decoration: none !important;
   color: black;
 }
-#keep-this{
+#keep-this {
   display: none !important;
 }
-#keepMe2{
+#keepMe2 {
   display: none !important;
 }
 
-
-
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
   div.col-4 {
     display: none;
   }
-#keep-this{
+  #keep-this {
     display: block !important;
   }
-  #hide-this{
+  #hide-this {
     display: none;
   }
   /* in the messages profile */
-  #hideMe2{
+  #hideMe2 {
     display: none;
   }
-  #keepMe2{
+  #keepMe2 {
     display: block !important;
   }
 }
