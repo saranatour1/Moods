@@ -73,8 +73,7 @@
                         {%for user in all_users_for_last_messages%}
                           <li>
                             <a href="/changOtherId/{{user.id}}">{{user.first_name}} {{user.last_name}}</a>
-                            <p>{{user.message_receiver.message_content}}</p>
-                            <p class="text-muted"> sent on {{message.created_at}} </p>
+
                           </li> 
                         {%endfor%}
                       </ul>
