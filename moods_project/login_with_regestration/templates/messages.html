@@ -146,7 +146,8 @@
           <div class="card p-3">
             <div class="card-body" style=" overflow-y: scroll;   max-height: 300px; ">
               <ul class="list-unstyled">
-                <p class="h5">Latest messages</p> {%for user in all_users_for_last_messages%} 
+                <p class="h5">Latest messages</p>
+                  {%for user in all_users_for_last_messages%} 
                   <li class="">
                     <a href="/changOtherId/{{user.id}}">{{user.first_name}} {{user.last_name}}</a>
                   </li> 
