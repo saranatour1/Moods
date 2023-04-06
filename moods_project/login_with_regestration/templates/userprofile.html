@@ -82,11 +82,9 @@
                     <i class="bi bi-hourglass-split ps-1"></i> time now: <em class="time_now"></em>
                     <br>
                 </div>
-                </em>
                 <p class="text-center">
                   <i class="bi bi-geo ps-1"></i> for the time zone <em>{{newUser.time_zone}}</em>
                   <br>
-                </p>
                 </p>
                 <a class="btn btn-link " href="/edit_profile">Edit profile</a>
               </div>
@@ -110,7 +108,7 @@
                             <h6 class="card-title">
                               <a href="/user/{{request.request_sender.id}}">{{request.request_sender.first_name}}  {{request.request_sender.last_name}} </a>
                             </h6>
-                            <p class="card-text">
+                            <div class="card-text">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                               <div class="text-end">
                                 <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
@@ -118,7 +116,7 @@
                               </div>            
                               </button>
                             </div>
-                            </p>
+                          </div>
                           </div>
                         </div>
                         <hr>
@@ -162,7 +160,7 @@
                     <h6 class="card-title">
                       <a href="/user/{{request.request_sender.id}}">{{request.request_sender.first_name}}  {{request.request_sender.last_name}} </a>
                     </h6>
-                    <p class="card-text">
+                    <div class="card-text">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                       <div class="text-end">
                         <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
@@ -170,7 +168,7 @@
                       </div>            
                       </button>
                     </div>
-                    </p>
+                  </div>
                   </div>
                 </div>
                 <hr>
@@ -254,10 +252,7 @@
     <!-- We need to add ajax asap -->
     <script>
       function updateTime() {
-        // function to get the logged user time
-        // const now = new Date();
-        // const timeNow = now.toLocaleTimeString();
-        // document.querySelector('.time_now').textContent = timeNow;
+
         var userTimezone = "{{ newUser.time_zone }}";
         // getting the user time despite him/her being logged in or not
         var currentDate = new Date();
@@ -266,7 +261,6 @@
         });
         const timeString = userDateTime.split(", ")[1];
         document.querySelector('.time_now').textContent = timeString
-        // console.log(timeString); 
       }
       setInterval(updateTime, 1000);
       // form for post submission, likes 
@@ -279,7 +273,6 @@
             success: function(response){
                 if (response.success) {
                   location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
-                  console.log(response)
                 } else {
                     var errors = response.errors;
                     var errorList = '<ul class="list-unstyled">';
@@ -288,7 +281,6 @@
                     }
                     errorList += '</ul>';
                     $('#error-message-post').html(errorList);
-                    console.log('adding post failed:', errors);
                 }
             }
         });
@@ -308,7 +300,6 @@
                   like_btn.text(data.likes_count + ' Like(s)');
                 },
                 error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
                 }
               });
             });

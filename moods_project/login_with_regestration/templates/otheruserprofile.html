@@ -81,11 +81,11 @@
                     <i class="bi bi-hourglass-split ps-1"></i> time now: <em class="time_now"></em>
                     <br>
                 </div>
-                </em>
                 <p class="text-center">
                   <i class="bi bi-geo ps-1"></i> for the time zone <em>{{user.time_zone}}</em>
                   <br>
                 </p>
+                <p>
                 {{msg |safe}}
                 </p>
                 {% if has_a_request %}
@@ -120,21 +120,6 @@
         <div class="row d-flex justify-content-between ">
           <!-- Posting , commenting, showing the comment and posts -->
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto  ">
-            <!-- <form action="/new_post" method="post" class="card shadow  mb-5 rounded postForm" >
-              {%csrf_token%}
-              <div class="card-body">
-                <div class="form-floating ">
-                  <textarea class="form-control" placeholder="What's on your mind today?" id="post" name="post" style="height: 100px"></textarea>
-                  <label for="post">Post</label>
-                  <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
-                  </div>
-                </div>
-                <div id="error-message-post">
-                    
-                </div>
-              </div>
-            </form> -->
             <div class="w-100">
               {% for post in all_posts %}
               <div class="card shadow mb-5 rounded">
@@ -149,7 +134,6 @@
                       <i class="bi bi-hand-thumbs-up"></i>
                   <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
                   </div>
-               
                 </div>
               </div>
 
@@ -173,10 +157,6 @@
     const pendingBtn=document.getElementById('pending');
     const addFriendBtn=document.getElementById('addfriend');
       function updateTime() {
-        // function to get the logged user time
-        // const now = new Date();
-        // const timeNow = now.toLocaleTimeString();
-        // document.querySelector('.time_now').textContent = timeNow;
         var userTimezone = "{{ user.time_zone }}";
         // getting the user time despite him/her being logged in or not
         var currentDate = new Date();
@@ -185,13 +165,9 @@
         });
         const timeString = userDateTime.split(", ")[1];
         document.querySelector('.time_now').textContent = timeString
-        // console.log(timeString); 
       }
       setInterval(updateTime, 1000);
-      // function pending_request(){
-      //   addFriendBtn.style.display="none"; 
-      //   pendingBtn.style.display="block";
-      // }   
+
       
       
       $('.postForm').submit(function(e){
@@ -203,7 +179,6 @@
             success: function(response){
                 if (response.success) {
                   location.reload(); //instead of reload get the post contant as variables and implement in them new 'refreshed' statmets 
-                  console.log(response)
                 } else {
                     var errors = response.errors;
                     var errorList = '<ul class="list-unstyled">';
@@ -212,7 +187,6 @@
                     }
                     errorList += '</ul>';
                     $('#error-message-post').html(errorList);
-                    console.log('adding post failed:', errors);
                 }
             }
         });
@@ -230,12 +204,10 @@
                   like_btn.text(data.likes_count + ' Like(s)');
                 },
                 error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
                 }
               });
             });
           });
-
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
