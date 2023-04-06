@@ -256,10 +256,10 @@ def logged_user_profile(request):
         # Get all the requests where the logged user is the receiver
         requests = Request.objects.filter(request_reciever=newUser).all()
         requests_count = newUser.received_requests.count()
-        print(requests_count)
+        # print(requests_count)
         for friend_request in requests:
             sender = friend_request.request_sender
-            print(sender)
+            # print(sender)
         
         context = {
             "newUser": newUser,
@@ -273,28 +273,6 @@ def logged_user_profile(request):
             "friend_request_count": requests_count,
         }
         return render(request, "userprofile.html", context)
-
-
-# friend requests
-# How to think:
-# as a person who is looking at other peoples profiles, I send them friend requests
-# they recieve the friend request, after that , they become the logged in user
-# they are met with the fact that they now hove a request in their main profile
-# if they accept we become friends else the request is removed and the friendship is not added
-# where to start? friendships
-# for demonstration purposes, I addded friendships in the shell :)
-# friend 1 added to 2
-# friend 1 added to 3
-# friend 1 added to 4
-
-# Note: this is in the other user profiles
-# handling adding or sending friend requests:
-# I am the other user who's accepting the request
-
-# the rendered user profile page
-# other users profile
-# the friendships are done
-# onto the requests
 
 
 def other_user_profile(request, user_id):
@@ -610,20 +588,6 @@ def result(request):
     }
     return render(request,'result.html',context)
 
-
-
-# def result(request):
-#     se = request.session['se']
-#     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
-#     if results:
-#         te = 1
-#     else:
-#         te = 0
-#     context = {
-#         'results': results,
-#         'te': te,
-#     }
-#     return render(request, 'result.html', context)
 
 
 def editProfile(request):
