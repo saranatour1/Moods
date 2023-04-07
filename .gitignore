@@ -1,6 +1,6 @@
 .vscode
 env/
-venv/
+.venv/
 # __pycache__/
 .vscode/
 *.pem
