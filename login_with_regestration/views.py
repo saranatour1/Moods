@@ -14,7 +14,7 @@ import datetime
 
 # referring to the main login method
 def show_login_page(request):
-    return render(request, "login.html ")
+    return render(request, "login.html")
 
 
 # referring to the main regestration page
