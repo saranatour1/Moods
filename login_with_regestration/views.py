@@ -309,22 +309,29 @@ def other_user_profile(request, user_id):
     time_zone_logged = logged_user.time_zone
     current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
     current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
-
+    current_date_str = current_time_logged.strftime("%Y-%m-%d")
     # Hourly time difference
-    hour_logged_user = int(current_time_logged.strftime("%H"))
-    hour_viewed_user = int(current_time.strftime("%H"))
-
-    hourly_dif = hour_logged_user - hour_viewed_user
-
-    if hourly_dif > 0:
-        msg = f"<p> You are {hourly_dif} hour(s) ahead.</p>"
-    elif hourly_dif < 0:
-        msg = f"<p> You are {abs(hourly_dif)} hour(s) behind.</p>"
+    time1 = datetime.datetime.strptime(current_time_str, "%H:%M:%S")
+    time2 = datetime.datetime.strptime(current_time_str_logged, "%H:%M:%S")
+    
+    time_differnce= time2 - time1
+    
+    day_logged_user = int(current_time_logged.strftime("%d"))
+    day_viewed_user = int(current_time.strftime("%d"))    
+    
+    # A more specific function , for time zone differences 
+    if day_logged_user > day_viewed_user:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"   
+    elif day_logged_user < day_viewed_user:
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    elif time2 > time1:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"
+    elif time2 < time1: 
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
     else:
         msg = "<p> You have the same time.</p>"
-
     
-    # print(type(hour_logged_user))
+
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
     
     context = {
