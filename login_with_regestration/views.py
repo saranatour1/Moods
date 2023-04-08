@@ -3,8 +3,10 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpRequest
 from pytz import all_timezones  # importing all time zones in the pyz library
 from .models import *
+from django.http import HttpResponseNotFound
+import random
 
-# from django.db.models import Q
+from django.db.models import Q
 # Create your views here.
 import pytz
 import bcrypt
@@ -331,9 +333,7 @@ def other_user_profile(request, user_id):
     else:
         msg = "<p> You have the same time.</p>"
     
-
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
-    
     context = {
         "newUser": logged_user,
         "user": user,
@@ -347,7 +347,6 @@ def other_user_profile(request, user_id):
         "all_posts":posts,
         'msg':msg,
     }
-
     return render(request, "otheruserprofile.html", context)
 
 
@@ -474,12 +473,9 @@ def messages(request):
     else:
         user_id=request.session['otherId']
         newUser=User.objects.get(id=user_id)
+        
         user_age= datetime.date.today() - newUser.birthday 
         age= (user_age.days // 365)
-        
-        
-        
-        
         user = User.objects.get(id = request.session['id'])
         other = User.objects.get(id=request.session['otherId'])
         
@@ -492,6 +488,7 @@ def messages(request):
         time_zone_logged = user.time_zone #the logged in user
         current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
         current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
+        
         # Hourly time difference
         hour_logged_user=int(current_time_logged.strftime("%H"))
         hour_viewed_user=int(current_time.strftime("%H"))
@@ -508,8 +505,6 @@ def messages(request):
         
         request.session['id']=request.session['newUser']
         all_users = User.objects.all() 
-        
-
         
         sent = Message.objects.filter(message_receiver = other,message_sender = user)
         
@@ -570,30 +565,47 @@ def creatMessages(request, otherId):
     OurMessage.objects.create(user_group1=message_sender, user_group2=message_receiver)
     return redirect("/messages")
 
-
-
 # adding the seacrh bar
 # getting the query value, and redirecting to the result page 
 def search(request):
     request.session['se'] = request.GET['q']
     return redirect('/result')
     
+    
+
+# def result(request):
+#     se = request.session['se']
+#     re1 = User.objects.filter(first_name =se)
+#     re2 = User.objects.filter(last_name=se)
+#     re3 = User.objects.filter(email=se)
+#     if re1 or re2 or re3:
+#         te = 1
+#     else:
+#         te = 0
+#     context = {
+#         're1':re1,
+#         're2':re2,
+#         're3':re3,
+#         'te':te,
+#     }
+#     return render(request,'result.html',context)
+
+
 def result(request):
     se = request.session['se']
-    re1 = User.objects.filter(first_name =se)
-    re2 = User.objects.filter(last_name=se)
-    re3 = User.objects.filter(email=se)
-    if re1 or re2 or re3:
+    results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
+    if results:
         te = 1
     else:
         te = 0
     context = {
-        're1':re1,
-        're2':re2,
-        're3':re3,
-        'te':te,
+        'results': results,
+        'te': te,
     }
-    return render(request,'result.html',context)
+    return render(request, 'result.html', context)
+
+
+
 
 
 
@@ -626,3 +638,26 @@ def updateProfile(request):
         user.save()
         return redirect('/user')
 
+
+# 404 Handler 
+
+# views.py
+
+# def custom_404(request, exception=None):
+#     return HttpResponseNotFound("Page not found. Custom message here.")
+
+def custom_404(request, exception):
+    print("Requested path:", request.path) 
+    print(random.randint(3, 9))
+    
+
+    
+    return render(request, '404.html', status=404)
+
+handler404 = custom_404
+
+# def custom_500(request, exception):
+#     print("Requested path:", request.path) 
+#     return render(request, '500.html', status=500)
+
+# handler500 = custom_500

@@ -15,6 +15,7 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path,include
+from django.conf.urls import handler404
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -22,3 +23,6 @@ urlpatterns = [
     # Any additional paths are placed here, make sure to not use the '' path, for example: 
     # if you want to create users app, you main app page  path('users',include(users.urls)), where the main route is /users/ 
 ]
+
+handler404 = 'login_with_regestration.views.custom_404'
+# handler500 = 'login_with_regestration.views.custom_500'
