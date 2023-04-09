@@ -25,4 +25,5 @@ urlpatterns = [
 ]
 
 handler404 = 'login_with_regestration.views.custom_404'
+
 # handler500 = 'login_with_regestration.views.custom_500'

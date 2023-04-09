@@ -1,6 +1,7 @@
 # from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, re_path
 # from django.urls import handler404
+# from django.conf.urls import handler404
 
 from . import views                    # import views from current file 
 urlpatterns = [
@@ -37,4 +38,4 @@ urlpatterns = [
     
 ]
 
-# handler404 = 'views.custom_404'
+# handler404 = views.custom_404

@@ -649,12 +649,16 @@ def updateProfile(request):
 def custom_404(request, exception):
     print("Requested path:", request.path) 
     print(random.randint(3, 9))
-    
+    img="{% static 'assets/meme1.png' %}"
+    context={
+        'img':img,
+        'path':request.path,
+    }
 
     
-    return render(request, '404.html', status=404)
+    return render(request, '404.html', status=404 ,context=context)
 
-handler404 = custom_404
+# handler404 = custom_404
 
 # def custom_500(request, exception):
 #     print("Requested path:", request.path) 
