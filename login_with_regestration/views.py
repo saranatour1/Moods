@@ -52,7 +52,7 @@ def handle_regestration(request):
                 birthday=request.POST["birthday"],
                 gender=request.POST["gender"],
                 time_zone=request.POST["time_zone"],
-                password_hash=pw_hash,
+                password_hash=pw_hash
             )
             new_user_object=User.objects.last()
             newUser = new_user_object.id
@@ -145,7 +145,12 @@ def dashboard(request):
     user_info =request.session.get('userinfo')
     if user_id == user_info['id']:
         avatar=user_info['avatar']
-        
+        newUser.avatar=avatar
+        newUser.save()
+
+
+
+
     # checking if the user has like the post
     context = {
         "newUser": newUser,
@@ -153,7 +158,7 @@ def dashboard(request):
         "current_time": current_time_str,
         "current_date": current_date_str,
         "all_posts": posts,
-        'avatar':avatar,
+        'avatar':newUser.avatar,
     }
     return render(request, "dashboard.html", context)
 
@@ -302,6 +307,8 @@ def logged_user_profile(request):
         user_info =request.session.get('userinfo')
         if user_id == user_info['id']:
             avatar=user_info['avatar']
+            newUser.avatar=avatar
+            newUser.save()
             # print(user_info['avatar'])
         
         context = {
@@ -314,7 +321,7 @@ def logged_user_profile(request):
             "friends_count": friend_count,
             "all_requests": requests,
             "friend_request_count": requests_count,
-            'avatar':avatar,
+            'avatar':newUser.avatar,
             
         }
         return render(request, "userprofile.html", context)
@@ -350,7 +357,7 @@ def other_user_profile(request, user_id):
     current_time_str = current_time.strftime("%H:%M:%S")
     current_date_str = current_time.strftime("%Y-%m-%d")
 
-    # For the logged-in user
+    # For the logged-in user 
     time_zone_logged = logged_user.time_zone
     current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
     current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
@@ -712,3 +719,5 @@ def custom_404(request, exception):
 #     return render(request, '500.html', status=500)
 
 # handler500 = custom_500
+
+
