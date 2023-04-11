@@ -54,6 +54,9 @@
             <!-- logged user profile functionality -->
             <div class="card  p-3 mb-5  rounded " >
               <div class="card-body p-4">
+                <div class="my-4 w-75 h-100 row text-center mx-auto">
+                  {{avatar|safe}}
+                 </div>
                 <h4 class="text-start mb-3"> Welcome <a href="/user">{{newUser.first_name}} {{newUser.last_name}}</a> ! </h4>
                 <p class="text-start mb-3"> Age: {{user_age}} years old </p>
                 <p class="text-start mb-3"> time now: <em class="time_now"></em> <br>

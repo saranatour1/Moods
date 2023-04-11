@@ -14,6 +14,10 @@ import bcrypt
 # from datetime import datetime
 import datetime
 
+# importing avatar library
+from multiavatar.multiavatar import multiavatar
+
+
 # referring to the main login method
 def show_login_page(request):
     return render(request, "login.html")
@@ -50,10 +54,20 @@ def handle_regestration(request):
                 time_zone=request.POST["time_zone"],
                 password_hash=pw_hash,
             )
-            newUser = User.objects.last().id
+            new_user_object=User.objects.last()
+            newUser = new_user_object.id
             request.session["newUser"] = newUser
             request.session['id']=newUser
             # return redirect('/dashboard')
+            # Adding a random avatar to each registed user
+            # only run once for that particular user who signed in 
+            if new_user_object.id == newUser:
+                svgCode = multiavatar(f"{new_user_object.first_name}", None, None);
+                user_front_face={'id':new_user_object.id, 'avatar':svgCode}
+                request.session['userinfo']=user_front_face
+                new_user_object.avatar=svgCode
+                print(new_user_object.avatar)
+                # print(user_front_face)
             return JsonResponse(
                 {"success": True}
             )  # returned true instead of redirection
@@ -81,6 +95,16 @@ def handle_login(request):
             ):
                 request.session["newUser"] = user.id
                 request.session['id']=user.id
+                # To get an svg for other users who have regesterd after this update
+                
+                
+                if not user:
+                    svgCode = multiavatar(f"{user.first_name}", None, None)
+                    request.session['userinfo'] = {'id': user.id, 'avatar': svgCode}
+                    user.avatar=svgCode
+                # print(request.session['userinfo'])
+                
+                
                 return JsonResponse({"success": True})
             else:
                 return JsonResponse(
@@ -93,8 +117,11 @@ def handle_login(request):
     return JsonResponse({"success": False, "errors": ["please try again"]})
 
 
+# this is to ensure that we do not want to delete the user avatar, might update it to be in the db
 def logout(request):
-    request.session.flush()
+    # request.session.flush()
+    del request.session['newUser']
+    del request.session['id']
     return redirect("/")
 
 
@@ -114,6 +141,11 @@ def dashboard(request):
         post.all_comments = comments
         post.likes_count = post.likes_on_post.count()
 
+
+    user_info =request.session.get('userinfo')
+    if user_id == user_info['id']:
+        avatar=user_info['avatar']
+        
     # checking if the user has like the post
     context = {
         "newUser": newUser,
@@ -121,6 +153,7 @@ def dashboard(request):
         "current_time": current_time_str,
         "current_date": current_date_str,
         "all_posts": posts,
+        'avatar':avatar,
     }
     return render(request, "dashboard.html", context)
 
@@ -263,6 +296,14 @@ def logged_user_profile(request):
             sender = friend_request.request_sender
             # print(sender)
         
+        # his avatar
+                # user_front_face={'id':new_user_object.id, 'avatar':svgCode}
+                # request.session['userinfo']=user_front_face
+        user_info =request.session.get('userinfo')
+        if user_id == user_info['id']:
+            avatar=user_info['avatar']
+            # print(user_info['avatar'])
+        
         context = {
             "newUser": newUser,
             "user_age": age,
@@ -273,6 +314,8 @@ def logged_user_profile(request):
             "friends_count": friend_count,
             "all_requests": requests,
             "friend_request_count": requests_count,
+            'avatar':avatar,
+            
         }
         return render(request, "userprofile.html", context)
 
@@ -334,6 +377,9 @@ def other_user_profile(request, user_id):
         msg = "<p> You have the same time.</p>"
     
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
+    
+    
+    
     context = {
         "newUser": logged_user,
         "user": user,
@@ -346,6 +392,7 @@ def other_user_profile(request, user_id):
         "has_a_request": has_a_request,
         "all_posts":posts,
         'msg':msg,
+        'avatar':user.avatar,
     }
     return render(request, "otheruserprofile.html", context)
 

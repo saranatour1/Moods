@@ -43,6 +43,7 @@ class User(models.Model):
     birthday=models.DateField()
     gender = models.CharField(max_length=50)
     time_zone = models.CharField(max_length=50)
+    avatar=models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects=UserManeger()
@@ -147,9 +148,9 @@ class Message(models.Model):
 
 
 # Randomized memes ,, randomized captions 
-class Meme(models.Model):
-  meme_content=models.TextField()
-  meme_caption= models.TextField()
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
+# class Meme(models.Model):
+#   meme_content=models.TextField()
+#   meme_caption= models.TextField()
+#   created_at = models.DateTimeField(auto_now_add=True)
+#   updated_at = models.DateTimeField(auto_now=True)
 
