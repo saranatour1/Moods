@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dvd59c3xx1q3vd4xej)q=1-jm6)q_w=9ap!&jqra9rd@6p)h)7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1']
 # ALLOWED_HOSTS = ['moods-production.up.railway.app','localhost','127.0.0.1']
