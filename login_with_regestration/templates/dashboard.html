@@ -80,7 +80,7 @@
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
                 </div>
-                <div id="error-message-post">
+                <div class="error-message-post">
                     
                 </div>
               </div>
@@ -122,7 +122,7 @@
                           <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
                         </div>
                       </div>
-                      <div id="error-message-comment">
+                      <div class="error-message-comment">
                     
                       </div>
                       <!-- {static 'assets/img'} -->
@@ -219,7 +219,7 @@
                         errorList += '<li class="text-danger">' + errors[i] + '</li>';
                     }
                     errorList += '</ul>';
-                    $('#error-message-post').html(errorList);
+                    $('.error-message-post').html(errorList);
                     console.log('adding post failed:', errors);
                 }
             }
@@ -228,30 +228,32 @@
     });
             // adding comments 
           $('.commentForm').submit(function(e){
-            e.preventDefault();
-            $.ajax({
-                url: '/add-new-comment',
-                method: 'post',
-                data: $(this).serialize(),
-                success: function(response){
-                    if (response.success) {
+          e.preventDefault();
+          var form = $(this); // Save the form element for later use
+          $.ajax({
+              url: '/add-new-comment',
+              method: 'post',
+              data: form.serialize(),
+              success: function(response){
+                  if (response.success) {
                       location.reload();
-                      console.log(response.success)
-                      alert(data)
-                    } else {
-                        var errors = response.errors;
-                        var errorList = '<ul class="list-unstyled">';
-                        for (var i=0; i<errors.length; i++) {
-                            errorList += '<li class="text-danger">' + errors[i] + '</li>';
-                        }
-                        errorList += '</ul>';
-                        $('#error-message-comment').html(errorList);
-                        console.log('adding post failed:', errors);
-                    }
-                }
-            });
+                      console.log(response.success);
+                      alert(data);
+                  } else {
+                      var errors = response.errors;
+                      var errorList = '<ul class="list-unstyled">';
+                      for (var i=0; i<errors.length; i++) {
+                          errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                      }
+                      errorList += '</ul>';
+                      form.find('.error-message-comment').html(errorList); // Update error message in the form itself
+                      console.log('adding post failed:', errors);
+                  }
+              }
+          });
           return false;
-        });
+      });
+
         // keep it like this for now , repetitive wise 
             // adding likes on posts and comment  likes_on_post, what i need to do is update the likes on the post id 
         $(document).ready(function() {

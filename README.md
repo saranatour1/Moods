@@ -2,6 +2,7 @@
 Moods is a project created using Django 2.2.4. The purpose of this project is to bring people together regardless of their time zone differences.
 
 
+
 ## Contributers
 
 * <a href="https://github.com/saranatour1">Sara  Nat</a>
