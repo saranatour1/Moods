@@ -14,7 +14,12 @@
     - [Demo](#Demo)
   - [messages](#messages)
     -[Demo](#Demo)
-  
+  -[other functions](#other functions)
+    - [Search](#Search)
+      - [Demo](#Demo)
+    -[Custom error pages](#Custom-error-pages) 
+      - [Demo](#Demo)
+ -[Conclusion](#Conclusion) 
     
 
 
@@ -83,7 +88,7 @@ here, When you go to the messages section, You'll be met with the users you have
 
 #### Demo
 ![Messages](https://user-images.githubusercontent.com/77834808/231600109-0be0c29b-0265-4f82-9c14-7ca3aeae718f.gif)
-![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231601016-417db4dc-35ea-4568-b975-5095e9d0cb26.gif)
+
 
 <!-- ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231596142-a0aef97c-275c-413b-8217-9c9b6a4700f4.gif) -->
 
@@ -96,11 +101,12 @@ here, When you go to the messages section, You'll be met with the users you have
  #### Custom error pages
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
     #### Demo
-    
+    ![Custom error messages](https://user-images.githubusercontent.com/77834808/231601414-abccb8af-2c22-4160-b0ea-97ce47d30056.gif)
+
     
  
 
-
+and that's it for now, we have some functionality additions in the future!
 # Conclusion 
 
 This was a very fun project to do, and we enjoyed working together as a team to ensure that the project was successful. Throughout the project, we demonstrated time management and soft skills by listening to each other and utilizing our individual strengths to complete tasks efficiently. We were amazed at how differently each of us approached problem-solving and delighted to work in a respectful team environment.
@@ -114,7 +120,5 @@ Finally, we were amazed at how much we learned during this project in such a lim
 Thank you for taking the time to read about our project!
 
 - Creators of Moods 
-
-
 
   ![image](https://user-images.githubusercontent.com/77834808/230228434-15fbe2c1-dc37-4518-9f00-9affb391acb0.png)
