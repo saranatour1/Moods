@@ -24,8 +24,6 @@
 
 
 
-<<<<<<< HEAD
-=======
 ## Introduction - Moods "Connect Across Time Zones with Ease"
 
 **Welcome to Moods!** a full stack application made with Django framework version 2.2.4, as one of the stack ending project with the coding Dojo and Axsos Academy. 
@@ -34,7 +32,6 @@
 
 As we were looking for a Project Idea, making a minified Facebook was on the table. We were trying hard to figure out what to do and how to do it. Then we came up with the idea of connecting people on different time zones. We got to work and created a simple app that mimics most of Facebook's functionality. Users can have their own profile with a random avatar, post on the main dashboard, comment, message people, and view the time for users in different time zones.
 
->>>>>>> 249edbc995a328fa1b9c1589842cb0076f6eb3db
 ## Contributers
 
 * <a href="https://github.com/saranatour1">Sara  Nat</a>
@@ -98,12 +95,14 @@ here, When you go to the messages section, You'll be met with the users you have
 ### other functions
  #### Search 
  We have added a search feature where you can look up people by their first name and last name and email
-    #### Demo
+  #### Demo
+
     ![Search](https://user-images.githubusercontent.com/77834808/231600176-36f5bd83-881f-48df-9e62-2227bf4e3740.gif)
 
  #### Custom error pages
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
-    #### Demo
+  #### Demo
+  
     ![Custom error messages](https://user-images.githubusercontent.com/77834808/231601414-abccb8af-2c22-4160-b0ea-97ce47d30056.gif)
 
     
