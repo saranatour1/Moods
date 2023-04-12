@@ -66,6 +66,7 @@ def handle_regestration(request):
                 user_front_face={'id':new_user_object.id, 'avatar':svgCode}
                 request.session['userinfo']=user_front_face
                 new_user_object.avatar=svgCode
+                new_user_object.save()
                 # print(new_user_object.avatar)
                 # print(user_front_face)
             return JsonResponse(
@@ -100,6 +101,7 @@ def handle_login(request):
                     svgCode = multiavatar(f"{user.first_name}", None, None)
                     request.session['userinfo'] = {'id': user.id, 'avatar': svgCode}
                     user.avatar = svgCode
+                    user.save()
                 # print(request.session['userinfo'])
                 
                 
@@ -537,65 +539,96 @@ def messages(request):
         current_time_str = current_time.strftime("%H:%M:%S")
         current_date_str = current_time.strftime("%Y-%m-%d")
 
-        # for the logged in user
-        time_zone_logged = user.time_zone #the logged in user
-        current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
-        current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
+        # # for the logged in user
+        # time_zone_logged = user.time_zone #the logged in user
+        # current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+        # current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
         
-        # Hourly time difference
-        hour_logged_user=int(current_time_logged.strftime("%H"))
-        hour_viewed_user=int(current_time.strftime("%H"))
+        # # Hourly time difference
+        # hour_logged_user=int(current_time_logged.strftime("%H"))
+        # hour_viewed_user=int(current_time.strftime("%H"))
         
-        hourly_dif = hour_logged_user - hour_viewed_user
-        if hourly_dif> 0:
-            msg=f"<p> You are { hourly_dif} hour ahead</p>"
-            # print(hourly_dif> 0)
-        elif hourly_dif < 0:
-            msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
-            # print(hourly_dif< 0)
-        else:
-            msg="<p> You have the same time  </p>"
+        # hourly_dif = hour_logged_user - hour_viewed_user
+        # if hourly_dif> 0:
+        #     msg=f"<p> You are { hourly_dif} hour ahead</p>"
+        #     # print(hourly_dif> 0)
+        # elif hourly_dif < 0:
+        #     msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
+        #     # print(hourly_dif< 0)
+        # else:
+        #     msg="<p> You have the same time  </p>"
         
-        request.session['id']=request.session['newUser']
-        all_users = User.objects.all() 
         
-        sent = Message.objects.filter(message_receiver = other,message_sender = user)
+    # For the logged-in user 
+    time_zone_logged = user.time_zone
+    current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+    current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
+    current_date_str = current_time_logged.strftime("%Y-%m-%d")
+    # Hourly time difference
+    time1 = datetime.datetime.strptime(current_time_str, "%H:%M:%S")
+    time2 = datetime.datetime.strptime(current_time_str_logged, "%H:%M:%S")
+    
+    time_differnce= time2 - time1
+    
+    day_logged_user = int(current_time_logged.strftime("%d"))
+    day_viewed_user = int(current_time.strftime("%d"))    
+    
+    # A more specific function , for time zone differences 
+    if day_logged_user > day_viewed_user:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"   
+    elif day_logged_user < day_viewed_user:
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    elif time2 > time1:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"
+    elif time2 < time1: 
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    else:
+        msg = "<p> You have the same time.</p>"
         
-        received = Message.objects.filter(message_sender = other,message_receiver = user)
         
-        allSR = received.union(sent)  # messagess 
+    
+    
+    request.session['id']=request.session['newUser']
+    all_users = User.objects.all() 
+    
+    sent = Message.objects.filter(message_receiver = other,message_sender = user)
+    
+    received = Message.objects.filter(message_sender = other,message_receiver = user)
+    
+    allSR = received.union(sent)  # messagess 
 
-        userId = request.session['id']
-        messages = Message.objects.all().order_by('-created_at')
-        arrI = []
-        arrP = []
-        all_users_for_last_messages = []
-        for message in messages:
-            if message.message_sender_id == userId and userId not in arrI:
-                arrI.append(message.message_receiver_id)
-                arrP.append(1)
-            elif message.message_receiver_id == userId and userId not in arrI:
-                arrI.append(message.message_sender_id)
-                arrP.append(0)
-        for i in range(len(arrI)):
-            if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
-                all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
-                
-        context = {
-                'allSR': allSR,
-                'all_users_for_last_messages': all_users_for_last_messages,
-                'all_users' : all_users,
-                'sent': sent,
-                'received' : received,
-                'other':other,
-                'theUser' : User.objects.get(id = request.session['id']),
-                'newUser':newUser,
-                'user_age':age,
-                'current_time':current_time_str,
-                'current_date':current_date_str, 
-                'msg':msg,
-                }
-        return render(request,'messages.html',context)
+    userId = request.session['id']
+    messages = Message.objects.all().order_by('-created_at')
+    arrI = []
+    arrP = []
+    all_users_for_last_messages = []
+    for message in messages:
+        if message.message_sender_id == userId and userId not in arrI:
+            arrI.append(message.message_receiver_id)
+            arrP.append(1)
+        elif message.message_receiver_id == userId and userId not in arrI:
+            arrI.append(message.message_sender_id)
+            arrP.append(0)
+    for i in range(len(arrI)):
+        if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
+            all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
+            
+    context = {
+            'allSR': allSR,
+            'all_users_for_last_messages': all_users_for_last_messages,
+            'all_users' : all_users,
+            'sent': sent,
+            'received' : received,
+            'other':other,
+            'theUser' : User.objects.get(id = request.session['id']),
+            'newUser':newUser,
+            'user_age':age,
+            'current_time':current_time_str,
+            'current_date':current_date_str, 
+            'msg':msg,
+            
+            }
+    return render(request,'messages.html',context)
 
 
 
