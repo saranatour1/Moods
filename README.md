@@ -103,9 +103,10 @@ here, When you go to the messages section, You'll be met with the users you have
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
   #### Demo
   
-   ![Custom error messages](https://user-images.githubusercontent.com/77834808/231601414-abccb8af-2c22-4160-b0ea-97ce47d30056.gif)
+   ![Custom error messages](https://user-images.githubusercontent.com/77834808/231604259-5aa9bc94-4be5-49a3-ac3a-b2be959379eb.gif)
+incaes it didn't uppload, please view it here : [Custom error messages](https://user-images.githubusercontent.com/77834808/231604259-5aa9bc94-4be5-49a3-ac3a-b2be959379eb.gif)
+<!--    ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231604370-6b420ac9-ad73-4043-bf85-44916bbc0d45.gif) -->
 
-    
  
 
 and that's it for now, we have some functionality additions in the future!
