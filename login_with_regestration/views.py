@@ -66,7 +66,7 @@ def handle_regestration(request):
                 user_front_face={'id':new_user_object.id, 'avatar':svgCode}
                 request.session['userinfo']=user_front_face
                 new_user_object.avatar=svgCode
-                print(new_user_object.avatar)
+                # print(new_user_object.avatar)
                 # print(user_front_face)
             return JsonResponse(
                 {"success": True}
@@ -96,12 +96,10 @@ def handle_login(request):
                 request.session["newUser"] = user.id
                 request.session['id']=user.id
                 # To get an svg for other users who have regesterd after this update
-                
-                
-                if not user:
+                if not user.avatar:
                     svgCode = multiavatar(f"{user.first_name}", None, None)
                     request.session['userinfo'] = {'id': user.id, 'avatar': svgCode}
-                    user.avatar=svgCode
+                    user.avatar = svgCode
                 # print(request.session['userinfo'])
                 
                 
@@ -141,15 +139,16 @@ def dashboard(request):
         post.all_comments = comments
         post.likes_count = post.likes_on_post.count()
 
-
-    user_info =request.session.get('userinfo')
-    if user_id == user_info['id']:
-        avatar=user_info['avatar']
-        newUser.avatar=avatar
-        newUser.save()
-
-
-
+    print(newUser.id) 
+    
+    request.session['userinfo'] = {'id': newUser.id, 'avatar':newUser.avatar}
+    
+    
+    # if newUser.id == user_info['id']:
+       
+    #     avatar=user_info['avatar']
+    #     newUser.avatar=avatar
+    #     newUser.save()
 
     # checking if the user has like the post
     context = {
