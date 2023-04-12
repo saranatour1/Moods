@@ -97,13 +97,13 @@ here, When you go to the messages section, You'll be met with the users you have
  We have added a search feature where you can look up people by their first name and last name and email
   #### Demo
 
-    ![Search](https://user-images.githubusercontent.com/77834808/231600176-36f5bd83-881f-48df-9e62-2227bf4e3740.gif)
+   ![Search](https://user-images.githubusercontent.com/77834808/231600176-36f5bd83-881f-48df-9e62-2227bf4e3740.gif)
 
  #### Custom error pages
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
   #### Demo
   
-    ![Custom error messages](https://user-images.githubusercontent.com/77834808/231601414-abccb8af-2c22-4160-b0ea-97ce47d30056.gif)
+   ![Custom error messages](https://user-images.githubusercontent.com/77834808/231601414-abccb8af-2c22-4160-b0ea-97ce47d30056.gif)
 
     
  
