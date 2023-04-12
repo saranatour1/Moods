@@ -147,10 +147,12 @@ class Message(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-# Randomized memes ,, randomized captions 
-# class Meme(models.Model):
-#   meme_content=models.TextField()
-#   meme_caption= models.TextField()
-#   created_at = models.DateTimeField(auto_now_add=True)
-#   updated_at = models.DateTimeField(auto_now=True)
+# # Randomized memes ,, randomized captions 
+
+class Meme(models.Model):
+  meme_content=models.TextField() #the meme svg
+  meme_caption= models.TextField() #meme caption to that particular incedent
+  status_code=models.IntegerField() #status codes only, not the whole response
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 

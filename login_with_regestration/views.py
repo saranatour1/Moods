@@ -6,7 +6,7 @@ from .models import *
 from django.http import HttpResponseNotFound
 import random
 
-from django.db.models import Q
+from django.db.models import Q ,Count
 # Create your views here.
 import pytz
 import bcrypt
@@ -97,6 +97,7 @@ def handle_login(request):
                 request.session["newUser"] = user.id
                 request.session['id']=user.id
                 # To get an svg for other users who have regesterd after this update
+                # this will fix the issue without deleting past users , if they login 
                 if not user.avatar:
                     svgCode = multiavatar(f"{user.first_name}", None, None)
                     request.session['userinfo'] = {'id': user.id, 'avatar': svgCode}
@@ -144,6 +145,11 @@ def dashboard(request):
     print(newUser.id) 
     
     request.session['userinfo'] = {'id': newUser.id, 'avatar':newUser.avatar}
+    
+    # Intentional server error *but not really* 
+    # something =0
+    # if not something:
+    #     return custom_500(request)
     
     
     # if newUser.id == user_info['id']:
@@ -654,8 +660,13 @@ def creatMessages(request, otherId):
 # adding the seacrh bar
 # getting the query value, and redirecting to the result page 
 def search(request):
-    request.session['se'] = request.GET['q']
-    return redirect('/result')
+    query = request.GET.get('q')  # Use request.GET.get() to avoid KeyError
+    if not query:  # Check if query is empty
+        return custom_404(request,None)  # Call your custom 404 method
+    else:
+        request.session['se'] = query
+        return redirect('/result')
+
     
     
 
@@ -682,17 +693,15 @@ def result(request):
     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
     if results:
         te = 1
+    elif se =='':
+        return custom_404(request,None)
     else:
-        te = 0
+        return custom_404(request,None)
     context = {
         'results': results,
         'te': te,
     }
     return render(request, 'result.html', context)
-
-
-
-
 
 
 def editProfile(request):
@@ -733,23 +742,49 @@ def updateProfile(request):
 #     return HttpResponseNotFound("Page not found. Custom message here.")
 
 def custom_404(request, exception):
-    print("Requested path:", request.path) 
-    print(random.randint(3, 9))
+    count = Meme.objects.filter(status_code=404).count()
+    random_picker=random.randint(1,count)
+    # print(count) #4
+    # print(random_picker) #3
+    
+    # print("Requested path:", request.path) 
+    # print(random.randint(3, 9))
     img="{% static 'assets/meme1.png' %}"
     context={
         'img':img,
         'path':request.path,
-    }
-
-    
+        'meme':Meme.objects.get(id=random_picker),
+    }    
     return render(request, '404.html', status=404 ,context=context)
 
 # handler404 = custom_404
 
-# def custom_500(request, exception):
-#     print("Requested path:", request.path) 
-#     return render(request, '500.html', status=500)
+def custom_500(request, exception=None):
+    print("Requested path:", request.path) 
+    count = Meme.objects.filter(status_code=500).count()
+    random_picker=random.randint(5,count+4)
+    print(count) 
+    print(random_picker) 
+    
+    print("Requested path:", request.path) 
+    # print(random.randint(3, 9))
+    # img="{% static 'assets/meme1.png' %}"
+    context={
+        # 'img':img,
+        'path':request.path,
+        'meme':Meme.objects.get(id=random_picker),
+    }
+    
+    return render(request, '500.html', status=500, context=context)
 
 # handler500 = custom_500
 
 
+# def delete_user(request):
+#     user =User.objects.get(id=1)
+#     user.delete()
+#     return redirect('/dashboard')
+
+# def test(request):
+#     Meme.objects.create(meme_content="")
+#     return redirect('/dashboard')

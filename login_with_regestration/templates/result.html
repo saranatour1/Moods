@@ -58,8 +58,8 @@
                   {%for user in results%}
                     <li class=" text-start "><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a> </li>
                   {%endfor%}
-                {%else%}
-                  <h2>no result match</h2>
+                <!-- {%else%}
+                  <h2>no result match</h2> -->
                 {%endif%}
               </ul>
             </div>

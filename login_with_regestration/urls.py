@@ -35,6 +35,7 @@ urlpatterns = [
     path('updateProfile/', views.updateProfile),
     # path('<str:path>/', views.customhandler404),
     # path('test',views.test),
+    # path('empty',views.delete_user),
     
     
 ]
