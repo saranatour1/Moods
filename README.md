@@ -38,6 +38,7 @@ As we were looking for a Project Idea, making a minified Facebook was on the tab
 ### Sign in and Sign Upa pages
 in these pages, we have used **ajax** to implement the non-refreshing page method for a better user experience, once the user Regesters to the app they are me with the main dashboard to let them know that their Regestration proccess went smoothly, Once they sign up they have a random avatar generated for them based on thir first name, you can find out more about how to use this avatar here -->> [Random avatar](https://www.stefanjudis.com/blog/apis-to-generate-random-user-avatars/#multiavatar-api)
 
+![Regestration Page](https://user-images.githubusercontent.com/77834808/231585866-c7c0793b-d8e5-457c-a6f8-243a2aea0075.gif)
 
 
 # Conclusion 
