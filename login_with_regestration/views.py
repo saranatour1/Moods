@@ -3,14 +3,20 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpRequest
 from pytz import all_timezones  # importing all time zones in the pyz library
 from .models import *
+from django.http import HttpResponseNotFound
+import random
 
-# from django.db.models import Q
+from django.db.models import Count
 # Create your views here.
 import pytz
 import bcrypt
 
 # from datetime import datetime
 import datetime
+
+# importing avatar library
+from multiavatar.multiavatar import multiavatar
+
 
 # referring to the main login method
 def show_login_page(request):
@@ -46,12 +52,23 @@ def handle_regestration(request):
                 birthday=request.POST["birthday"],
                 gender=request.POST["gender"],
                 time_zone=request.POST["time_zone"],
-                password_hash=pw_hash,
+                password_hash=pw_hash
             )
-            newUser = User.objects.last().id
+            new_user_object=User.objects.last()
+            newUser = new_user_object.id
             request.session["newUser"] = newUser
             request.session['id']=newUser
             # return redirect('/dashboard')
+            # Adding a random avatar to each registed user
+            # only run once for that particular user who signed in 
+            if new_user_object.id == newUser:
+                svgCode = multiavatar(f"{new_user_object.first_name}", None, None);
+                user_front_face={'id':new_user_object.id, 'avatar':svgCode}
+                request.session['userinfo']=user_front_face
+                new_user_object.avatar=svgCode
+                new_user_object.save()
+                # print(new_user_object.avatar)
+                # print(user_front_face)
             return JsonResponse(
                 {"success": True}
             )  # returned true instead of redirection
@@ -79,6 +96,16 @@ def handle_login(request):
             ):
                 request.session["newUser"] = user.id
                 request.session['id']=user.id
+                # To get an svg for other users who have regesterd after this update
+                # this will fix the issue without deleting past users , if they login 
+                if not user.avatar:
+                    svgCode = multiavatar(f"{user.first_name}", None, None)
+                    request.session['userinfo'] = {'id': user.id, 'avatar': svgCode}
+                    user.avatar = svgCode
+                    user.save()
+                # print(request.session['userinfo'])
+                
+                
                 return JsonResponse({"success": True})
             else:
                 return JsonResponse(
@@ -91,8 +118,11 @@ def handle_login(request):
     return JsonResponse({"success": False, "errors": ["please try again"]})
 
 
+# this is to ensure that we do not want to delete the user avatar, might update it to be in the db
 def logout(request):
-    request.session.flush()
+    # request.session.flush()
+    del request.session['newUser']
+    del request.session['id']
     return redirect("/")
 
 
@@ -112,6 +142,22 @@ def dashboard(request):
         post.all_comments = comments
         post.likes_count = post.likes_on_post.count()
 
+    print(newUser.id) 
+    
+    request.session['userinfo'] = {'id': newUser.id, 'avatar':newUser.avatar}
+    
+    # Intentional server error *but not really* 
+    # something =0
+    # if not something:
+    #     return custom_500(request)
+    
+    
+    # if newUser.id == user_info['id']:
+       
+    #     avatar=user_info['avatar']
+    #     newUser.avatar=avatar
+    #     newUser.save()
+
     # checking if the user has like the post
     context = {
         "newUser": newUser,
@@ -119,6 +165,7 @@ def dashboard(request):
         "current_time": current_time_str,
         "current_date": current_date_str,
         "all_posts": posts,
+        'avatar':newUser.avatar,
     }
     return render(request, "dashboard.html", context)
 
@@ -261,6 +308,16 @@ def logged_user_profile(request):
             sender = friend_request.request_sender
             # print(sender)
         
+        # his avatar
+                # user_front_face={'id':new_user_object.id, 'avatar':svgCode}
+                # request.session['userinfo']=user_front_face
+        user_info =request.session.get('userinfo')
+        if user_id == user_info['id']:
+            avatar=user_info['avatar']
+            newUser.avatar=avatar
+            newUser.save()
+            # print(user_info['avatar'])
+        
         context = {
             "newUser": newUser,
             "user_age": age,
@@ -271,6 +328,8 @@ def logged_user_profile(request):
             "friends_count": friend_count,
             "all_requests": requests,
             "friend_request_count": requests_count,
+            'avatar':newUser.avatar,
+            
         }
         return render(request, "userprofile.html", context)
 
@@ -305,27 +364,35 @@ def other_user_profile(request, user_id):
     current_time_str = current_time.strftime("%H:%M:%S")
     current_date_str = current_time.strftime("%Y-%m-%d")
 
-    # For the logged-in user
+    # For the logged-in user 
     time_zone_logged = logged_user.time_zone
     current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
     current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
-
+    current_date_str = current_time_logged.strftime("%Y-%m-%d")
     # Hourly time difference
-    hour_logged_user = int(current_time_logged.strftime("%H"))
-    hour_viewed_user = int(current_time.strftime("%H"))
-
-    hourly_dif = hour_logged_user - hour_viewed_user
-
-    if hourly_dif > 0:
-        msg = f"<p> You are {hourly_dif} hour(s) ahead.</p>"
-    elif hourly_dif < 0:
-        msg = f"<p> You are {abs(hourly_dif)} hour(s) behind.</p>"
+    time1 = datetime.datetime.strptime(current_time_str, "%H:%M:%S")
+    time2 = datetime.datetime.strptime(current_time_str_logged, "%H:%M:%S")
+    
+    time_differnce= time2 - time1
+    
+    day_logged_user = int(current_time_logged.strftime("%d"))
+    day_viewed_user = int(current_time.strftime("%d"))    
+    
+    # A more specific function , for time zone differences 
+    if day_logged_user > day_viewed_user:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"   
+    elif day_logged_user < day_viewed_user:
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    elif time2 > time1:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"
+    elif time2 < time1: 
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
     else:
         msg = "<p> You have the same time.</p>"
-
     
-    # print(type(hour_logged_user))
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
+    
+    
     
     context = {
         "newUser": logged_user,
@@ -339,8 +406,8 @@ def other_user_profile(request, user_id):
         "has_a_request": has_a_request,
         "all_posts":posts,
         'msg':msg,
+        'avatar':user.avatar,
     }
-
     return render(request, "otheruserprofile.html", context)
 
 
@@ -467,12 +534,9 @@ def messages(request):
     else:
         user_id=request.session['otherId']
         newUser=User.objects.get(id=user_id)
+        
         user_age= datetime.date.today() - newUser.birthday 
         age= (user_age.days // 365)
-        
-        
-        
-        
         user = User.objects.get(id = request.session['id'])
         other = User.objects.get(id=request.session['otherId'])
         
@@ -481,66 +545,96 @@ def messages(request):
         current_time_str = current_time.strftime("%H:%M:%S")
         current_date_str = current_time.strftime("%Y-%m-%d")
 
-        # for the logged in user
-        time_zone_logged = user.time_zone #the logged in user
-        current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
-        current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
-        # Hourly time difference
-        hour_logged_user=int(current_time_logged.strftime("%H"))
-        hour_viewed_user=int(current_time.strftime("%H"))
+        # # for the logged in user
+        # time_zone_logged = user.time_zone #the logged in user
+        # current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+        # current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
         
-        hourly_dif = hour_logged_user - hour_viewed_user
-        if hourly_dif> 0:
-            msg=f"<p> You are { hourly_dif} hour ahead</p>"
-            # print(hourly_dif> 0)
-        elif hourly_dif < 0:
-            msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
-            # print(hourly_dif< 0)
-        else:
-            msg="<p> You have the same time  </p>"
+        # # Hourly time difference
+        # hour_logged_user=int(current_time_logged.strftime("%H"))
+        # hour_viewed_user=int(current_time.strftime("%H"))
         
-        request.session['id']=request.session['newUser']
-        all_users = User.objects.all() 
+        # hourly_dif = hour_logged_user - hour_viewed_user
+        # if hourly_dif> 0:
+        #     msg=f"<p> You are { hourly_dif} hour ahead</p>"
+        #     # print(hourly_dif> 0)
+        # elif hourly_dif < 0:
+        #     msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
+        #     # print(hourly_dif< 0)
+        # else:
+        #     msg="<p> You have the same time  </p>"
         
+        
+    # For the logged-in user 
+    time_zone_logged = user.time_zone
+    current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
+    current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
+    current_date_str = current_time_logged.strftime("%Y-%m-%d")
+    # Hourly time difference
+    time1 = datetime.datetime.strptime(current_time_str, "%H:%M:%S")
+    time2 = datetime.datetime.strptime(current_time_str_logged, "%H:%M:%S")
+    
+    time_differnce= time2 - time1
+    
+    day_logged_user = int(current_time_logged.strftime("%d"))
+    day_viewed_user = int(current_time.strftime("%d"))    
+    
+    # A more specific function , for time zone differences 
+    if day_logged_user > day_viewed_user:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"   
+    elif day_logged_user < day_viewed_user:
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    elif time2 > time1:
+        msg = f"<p> You are {time_differnce} hour(s) ahead.</p>"
+    elif time2 < time1: 
+        msg = f"<p> You are {abs(time_differnce)} hour(s) behind.</p>"
+    else:
+        msg = "<p> You have the same time.</p>"
+        
+        
+    
+    
+    request.session['id']=request.session['newUser']
+    all_users = User.objects.all() 
+    
+    sent = Message.objects.filter(message_receiver = other,message_sender = user)
+    
+    received = Message.objects.filter(message_sender = other,message_receiver = user)
+    
+    allSR = received.union(sent)  # messagess 
 
-        
-        sent = Message.objects.filter(message_receiver = other,message_sender = user)
-        
-        received = Message.objects.filter(message_sender = other,message_receiver = user)
-        
-        allSR = received.union(sent)  # messagess 
-
-        userId = request.session['id']
-        messages = Message.objects.all().order_by('-created_at')
-        arrI = []
-        arrP = []
-        all_users_for_last_messages = []
-        for message in messages:
-            if message.message_sender_id == userId and userId not in arrI:
-                arrI.append(message.message_receiver_id)
-                arrP.append(1)
-            elif message.message_receiver_id == userId and userId not in arrI:
-                arrI.append(message.message_sender_id)
-                arrP.append(0)
-        for i in range(len(arrI)):
-            if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
-                all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
-                
-        context = {
-                'allSR': allSR,
-                'all_users_for_last_messages': all_users_for_last_messages,
-                'all_users' : all_users,
-                'sent': sent,
-                'received' : received,
-                'other':other,
-                'theUser' : User.objects.get(id = request.session['id']),
-                'newUser':newUser,
-                'user_age':age,
-                'current_time':current_time_str,
-                'current_date':current_date_str, 
-                'msg':msg,
-                }
-        return render(request,'messages.html',context)
+    userId = request.session['id']
+    messages = Message.objects.all().order_by('-created_at')
+    arrI = []
+    arrP = []
+    all_users_for_last_messages = []
+    for message in messages:
+        if message.message_sender_id == userId and userId not in arrI:
+            arrI.append(message.message_receiver_id)
+            arrP.append(1)
+        elif message.message_receiver_id == userId and userId not in arrI:
+            arrI.append(message.message_sender_id)
+            arrP.append(0)
+    for i in range(len(arrI)):
+        if  User.objects.get(id = arrI[i]) not in all_users_for_last_messages:
+            all_users_for_last_messages.append(User.objects.get(id = arrI[i]))
+            
+    context = {
+            'allSR': allSR,
+            'all_users_for_last_messages': all_users_for_last_messages,
+            'all_users' : all_users,
+            'sent': sent,
+            'received' : received,
+            'other':other,
+            'theUser' : User.objects.get(id = request.session['id']),
+            'newUser':newUser,
+            'user_age':age,
+            'current_time':current_time_str,
+            'current_date':current_date_str, 
+            'msg':msg,
+            
+            }
+    return render(request,'messages.html',context)
 
 
 
@@ -563,31 +657,50 @@ def creatMessages(request, otherId):
     OurMessage.objects.create(user_group1=message_sender, user_group2=message_receiver)
     return redirect("/messages")
 
-
-
 # adding the seacrh bar
 # getting the query value, and redirecting to the result page 
 def search(request):
-    request.session['se'] = request.GET['q']
-    return redirect('/result')
+    query = request.GET.get('q')  # Use request.GET.get() to avoid KeyError
+    if not query:  # Check if query is empty
+        return custom_404(request,None)  # Call your custom 404 method
+    else:
+        request.session['se'] = query
+        return redirect('/result')
+
     
+    
+
 def result(request):
     se = request.session['se']
-    re1 = User.objects.filter(first_name =se)
-    re2 = User.objects.filter(last_name=se)
-    re3 = User.objects.filter(email=se)
-    if re1 or re2 or re3:
+    re1 = User.objects.filter(first_name=se) | User.objects.filter(last_name=se) | User.objects.filter(email=se)
+
+    if re1:
         te = 1
     else:
-        te = 0
+        return custom_404(request,None)
     context = {
         're1':re1,
-        're2':re2,
-        're3':re3,
+        # 're2':re2,
+        # 're3':re3,
         'te':te,
     }
     return render(request,'result.html',context)
 
+
+# def result(request):
+#     se = request.session['se']
+#     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
+#     if results:
+#         te = 1
+#     elif se =='':
+#         return custom_404(request,None)
+#     else:
+#         return custom_404(request,None)
+#     context = {
+#         'results': results,
+#         'te': te,
+#     }
+#     return render(request, 'result.html', context)
 
 
 def editProfile(request):
@@ -619,3 +732,58 @@ def updateProfile(request):
         user.save()
         return redirect('/user')
 
+
+# 404 Handler 
+
+# views.py
+
+# def custom_404(request, exception=None):
+#     return HttpResponseNotFound("Page not found. Custom message here.")
+
+def custom_404(request, exception):
+    count = Meme.objects.filter(status_code=404).count()
+    random_picker=random.randint(1,count)
+    # print(count) #4
+    # print(random_picker) #3
+    
+    # print("Requested path:", request.path) 
+    # print(random.randint(3, 9))
+    img="{% static 'assets/meme1.png' %}"
+    context={
+        'img':img,
+        'path':request.path,
+        'meme':Meme.objects.get(id=random_picker),
+    }    
+    return render(request, '404.html', status=404 ,context=context)
+
+# handler404 = custom_404
+
+def custom_500(request, exception=None):
+    print("Requested path:", request.path) 
+    count = Meme.objects.filter(status_code=500).count()
+    random_picker=random.randint(5,count+4)
+    print(count) 
+    print(random_picker) 
+    
+    print("Requested path:", request.path) 
+    # print(random.randint(3, 9))
+    # img="{% static 'assets/meme1.png' %}"
+    context={
+        # 'img':img,
+        'path':request.path,
+        'meme':Meme.objects.get(id=random_picker),
+    }
+    
+    return render(request, '500.html', status=500, context=context)
+
+# handler500 = custom_500
+
+
+# def delete_user(request):
+#     user =User.objects.get(id=1)
+#     user.delete()
+#     return redirect('/dashboard')
+
+# def test(request):
+#     Meme.objects.create(meme_content="")
+#     return redirect('/dashboard')

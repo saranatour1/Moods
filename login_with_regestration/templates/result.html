@@ -55,18 +55,12 @@
             <div class="card-body">
               {%if te == 1%}
               <ul class="list-unstyled">
-                {%for user in re1%}
-                  <li class=" text-start "><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a> </li>
-                {%endfor%}
-                {%for user in re2%}
-                  <li class="text-start"><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></li>
-                {%endfor%}
-                {%for user in re3%}
-                  <li><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a></li>
-                {%endfor%}
-                {%else%}
-                <h2>no result match</h2>
-              {%endif%}
+                  {%for user in re1%}
+                    <li class=" text-start "><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a> </li>
+                  {%endfor%}
+                <!-- {%else%}
+                  <h2>no result match</h2> -->
+                {%endif%}
               </ul>
             </div>
           </div>

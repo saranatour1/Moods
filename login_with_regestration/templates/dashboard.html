@@ -54,6 +54,9 @@
             <!-- logged user profile functionality -->
             <div class="card  p-3 mb-5  rounded " >
               <div class="card-body p-4">
+                <div class="my-4 w-75 h-100 row text-center mx-auto">
+                  {{avatar|safe}}
+                 </div>
                 <h4 class="text-start mb-3"> Welcome <a href="/user">{{newUser.first_name}} {{newUser.last_name}}</a> ! </h4>
                 <p class="text-start mb-3"> Age: {{user_age}} years old </p>
                 <p class="text-start mb-3"> time now: <em class="time_now"></em> <br>
@@ -77,7 +80,7 @@
                     <button class="btn btn-primary my-2 me-2" type="submit">Post</button>
                   </div>
                 </div>
-                <div id="error-message-post">
+                <div class="error-message-post">
                     
                 </div>
               </div>
@@ -88,17 +91,25 @@
               <div class="card shadow mb-5 rounded">
                 <div class="card-body p-5">
                   <small class="text-body-secondary my-2"> last updated {{post.updated_at.time}}</small>
-                  <p class="card-title my-2"  > <a href="/user/{{post.user_who_post.id}}" > {{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a> </p>
-                  <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
-                  {%if newUser == post.user_who_post%}
-                  <p>
-                    <a href="/delete/{{post.id}}"> delete Post</a>
-                  </p>
-                  {% endif %}
-                  <div class="text-end my-3">
-                    <button class="btn btn-light">
+                  <div class="row d-flex align-items-start justify-content-start">
+                    <div class="my-1 img-fluid col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 w-25 h-25 me-3 ms-2" style="width: 5.5rem !important;">
+                      {{post.user_who_post.avatar|safe}}
+                    </div>
+                    <div class="col-9 col-sm-5 col-lg-8 col-xl-9">
+                      <p class="card-title my-2"><a href="/user/{{post.user_who_post.id}}">{{post.user_who_post.first_name}} {{post.user_who_post.last_name}}</a></p>
+                      <p class="card-text text-wrap my-2">{{post.post_content}}</p>
+                      {%if newUser == post.user_who_post%}
+                      <p>
+                        <a href="/delete/{{post.id}}">Delete Post</a>
+                      </p>
+                      {% endif %}
+                      <div class="text-end my-3">
+                        <button class="btn btn-light">
                           <i class="bi bi-hand-thumbs-up"></i>
-                      <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
+                          <a class="likes_on_post " id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                   <form action="/add-new-comment" method="post" class="card shadow-sm   rounded w-90 commentForm ">
                     {%csrf_token%}
@@ -111,9 +122,10 @@
                           <button class="btn btn-primary my-3 me-1" type="submit">Comment</button>
                         </div>
                       </div>
-                      <div id="error-message-comment">
+                      <div class="error-message-comment">
                     
                       </div>
+                      <!-- {static 'assets/img'} -->
                     </div>
                   </form>
                   <div>
@@ -123,17 +135,33 @@
                         {% if comment.post == post %}
                           <div class="card-body border-bottom">
                             <small class="text-body-secondary my-2">last updated: {{comment.updated_at.time}}</small>
-                            <p class="card-title my-2" ><a href="/user/{{comment.user_who_comment.id}}">{{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</a></p> 
-                            <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
-                            {%if newUser == comment.user_who_comment%}
-                            <p>
-                              <a href="/delete/comment/{{comment.id}}"> delete Comment</a>
-                            </p>
-                            {% endif %}
-                            <div class="text-end my-3">
-                              <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}" class="likes_on_comment" id="like_btn_{{comment.id}}">  {{comment.likes_count}} Like(s)</a> </button>
+                            <div class="row">
+
+                                <div class="my-1 img-fluid col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2 w-25 h-25 me-3 ms-2" style="width: 5.5rem !important;">
+                                  {{comment.user_who_comment.avatar|safe}}
+      
+
+                              </div>
+                              <div class="col-9 col-sm-5 col-lg-8 col-xl-9">
+                                <p class="card-title my-2" ><a href="/user/{{comment.user_who_comment.id}}">{{comment.user_who_comment.first_name}} {{ comment.user_who_comment.last_name}}</a></p> 
+                                <p class="card-text text-wrap my-2"> {{comment.comment_content}} </p>
+                                {%if newUser == comment.user_who_comment%}
+                                <p>
+                                  <a href="/delete/comment/{{comment.id}}"> delete Comment</a>
+                                </p>
+                                {% endif %}
+                                <div class="text-end my-3">
+                                  <button class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i> <a href="/add_likes_comment/{{comment.id}}" class="likes_on_comment" id="like_btn_{{comment.id}}">  {{comment.likes_count}} Like(s)</a> </button>
+                                </div>
+                              </div>
+                              </div>
+
+
                             </div>
-                          </div>
+
+
+
+
                         {% endif %}
                       {% endfor %}
 
@@ -191,7 +219,7 @@
                         errorList += '<li class="text-danger">' + errors[i] + '</li>';
                     }
                     errorList += '</ul>';
-                    $('#error-message-post').html(errorList);
+                    $('.error-message-post').html(errorList);
                     console.log('adding post failed:', errors);
                 }
             }
@@ -200,30 +228,32 @@
     });
             // adding comments 
           $('.commentForm').submit(function(e){
-            e.preventDefault();
-            $.ajax({
-                url: '/add-new-comment',
-                method: 'post',
-                data: $(this).serialize(),
-                success: function(response){
-                    if (response.success) {
+          e.preventDefault();
+          var form = $(this); // Save the form element for later use
+          $.ajax({
+              url: '/add-new-comment',
+              method: 'post',
+              data: form.serialize(),
+              success: function(response){
+                  if (response.success) {
                       location.reload();
-                      console.log(response.success)
-                      alert(data)
-                    } else {
-                        var errors = response.errors;
-                        var errorList = '<ul class="list-unstyled">';
-                        for (var i=0; i<errors.length; i++) {
-                            errorList += '<li class="text-danger">' + errors[i] + '</li>';
-                        }
-                        errorList += '</ul>';
-                        $('#error-message-comment').html(errorList);
-                        console.log('adding post failed:', errors);
-                    }
-                }
-            });
+                      console.log(response.success);
+                      alert(data);
+                  } else {
+                      var errors = response.errors;
+                      var errorList = '<ul class="list-unstyled">';
+                      for (var i=0; i<errors.length; i++) {
+                          errorList += '<li class="text-danger">' + errors[i] + '</li>';
+                      }
+                      errorList += '</ul>';
+                      form.find('.error-message-comment').html(errorList); // Update error message in the form itself
+                      console.log('adding post failed:', errors);
+                  }
+              }
+          });
           return false;
-        });
+      });
+
         // keep it like this for now , repetitive wise 
             // adding likes on posts and comment  likes_on_post, what i need to do is update the likes on the post id 
         $(document).ready(function() {

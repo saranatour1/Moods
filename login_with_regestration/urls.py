@@ -1,5 +1,8 @@
 # from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, re_path
+# from django.urls import handler404
+# from django.conf.urls import handler404
+
 from . import views                    # import views from current file 
 urlpatterns = [
     path('login/',views.show_login_page),              # here i am refering to the method
@@ -30,5 +33,11 @@ urlpatterns = [
     path('result',views.result), # redirected to the results page 
     path('edit_profile', views.editProfile),
     path('updateProfile/', views.updateProfile),
+    # path('<str:path>/', views.customhandler404),
+    # path('test',views.test),
+    # path('empty',views.delete_user),
+    
     
 ]
+
+# handler404 = views.custom_404
