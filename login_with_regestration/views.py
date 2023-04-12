@@ -6,7 +6,7 @@ from .models import *
 from django.http import HttpResponseNotFound
 import random
 
-from django.db.models import Q ,Count
+from django.db.models import Count
 # Create your views here.
 import pytz
 import bcrypt
@@ -670,38 +670,37 @@ def search(request):
     
     
 
-# def result(request):
-#     se = request.session['se']
-#     re1 = User.objects.filter(first_name =se)
-#     re2 = User.objects.filter(last_name=se)
-#     re3 = User.objects.filter(email=se)
-#     if re1 or re2 or re3:
-#         te = 1
-#     else:
-#         te = 0
-#     context = {
-#         're1':re1,
-#         're2':re2,
-#         're3':re3,
-#         'te':te,
-#     }
-#     return render(request,'result.html',context)
-
-
 def result(request):
     se = request.session['se']
-    results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
-    if results:
+    re1 = User.objects.filter(first_name=se) | User.objects.filter(last_name=se) | User.objects.filter(email=se)
+
+    if re1:
         te = 1
-    elif se =='':
-        return custom_404(request,None)
     else:
         return custom_404(request,None)
     context = {
-        'results': results,
-        'te': te,
+        're1':re1,
+        # 're2':re2,
+        # 're3':re3,
+        'te':te,
     }
-    return render(request, 'result.html', context)
+    return render(request,'result.html',context)
+
+
+# def result(request):
+#     se = request.session['se']
+#     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
+#     if results:
+#         te = 1
+#     elif se =='':
+#         return custom_404(request,None)
+#     else:
+#         return custom_404(request,None)
+#     context = {
+#         'results': results,
+#         'te': te,
+#     }
+#     return render(request, 'result.html', context)
 
 
 def editProfile(request):

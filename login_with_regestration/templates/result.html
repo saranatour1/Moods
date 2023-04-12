@@ -55,7 +55,7 @@
             <div class="card-body">
               {%if te == 1%}
               <ul class="list-unstyled">
-                  {%for user in results%}
+                  {%for user in re1%}
                     <li class=" text-start "><a href="/user/{{user.id}}">{{user.first_name}}  {{user.last_name}}</a> </li>
                   {%endfor%}
                 <!-- {%else%}
