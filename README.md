@@ -83,6 +83,7 @@ here, When you go to the messages section, You'll be met with the users you have
 
 #### Demo
 ![Messages](https://user-images.githubusercontent.com/77834808/231600109-0be0c29b-0265-4f82-9c14-7ca3aeae718f.gif)
+![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231601016-417db4dc-35ea-4568-b975-5095e9d0cb26.gif)
 
 <!-- ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231596142-a0aef97c-275c-413b-8217-9c9b6a4700f4.gif) -->
 
@@ -95,6 +96,7 @@ here, When you go to the messages section, You'll be met with the users you have
  #### Custom error pages
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
     #### Demo
+    
     
  
 
