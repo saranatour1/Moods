@@ -14,7 +14,7 @@
     - [Demo](#Demo)
   - [messages](#messages)
     - [Demo](#Demo)
-  - [other functions](#other functions)
+  -[other functions](#other functions)
     - [Search](#Search)
       - [Demo](#Demo)
     - [Custom error pages](#Custom-error-pages) 
