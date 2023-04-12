@@ -5,7 +5,17 @@
 - [Tools used ](#Tools-used)
 - [Functionality](#Functionality)
   - [Sign in and Sign Up pages](#Sign-in-and-Sign-Up-pages)
-  - 
+    - [Demo](#Demo)
+  - [dashboard ](#dashboard)
+    - [Demo](#Demo)
+  -[Logged in profile pages](#Logged-in-profile-pages) 
+    - [Demo](#Demo)
+  - [other's profiles](#other's-profiles)
+    - [Demo](#Demo)
+  - [messages](#messages)
+    -[Demo](#Demo)
+  
+    
 
 
 
@@ -42,7 +52,7 @@ As we were looking for a Project Idea, making a minified Facebook was on the tab
 ### Sign in and Sign Up pages
 in these pages, we have used **ajax** to implement the non-refreshing page method for a better user experience, once the user Regesters to the app they are me with the main dashboard to let them know that their Regestration proccess went smoothly, Once they sign up they have a random avatar generated for them based on thir first name, you can find out more about how to use this avatar here -->> [Random avatar](https://www.stefanjudis.com/blog/apis-to-generate-random-user-avatars/#multiavatar-api)
 <!-- How to center this -->
-
+#### Demo:
 ![Regestration Page](https://user-images.githubusercontent.com/77834808/231585866-c7c0793b-d8e5-457c-a6f8-243a2aea0075.gif)
 
 
@@ -51,8 +61,42 @@ in the dashboard, You are met on the left with your user information, and on the
 
 We have used alot of crud operations here, such as Creating a post object, creating a like on the post and updating the count, and many more, you can feel free to check our models file with the views. 
 
-Demo: 
+#### Demo 
+![Dashboard](https://user-images.githubusercontent.com/77834808/231593112-271b2856-4ba5-4a75-af2d-0384657e16cf.gif)
 
+### Logged in profile pages 
+For this, we when we go to our profile in the nav bar, or click on our name, we will be redirected to our main profile, where we can see our posts, we can see our posts, our friends , our requests, we can post on our profiles and it will be posted on the dashboard as well.
+
+#### Demo 
+
+![Main User Profile](https://user-images.githubusercontent.com/77834808/231595981-89f2fb21-0068-441e-8af5-11c43a5260ac.gif)
+
+
+### other's profiles
+this is very similar to the user profile,  we can see the other users information and posts, with an additional feature to see their own local time and how much time difference is between both of you, you can add them as a friend, see if they have sen't you a friend request. 
+#### Demo 
+![other user's profile](https://user-images.githubusercontent.com/77834808/231597104-aa878bc1-c3ea-42a5-8b78-29e760f2ba00.gif)
+
+
+### messages
+here, When you go to the messages section, You'll be met with the users you have sent messages to, user's who you have not sent messages to, and the other users information. 
+
+#### Demo
+![Messages](https://user-images.githubusercontent.com/77834808/231600109-0be0c29b-0265-4f82-9c14-7ca3aeae718f.gif)
+
+<!-- ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231596142-a0aef97c-275c-413b-8217-9c9b6a4700f4.gif) -->
+
+### other functions
+ #### Search 
+ We have added a search feature where you can look up people by their first name and last name and email
+    #### Demo
+    ![Search](https://user-images.githubusercontent.com/77834808/231600176-36f5bd83-881f-48df-9e62-2227bf4e3740.gif)
+
+ #### Custom error pages
+ we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
+    #### Demo
+    
+ 
 
 
 # Conclusion 
