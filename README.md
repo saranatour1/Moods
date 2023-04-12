@@ -2,8 +2,12 @@
 - [Introduction](#Introduction)
 - [Backstory](#Backstory)
 - [Contributers](#Contributers)
-- [Tools used ](#Tools used)
-- [License](#license)
+- [Tools used ](#Tools-used)
+- [Functionality](#Functionality)
+  - [Sign in and Sign Up pages](#Sign-in-and-Sign-Up-pages)
+  - 
+
+
 
 ## Introduction - Moods "Connect Across Time Zones with Ease"
 
@@ -35,10 +39,20 @@ As we were looking for a Project Idea, making a minified Facebook was on the tab
 
 ## Functionality
 
-### Sign in and Sign Upa pages
+### Sign in and Sign Up pages
 in these pages, we have used **ajax** to implement the non-refreshing page method for a better user experience, once the user Regesters to the app they are me with the main dashboard to let them know that their Regestration proccess went smoothly, Once they sign up they have a random avatar generated for them based on thir first name, you can find out more about how to use this avatar here -->> [Random avatar](https://www.stefanjudis.com/blog/apis-to-generate-random-user-avatars/#multiavatar-api)
+<!-- How to center this -->
 
 ![Regestration Page](https://user-images.githubusercontent.com/77834808/231585866-c7c0793b-d8e5-457c-a6f8-243a2aea0075.gif)
+
+
+### dashboard 
+in the dashboard, You are met on the left with your user information, and on the right you have the abilty to see people's posts and comment them, you can have your own posts, you have the ability to delete your own comments and posts. Ajax was implemented here on the comments, posts, likes. 
+
+We have used alot of crud operations here, such as Creating a post object, creating a like on the post and updating the count, and many more, you can feel free to check our models file with the views. 
+
+Demo: 
+
 
 
 # Conclusion 
