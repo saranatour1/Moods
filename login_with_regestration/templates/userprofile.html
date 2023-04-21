@@ -16,6 +16,7 @@
     <link rel="shortcut icon" href="{%  static 'assets/favicon.png' %} " type="image/x-icon">
   </head>
   <body>
+    <!-- 21-04-2023 update, Stray buttons removed-->
     <!-- The main bav bar containing the Moods Logo -->
     <!-- Logo Design -->
     <div class=" w-100  ">
@@ -121,7 +122,6 @@
                                 <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
                                 <a href="/accept-request/{{request.id}}" class="btn btn-outline-success">Accept</a>
                               </div>            
-                              </button>
                             </div>
                           </div>
                           </div>
@@ -173,14 +173,12 @@
                         <a href="/delete-request/{{request.id}}" class="btn btn-outline-danger">Ignore</a>
                         <a href="/accept-request/{{request.id}}" class="btn btn-outline-success">Accept</a>
                       </div>            
-                      </button>
                     </div>
                   </div>
                   </div>
                 </div>
                 <hr>
                 {% endfor %}
-
                 <!-- End -->
               </div>
             </div>

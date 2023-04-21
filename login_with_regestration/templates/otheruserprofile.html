@@ -15,6 +15,7 @@
     <link rel="shortcut icon" href="{%  static 'assets/favicon.png' %} " type="image/x-icon">
   </head>
   <body>
+    <!-- 21-04-2023 update -->
     <!-- The main bav bar containing the Moods Logo -->
     <!-- Logo Design -->
     <div class=" w-100  ">
@@ -137,9 +138,11 @@
                   </p>
                   <p class="card-text text-wrap my-2"> {{post.post_content}} </p>
                   <div class="text-end my-3">
+                    <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">
                     <button class="btn btn-light">
                       <i class="bi bi-hand-thumbs-up"></i>
-                  <a class="likes_on_post" id="like_btn_{{post.id}}" href="/likeOnPost/{{post.id}}">{{post.likes_count}} Like(s)</a> </button>
+                  {{post.likes_count}} Like(s)</button>
+                </a> 
                   </div>
                 </div>
               </div>
