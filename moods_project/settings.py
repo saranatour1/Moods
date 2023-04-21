@@ -126,3 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # handler404 = 'myapp.views.custom_404'
+
+# this is used to fix the issue of static files not reloading ,tested on local host
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)

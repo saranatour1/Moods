@@ -86,7 +86,7 @@ def successfull(request):
 
 # route to handle login
 
-
+# Handle login method, checks for passwords and emails. 
 def handle_login(request):
     if request.method == "POST":
         user = User.objects.filter(email=request.POST["email"]).first()
@@ -104,8 +104,6 @@ def handle_login(request):
                     user.avatar = svgCode
                     user.save()
                 # print(request.session['userinfo'])
-                
-                
                 return JsonResponse({"success": True})
             else:
                 return JsonResponse(
@@ -126,7 +124,7 @@ def logout(request):
     return redirect("/")
 
 
-# The main dashboard page at route  /dashboard
+# The main dashboard page at route  /dashboard , 
 def dashboard(request):
     user_id = request.session["newUser"]
     newUser = User.objects.get(id=user_id)
@@ -142,23 +140,11 @@ def dashboard(request):
         post.all_comments = comments
         post.likes_count = post.likes_on_post.count()
 
-    print(newUser.id) 
+    # print(newUser.id) 
     
     request.session['userinfo'] = {'id': newUser.id, 'avatar':newUser.avatar}
-    
-    # Intentional server error *but not really* 
-    # something =0
-    # if not something:
-    #     return custom_500(request)
-    
-    
-    # if newUser.id == user_info['id']:
-       
-    #     avatar=user_info['avatar']
-    #     newUser.avatar=avatar
-    #     newUser.save()
-
     # checking if the user has like the post
+    # rendering these values from the above code
     context = {
         "newUser": newUser,
         "user_age": age,
@@ -171,8 +157,6 @@ def dashboard(request):
 
 
 # adding a post functionality
-
-
 def add_post(request):
     if request.method == "POST":
         errors = Post.objects.validate_post(request.POST)
@@ -227,7 +211,6 @@ def add_comment(request):
     return JsonResponse({"success": True})
     # return redirect('/dashboard')
 
-
 # delete comment
 def delete_comment(request, comment_id):
     user_id = request.session["newUser"]
@@ -256,8 +239,6 @@ def likeOnPost(request, post_id):
 
 
 # check the comment on the .html
-
-
 # adding likes to comments
 def likeOnComemnt(request, comment_id):
     user = User.objects.get(id=request.session["newUser"])
@@ -283,7 +264,6 @@ def likeOnComemnt(request, comment_id):
 # have the friends of this user be displayed
 # display the user posts
 
-
 def logged_user_profile(request):
     if "newUser" in request.session:
         user_id = request.session["newUser"]
@@ -295,11 +275,9 @@ def logged_user_profile(request):
         current_time_str = current_time.strftime("%H:%M:%S")
         current_date_str = current_time.strftime("%Y-%m-%d")
         posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
-
         # All the user friends
         friends = newUser.friends.all()
         friend_count = newUser.friends.count()
-
         # Get all the requests where the logged user is the receiver
         requests = Request.objects.filter(request_reciever=newUser).all()
         requests_count = newUser.received_requests.count()
@@ -308,16 +286,13 @@ def logged_user_profile(request):
             sender = friend_request.request_sender
             # print(sender)
         
-        # his avatar
-                # user_front_face={'id':new_user_object.id, 'avatar':svgCode}
-                # request.session['userinfo']=user_front_face
         user_info =request.session.get('userinfo')
         if user_id == user_info['id']:
             avatar=user_info['avatar']
             newUser.avatar=avatar
             newUser.save()
             # print(user_info['avatar'])
-        
+        # Rendering those variables 
         context = {
             "newUser": newUser,
             "user_age": age,
@@ -391,9 +366,6 @@ def other_user_profile(request, user_id):
         msg = "<p> You have the same time.</p>"
     
     posts = Post.objects.filter(user_who_post=user_id).order_by("-created_at")
-    
-    
-    
     context = {
         "newUser": logged_user,
         "user": user,
@@ -519,7 +491,6 @@ def delete_request(request, request_id):
 
 
 def messages(request):
-    
     if 'otherId' not in request.session :
         if User.objects.last().id:
             otherId = User.objects.last().id
@@ -545,25 +516,6 @@ def messages(request):
         current_time_str = current_time.strftime("%H:%M:%S")
         current_date_str = current_time.strftime("%Y-%m-%d")
 
-        # # for the logged in user
-        # time_zone_logged = user.time_zone #the logged in user
-        # current_time_logged = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(time_zone_logged))
-        # current_time_str_logged = current_time_logged.strftime("%H:%M:%S")
-        
-        # # Hourly time difference
-        # hour_logged_user=int(current_time_logged.strftime("%H"))
-        # hour_viewed_user=int(current_time.strftime("%H"))
-        
-        # hourly_dif = hour_logged_user - hour_viewed_user
-        # if hourly_dif> 0:
-        #     msg=f"<p> You are { hourly_dif} hour ahead</p>"
-        #     # print(hourly_dif> 0)
-        # elif hourly_dif < 0:
-        #     msg=f"<p> You are {abs(hourly_dif)} hour behind</p>"
-        #     # print(hourly_dif< 0)
-        # else:
-        #     msg="<p> You have the same time  </p>"
-        
         
     # For the logged-in user 
     time_zone_logged = user.time_zone
@@ -591,9 +543,6 @@ def messages(request):
     else:
         msg = "<p> You have the same time.</p>"
         
-        
-    
-    
     request.session['id']=request.session['newUser']
     all_users = User.objects.all() 
     
@@ -680,28 +629,9 @@ def result(request):
         return custom_404(request,None)
     context = {
         're1':re1,
-        # 're2':re2,
-        # 're3':re3,
         'te':te,
     }
     return render(request,'result.html',context)
-
-
-# def result(request):
-#     se = request.session['se']
-#     results = User.objects.filter(Q(first_name__icontains=se) | Q(last_name__icontains=se) | Q(email__icontains=se))
-#     if results:
-#         te = 1
-#     elif se =='':
-#         return custom_404(request,None)
-#     else:
-#         return custom_404(request,None)
-#     context = {
-#         'results': results,
-#         'te': te,
-#     }
-#     return render(request, 'result.html', context)
-
 
 def editProfile(request):
     time_zones = all_timezones
@@ -733,21 +663,11 @@ def updateProfile(request):
         return redirect('/user')
 
 
-# 404 Handler 
-
-# views.py
-
-# def custom_404(request, exception=None):
-#     return HttpResponseNotFound("Page not found. Custom message here.")
 
 def custom_404(request, exception):
     count = Meme.objects.filter(status_code=404).count()
     random_picker=random.randint(1,count)
-    # print(count) #4
-    # print(random_picker) #3
-    
-    # print("Requested path:", request.path) 
-    # print(random.randint(3, 9))
+
     img="{% static 'assets/meme1.png' %}"
     context={
         'img':img,
@@ -766,24 +686,13 @@ def custom_500(request, exception=None):
     print(random_picker) 
     
     print("Requested path:", request.path) 
-    # print(random.randint(3, 9))
-    # img="{% static 'assets/meme1.png' %}"
+
     context={
-        # 'img':img,
+
         'path':request.path,
         'meme':Meme.objects.get(id=random_picker),
     }
     
     return render(request, '500.html', status=500, context=context)
 
-# handler500 = custom_500
 
-
-# def delete_user(request):
-#     user =User.objects.get(id=1)
-#     user.delete()
-#     return redirect('/dashboard')
-
-# def test(request):
-#     Meme.objects.create(meme_content="")
-#     return redirect('/dashboard')
