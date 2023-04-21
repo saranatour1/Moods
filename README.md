@@ -20,6 +20,7 @@
       - [Demo](#Demo)
     - [Custom error pages](#Custom-error-pages) 
       - [Demo](#Demo)
+    - [issues](#issues)
  - [Conclusion](#Conclusion) 
     
 
@@ -129,6 +130,13 @@ We have added a search feature where you can look up people by their first name,
  
 
 and that's it for now, we have some functionality additions in the future!
+
+### issues
+Some of the issues we faced during the project were related to the problem of static files rendering. Here are a few resources that can make your life easier:
+- [Stack overflow, running on the local host](https://stackoverflow.com/questions/62555499/django-react-the-resource-was-blocked-due-to-mime-type-text-html-mismatch)
+- [Stack overflow, settings.py fix](https://stackoverflow.com/questions/25913849/django-static-file-not-loading)
+- [whitenoise](https://whitenoise.readthedocs.io/en/latest/)
+
 # Conclusion:
 
 This was a fun project, and we enjoyed working together as a team to ensure its success. We demonstrated time management and soft skills by listening to each other and utilizing our strengths to complete tasks efficiently. We were amazed at how differently each of us approached problem-solving and delighted to work in a respectful team environment.
