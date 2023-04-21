@@ -1,5 +1,6 @@
 ## Table of Contents
 - [Introduction](#Introduction)
+- [Setup](#setup)
 - [Backstory](#Backstory)
 - [Contributers](#Contributers)
 - [Tools used ](#Tools-used)
@@ -28,9 +29,32 @@
 
 **Welcome to Moods!** a full stack application made with Django framework version 2.2.4, as one of the stack ending project with the coding Dojo and Axsos Academy. 
 
-### Backstory
+### Setup:
+In order to use this website, you have to have Python installed, specifically Python 3. To install Python, please visit [python docs](https://www.python.org/downloads/) 
 
-As we were looking for a Project Idea, making a minified Facebook was on the table. We were trying hard to figure out what to do and how to do it. Then we came up with the idea of connecting people on different time zones. We got to work and created a simple app that mimics most of Facebook's functionality. Users can have their own profile with a random avatar, post on the main dashboard, comment, message people, and view the time for users in different time zones.
+After that, you need to install a virtual environment by running the following command in Windows:
+```bash
+  python -m venv py3Env 
+```
+Then, activate the virtual environment by running this command in the command prompt:
+```bash
+  call py3Env\Scripts\activate 
+```
+After activation, install the project dependencies to the virtual environment using this command:
+```bash
+  pip install -r requirements.txt 
+```
+Then, go to the folder directory where the manage.py file is located and use this command to start the app:
+```bash
+  python manage.py runserver
+```
+The program will run on localhost:8000 and you should be good to go!  
+
+_______________________
+
+### Backstory:
+
+As we were looking for a project idea, creating a minified version of Facebook was on the table. We were struggling to figure out what to do and how to do it. Then, we came up with the idea of connecting people in different time zones. We got to work and created a simple app that replicates most of Facebook's functionality. Users can create their own profile with a random avatar, post on the main dashboard, comment, message other users, and view the time for users in different time zones.
 
 ## Contributers
 
@@ -53,12 +77,12 @@ As we were looking for a Project Idea, making a minified Facebook was on the tab
  
 
 ## Functionality
+### Sign In and Sign Up Pages:
 
-### Sign in and Sign Up pages
-in these pages, we have used **ajax** to implement the non-refreshing page method for a better user experience, once the user Regesters to the app they are me with the main dashboard to let them know that their Regestration proccess went smoothly, Once they sign up they have a random avatar generated for them based on thir first name, you can find out more about how to use this avatar here -->> [Random avatar](https://www.stefanjudis.com/blog/apis-to-generate-random-user-avatars/#multiavatar-api)
+On these pages, we have used **Ajax** to implement the non-refreshing page method for a better user experience. Once the user registers for the app, they are redirected to the main dashboard to let them know that their registration process went smoothly. Once they sign up, a random avatar is generated for them based on their first name. You can find out more about how to use this avatar here -->> [Random Avatar](https://www.stefanjudis.com/blog/apis-to-generate-random-user-avatars/#multiavatar-api).
 <!-- How to center this -->
 #### Demo:
-![Regestration Page](https://user-images.githubusercontent.com/77834808/231585866-c7c0793b-d8e5-457c-a6f8-243a2aea0075.gif)
+![Regestration page](https://user-images.githubusercontent.com/77834808/233746123-ff6d8970-0013-44a2-ae8e-f86508a591a0.png)
 
 
 ### dashboard 
@@ -67,58 +91,53 @@ in the dashboard, You are met on the left with your user information, and on the
 We have used alot of crud operations here, such as Creating a post object, creating a like on the post and updating the count, and many more, you can feel free to check our models file with the views. 
 
 #### Demo 
-![Dashboard](https://user-images.githubusercontent.com/77834808/231593112-271b2856-4ba5-4a75-af2d-0384657e16cf.gif)
+![dashboard](https://user-images.githubusercontent.com/77834808/233746267-7f9f5cef-5b9f-4550-a3c4-eb71388d4550.png)
 
-### Logged in profile pages 
-For this, we when we go to our profile in the nav bar, or click on our name, we will be redirected to our main profile, where we can see our posts, we can see our posts, our friends , our requests, we can post on our profiles and it will be posted on the dashboard as well.
-
+### Logged In Profile Pages:
+When we go to our profile in the navigation bar or click on our name, we are redirected to our main profile. Here, we can see our posts, our friends, our requests, and we can post on our profiles, which will also be displayed on the main dashboard.
 #### Demo 
+![Logged in user profile](https://user-images.githubusercontent.com/77834808/233746399-3d51a16b-b9e4-417b-a153-4f3356645bcc.png)
 
-![Main User Profile](https://user-images.githubusercontent.com/77834808/231595981-89f2fb21-0068-441e-8af5-11c43a5260ac.gif)
 
-
-### other's profiles
-this is very similar to the user profile,  we can see the other users information and posts, with an additional feature to see their own local time and how much time difference is between both of you, you can add them as a friend, see if they have sen't you a friend request. 
+### Other Users' Profiles:
+This is very similar to the user profile page. Here, we can see the other user's information and posts, with an additional feature to see their local time and the time difference between both of you. We can also add them as a friend, and check if they have sent us a friend request.
 #### Demo 
-![other user's profile](https://user-images.githubusercontent.com/77834808/231597104-aa878bc1-c3ea-42a5-8b78-29e760f2ba00.gif)
+![other profile](https://user-images.githubusercontent.com/77834808/233746610-762a3217-35ab-49d0-bea7-d37810f36ce5.png)
 
 
-### messages
-here, When you go to the messages section, You'll be met with the users you have sent messages to, user's who you have not sent messages to, and the other users information. 
+### Messages:
+
+When you go to the messages section, you will see the users you have sent messages to, the users you have not sent messages to, and other users' information.
 
 #### Demo
-![Messages](https://user-images.githubusercontent.com/77834808/231600109-0be0c29b-0265-4f82-9c14-7ca3aeae718f.gif)
+
+![messages](https://user-images.githubusercontent.com/77834808/233746747-183e9b39-3750-406d-9129-f31e03eb87a6.png)
 
 
-<!-- ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231596142-a0aef97c-275c-413b-8217-9c9b6a4700f4.gif) -->
+### Other Functions:
 
-### other functions
- #### Search 
- We have added a search feature where you can look up people by their first name and last name and email
+#### Search:
+We have added a search feature where you can look up people by their first name, last name, and email.
   #### Demo
 
-   ![Search](https://user-images.githubusercontent.com/77834808/231600176-36f5bd83-881f-48df-9e62-2227bf4e3740.gif)
+![search](https://user-images.githubusercontent.com/77834808/233746904-79135a08-86bb-43e9-ade1-2558ca386a61.png)
 
  #### Custom error pages
  we have added a custom error page for errors  :404 and 500, and in the future we are planning to add more
   #### Demo
-  
-   ![Custom error messages](https://user-images.githubusercontent.com/77834808/231604259-5aa9bc94-4be5-49a3-ac3a-b2be959379eb.gif)
-incaes it didn't uppload, please view it here : [Custom error messages](https://user-images.githubusercontent.com/77834808/231604259-5aa9bc94-4be5-49a3-ac3a-b2be959379eb.gif)
-<!--    ![Sign in and Sign up](https://user-images.githubusercontent.com/77834808/231604370-6b420ac9-ad73-4043-bf85-44916bbc0d45.gif) -->
-
+![error message](https://user-images.githubusercontent.com/77834808/233746956-2edb4807-3b8c-42f4-ba58-16eb8c4c02b1.png)
  
 
 and that's it for now, we have some functionality additions in the future!
-# Conclusion 
+# Conclusion:
 
-This was a very fun project to do, and we enjoyed working together as a team to ensure that the project was successful. Throughout the project, we demonstrated time management and soft skills by listening to each other and utilizing our individual strengths to complete tasks efficiently. We were amazed at how differently each of us approached problem-solving and delighted to work in a respectful team environment.
+This was a fun project, and we enjoyed working together as a team to ensure its success. We demonstrated time management and soft skills by listening to each other and utilizing our strengths to complete tasks efficiently. We were amazed at how differently each of us approached problem-solving and delighted to work in a respectful team environment.
 
-As a team, we believe that this project has a future and there are still some functionalities that we did not have time to implement. We plan to revisit the repository, clean up the code, and add more features to make it even more presentable. 
+As a team, we believe this project has a future, and there are still some functionalities we did not have time to implement. We plan to revisit the repository, clean up the code, and add more features to make it even more presentable.
 
-We would love to hear your feedback and criticism if you end up using our code. Please don't hesitate to reach out to us. And, if you find our project useful, please consider giving us a star on the repository. 
+We would love to hear your feedback and criticism if you end up using our code. Please don't hesitate to reach out to us. And if you find our project useful, please consider giving us a star on the repository.
 
-Finally, we were amazed at how much we learned during this project in such a limited period of time. We were all eager to learn and help each other, which made the experience even more enjoyable.
+Finally, we learned a lot during this project in a limited period of time. We were all eager to learn and help each other, which made the experience even more enjoyable.
 
 Thank you for taking the time to read about our project!
 
